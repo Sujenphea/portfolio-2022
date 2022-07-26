@@ -1,0 +1,61 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - plugin:react/recommended
+  - airbnb
+  - prettier
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - react
+  - '@typescript-eslint'
+rules: {
+    # rule's settings
+    # --------------------------------
+    # "off" or 0 - turn the rule off
+    # "warn" or 1 - turn the rule on as a warning (doesn't affect exit code)
+    # "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
+
+    import/extensions: 'off',
+    import/prefer-default-export: 'off',
+
+    semi: 'off',
+    max-params: ['error', 3],
+
+    react/jsx-props-no-spreading: 'off',
+    react/jsx-filename-extension: 'off',
+    react/jsx-curly-newline: 'error',
+    react/jsx-max-props-per-line: ['off'],
+    react/destructuring-assignment: [error, never],
+    react/function-component-definition: 'off',
+
+    # unused var
+    # need these two lines to make sure props function variables don't have error
+    # https://stackoverflow.com/a/72182126
+    no-unused-vars: 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
+
+    # Allow untyped functions
+    # must be quoted
+    typescript-eslint/explicit-module-boundary-types: 'off',
+
+    # Require naming react components
+    react/display-name: 'error',
+
+    # NextJs specific fix: suppress errors for missing 'import React' in files for nextjs
+    react/react-in-jsx-scope: 'off',
+  }
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - '.js'
+        - '.jsx'
+        - '.ts'
+        - '.tsx'
+        - '.d.ts'
