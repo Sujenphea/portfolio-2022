@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import CameraControls from './CameraControls'
 import Lights from './Lights'
+import SJParticles from './models/SJParticles'
 
 function ExperienceCanvas() {
   return (
@@ -24,10 +25,7 @@ function ExperienceCanvas() {
         <CameraControls />
         <Lights />
         <Suspense fallback={null}>
-          <mesh position={[0, 0, 0]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color={0xff0000} />
-          </mesh>
+          <SJParticles />
         </Suspense>
       </Canvas>
     </div>
