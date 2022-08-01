@@ -3,11 +3,11 @@ import { useFrame } from '@react-three/fiber'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Vector3 } from 'three'
+import { clamp } from './utils/math'
 
-const Cameras = (props: { points: Vector3[] }) => {
+const Cameras = (props: { points: Vector3[]; scrollProgress: number }) => {
   // params
   const [curve] = useState(new THREE.CatmullRomCurve3(props.points))
-  const loopDuration = useRef(60)
   const cameraHeightOffset = useRef(20)
 
   // refs
@@ -16,22 +16,19 @@ const Cameras = (props: { points: Vector3[] }) => {
 
   // tick
   // - update camera position
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime
-    const loop = loopDuration.current
-
-    // time
-    const timeOne = (time % loop) / loop // timestamp for initial position
-    const timeTwo = ((time + 1) % loop) / loop // timestamp for next position
+  useFrame(() => {
+    // get position on curve
+    const initialProgress = clamp(props.scrollProgress, 0, 1)
+    const lookAtProgress = clamp(props.scrollProgress + 0.001, 0, 1)
 
     // set camera position
-    position.current = curve.getPointAt(timeOne)
+    position.current = curve.getPointAt(initialProgress)
     position.current.add(new Vector3(0, cameraHeightOffset.current, 0)) // position offset
 
     cameraRef.current.position.copy(position.current)
 
     // set camera direction
-    const cameraDirection = curve.getPointAt(timeTwo)
+    const cameraDirection = curve.getPointAt(lookAtProgress)
     cameraDirection.add(new Vector3(0, cameraHeightOffset.current, 0)) // direction offset
 
     cameraRef.current.lookAt(cameraDirection)

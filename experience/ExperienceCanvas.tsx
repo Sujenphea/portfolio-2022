@@ -1,12 +1,14 @@
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import Cameras from './Cameras'
 import Lights from './Lights'
-import SJParticles from './models/SJParticles'
-import pointsSj from './points/points-sj'
+import SJParticlesScroll from './models/SJParticlesScroll'
 import pointsSjVector from './points/points-sj-vector'
 
 function ExperienceCanvas() {
+  // states
+  const [scrollProgress, setScrollProgress] = useState(0)
+
   return (
     <div
       style={{
@@ -20,9 +22,9 @@ function ExperienceCanvas() {
     >
       <Canvas dpr={[1, 2]} linear>
         <Lights />
-        <Cameras points={pointsSjVector} />
+        <Cameras points={pointsSjVector} scrollProgress={scrollProgress} />
         <Suspense fallback={null}>
-          <SJParticles points={pointsSj} />
+          <SJParticlesScroll setScrollProgress={setScrollProgress} />
         </Suspense>
       </Canvas>
     </div>
