@@ -1,18 +1,13 @@
 import { PointMaterial, Points } from '@react-three/drei'
 import { useState } from 'react'
-import pointsSj from '../points/points-sj'
 
-const TestPoints = () => {
-  const [points] = useState(new Float32Array(pointsSj.flatMap((i) => i)))
-  const [color] = useState(
-    Float32Array.from({ length: points.length }, () => Math.random())
-  )
+const SJParticles = (props: { points: number[][] }) => {
+  const [points] = useState(new Float32Array(props.points.flatMap((i) => i)))
 
   return (
-    <Points positions={points} colors={color}>
+    <Points positions={points}>
       <PointMaterial
-        transparent
-        vertexColors
+        color={0xff0000}
         size={4}
         sizeAttenuation={false}
         depthWrite={false}
@@ -21,4 +16,4 @@ const TestPoints = () => {
   )
 }
 
-export default TestPoints
+export default SJParticles

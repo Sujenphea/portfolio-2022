@@ -1,8 +1,10 @@
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
-import CameraControls from './CameraControls'
+import Cameras from './Cameras'
 import Lights from './Lights'
 import SJParticles from './models/SJParticles'
+import pointsSj from './points/points-sj'
+import pointsSjVector from './points/points-sj-vector'
 
 function ExperienceCanvas() {
   return (
@@ -16,16 +18,11 @@ function ExperienceCanvas() {
         width: '100vw',
       }}
     >
-      <Canvas
-        camera={{ zoom: 40, far: 1000, position: [0, 0, 100] }}
-        orthographic
-        dpr={[1, 2]}
-        linear
-      >
-        <CameraControls />
+      <Canvas dpr={[1, 2]} linear>
         <Lights />
+        <Cameras points={pointsSjVector} />
         <Suspense fallback={null}>
-          <SJParticles />
+          <SJParticles points={pointsSj} />
         </Suspense>
       </Canvas>
     </div>
