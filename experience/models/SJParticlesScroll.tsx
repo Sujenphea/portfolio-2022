@@ -6,13 +6,13 @@ import {
 } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { Dispatch, SetStateAction, useState } from 'react'
-import pointsSj from '../points/points-sj'
 
 const Particles = (props: {
+  points: number[][]
   setScrollProgress: Dispatch<SetStateAction<number>>
 }) => {
   // hooks
-  const [points] = useState(new Float32Array(pointsSj.flatMap((i) => i)))
+  const [points] = useState(new Float32Array(props.points.flatMap((i) => i)))
   const scrollData = useScroll()
 
   // tick
@@ -34,6 +34,7 @@ const Particles = (props: {
 }
 
 const SJParticlesScroll = (props: {
+  points: number[][]
   setScrollProgress: Dispatch<SetStateAction<number>>
 }) => (
   <ScrollControls
@@ -43,7 +44,10 @@ const SJParticlesScroll = (props: {
     horizontal={false}
     infinite={false}
   >
-    <Particles setScrollProgress={props.setScrollProgress} />
+    <Particles
+      points={props.points}
+      setScrollProgress={props.setScrollProgress}
+    />
   </ScrollControls>
 )
 

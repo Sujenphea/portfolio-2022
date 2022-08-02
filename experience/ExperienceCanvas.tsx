@@ -3,6 +3,7 @@ import { Suspense, useState } from 'react'
 import Cameras from './Cameras'
 import Lights from './Lights'
 import SJParticlesScroll from './models/SJParticlesScroll'
+import pointsSj from './points/points-sj'
 import pointsSjCamera from './points/points-sj-camera'
 
 function ExperienceCanvas() {
@@ -24,7 +25,10 @@ function ExperienceCanvas() {
         <Lights />
         <Cameras points={pointsSjCamera} scrollProgress={scrollProgress} />
         <Suspense fallback={null}>
-          <SJParticlesScroll setScrollProgress={setScrollProgress} />
+          <SJParticlesScroll
+            points={pointsSj}
+            setScrollProgress={setScrollProgress}
+          />
         </Suspense>
       </Canvas>
     </div>
