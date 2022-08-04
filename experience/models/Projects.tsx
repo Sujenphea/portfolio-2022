@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three'
 
 const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
   // params
-  const objectOffset = useRef(new Vector3(-10, 15, 0))
+  const objectVerticalOffset = useRef(new Vector3(0, 10, 0))
+  const objectNormalMultiplier = useRef(10) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.01)
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
@@ -26,7 +27,15 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
       const lookAtPosition = curve.getPointAt(
         location + lookAtPositionOffset.current
       )
-      lookAtPosition.add(objectOffset.current)
+      lookAtPosition.add(objectVerticalOffset.current)
+
+      // get normal to curve
+      const tangent = curve.getTangentAt(location)
+      const normal = new Vector3()
+        .copy(tangent)
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+        .normalize()
+      lookAtPosition.add(normal.multiplyScalar(objectNormalMultiplier.current))
 
       ref?.lookAt(lookAtPosition)
     })
@@ -41,7 +50,15 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
 
         // get position
         const position = curve.getPointAt(location)
-        position.add(objectOffset.current)
+        position.add(objectVerticalOffset.current)
+
+        // get normal to curve
+        const tangent = curve.getTangentAt(location)
+        const normal = new Vector3()
+          .copy(tangent)
+          .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+          .normalize()
+        position.add(normal.multiplyScalar(objectNormalMultiplier.current))
 
         return (
           <mesh
@@ -59,4 +76,4 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
   )
 }
 
-export default Projects
+export default memo(Projects)
