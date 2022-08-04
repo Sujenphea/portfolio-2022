@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three'
+import { Text } from '@react-three/drei'
 
 const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
   // params
@@ -15,6 +16,7 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
   const meshRefs = useRef<
     (Mesh<BufferGeometry, Material | Material[]> | null)[]
   >([])
+  const textRef = useRef<Mesh>(null!)
 
   // helpers
   const calculatePosition = (
@@ -53,6 +55,25 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     })
   }, [props.projects.length])
 
+  // handlers
+  const handleProjectClick = (name: string, location: number) => {
+    textRef.current.visible = !textRef.current.visible
+
+    // get position
+    const position = calculatePosition(location, -1)
+    textRef.current.position.copy(position)
+
+    // get lookAt Position
+    const lookAtPosition = calculatePosition(
+      location + lookAtPositionOffset.current,
+      -1
+    )
+    textRef.current.lookAt(lookAtPosition)
+
+    // modify text
+    // textRef.current.children
+  }
+
   return (
     <group>
       {/* render projects */}
@@ -69,12 +90,25 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
             ref={(ref) => {
               meshRefs.current[i] = ref
             }}
+            onClick={() => {
+              handleProjectClick(name, location)
+            }}
           >
             <planeGeometry args={[12, 9]} />
             <meshBasicMaterial color={0x00ff00} />
           </mesh>
         )
       })}
+      <Text
+        color="pink"
+        fontSize={2}
+        visible={false}
+        anchorX="center"
+        anchorY="middle"
+        ref={textRef}
+      >
+        hello world!
+      </Text>
     </group>
   )
 }
