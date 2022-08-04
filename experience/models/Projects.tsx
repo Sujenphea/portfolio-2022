@@ -16,6 +16,26 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     (Mesh<BufferGeometry, Material | Material[]> | null)[]
   >([])
 
+  // helpers
+  const calculatePosition = (
+    locationOnCurve: number,
+    side: number // 1 for left side, -1 for right side
+  ) => {
+    const position = curve.getPointAt(locationOnCurve)
+    position.add(objectVerticalOffset.current)
+
+    // get normal to curve
+    const tangent = curve.getTangentAt(locationOnCurve)
+    const normal = new Vector3()
+      .copy(tangent)
+      .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+      .normalize()
+    position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
+
+    return position
+  }
+
+  // hooks
   useEffect(() => {
     // set length for ref
     meshRefs.current = meshRefs.current.slice(0, props.projects.length)
@@ -24,18 +44,10 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     meshRefs.current.forEach((ref, i) => {
       const location = (i + 1) / (props.projects.length + 1)
 
-      const lookAtPosition = curve.getPointAt(
-        location + lookAtPositionOffset.current
+      const lookAtPosition = calculatePosition(
+        location + lookAtPositionOffset.current,
+        1
       )
-      lookAtPosition.add(objectVerticalOffset.current)
-
-      // get normal to curve
-      const tangent = curve.getTangentAt(location)
-      const normal = new Vector3()
-        .copy(tangent)
-        .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
-        .normalize()
-      lookAtPosition.add(normal.multiplyScalar(objectNormalMultiplier.current))
 
       ref?.lookAt(lookAtPosition)
     })
@@ -48,17 +60,8 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
         // place first project further into the curve
         const location = (i + 1) / (props.projects.length + 1)
 
-        // get position
-        const position = curve.getPointAt(location)
-        position.add(objectVerticalOffset.current)
-
-        // get normal to curve
-        const tangent = curve.getTangentAt(location)
-        const normal = new Vector3()
-          .copy(tangent)
-          .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
-          .normalize()
-        position.add(normal.multiplyScalar(objectNormalMultiplier.current))
+        // position
+        const position = calculatePosition(location, 1)
 
         return (
           <mesh
