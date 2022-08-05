@@ -6,9 +6,12 @@ import * as THREE from 'three'
 
 import { clamp } from './utils/math'
 
+import CameraViewType from './types/cameraViewEnum'
+
 const Cameras = (props: {
   points: THREE.Vector3[]
   scrollProgress: number
+  cameraView: CameraViewType
 }) => {
   // params
   const [curve] = useState(new THREE.CatmullRomCurve3(props.points))
@@ -21,21 +24,33 @@ const Cameras = (props: {
   // tick
   // - update camera position
   useFrame(() => {
-    // get position on curve
-    const initialProgress = clamp(props.scrollProgress, 0, 1)
-    const lookAtProgress = clamp(props.scrollProgress + 0.001, 0, 1)
+    switch (props.cameraView) {
+      case CameraViewType.FirstPerson:
+        // get position on curve
+        const initialProgress = clamp(props.scrollProgress, 0, 1)
+        const lookAtProgress = clamp(props.scrollProgress + 0.001, 0, 1)
 
-    // set camera position
-    position.current = curve.getPointAt(initialProgress)
-    position.current.add(new THREE.Vector3(0, cameraHeightOffset.current, 0)) // position offset
+        // set camera position
+        position.current = curve.getPointAt(initialProgress)
+        position.current.add(
+          new THREE.Vector3(0, cameraHeightOffset.current, 0)
+        ) // position offset
 
-    cameraRef.current.position.copy(position.current)
+        cameraRef.current.position.copy(position.current)
 
-    // set camera direction
-    const cameraDirection = curve.getPointAt(lookAtProgress)
-    cameraDirection.add(new THREE.Vector3(0, cameraHeightOffset.current, 0)) // direction offset
+        // set camera direction
+        const cameraDirection = curve.getPointAt(lookAtProgress)
+        cameraDirection.add(new THREE.Vector3(0, cameraHeightOffset.current, 0)) // direction offset
 
-    cameraRef.current.lookAt(cameraDirection)
+        cameraRef.current.lookAt(cameraDirection)
+
+        return
+      case CameraViewType.Overview:
+        cameraRef.current.position.copy(new THREE.Vector3(0, 600, 0))
+        cameraRef.current.lookAt(new THREE.Vector3(0, 99, 0))
+
+        return
+    }
   })
 
   return (

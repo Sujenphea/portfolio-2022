@@ -8,6 +8,8 @@ import {
 } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 
+import CameraViewType from '../types/cameraViewEnum'
+
 const Particles = (props: {
   points: number[][]
   setScrollProgress: Dispatch<SetStateAction<number>>
@@ -37,6 +39,7 @@ const Particles = (props: {
 const SJParticlesScroll = (props: {
   points: number[][]
   setScrollProgress: Dispatch<SetStateAction<number>>
+  cameraView: CameraViewType
 }) => (
   <ScrollControls
     pages={5}
@@ -44,6 +47,7 @@ const SJParticlesScroll = (props: {
     damping={4}
     horizontal={false}
     infinite={false}
+    enabled={props.cameraView === CameraViewType.FirstPerson}
   >
     <Particles
       points={props.points}
