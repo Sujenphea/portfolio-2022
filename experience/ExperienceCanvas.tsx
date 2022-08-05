@@ -3,6 +3,7 @@ import { Suspense, useState } from 'react'
 
 import Cameras from './Cameras'
 import Lights from './Lights'
+import Works from './models/Works'
 
 import Projects from './models/Projects'
 import SJParticlesScroll from './models/SJParticlesScroll'
@@ -34,10 +35,15 @@ function ExperienceCanvas() {
             points={pointsSj}
             setScrollProgress={setScrollProgress}
           />
-          <Projects
+          <Works
             curvePoints={pointsSjCamera}
             projects={projects}
             rangeOnCurve={[0, 0.5]}
+          />
+          <Projects
+            curvePoints={pointsSjCamera}
+            projects={projects}
+            rangeOnCurve={[0.5, 1]}
           />
         </Suspense>
       </Canvas>
