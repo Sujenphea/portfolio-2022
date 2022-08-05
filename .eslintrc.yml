@@ -49,6 +49,10 @@ rules: {
 
     # NextJs specific fix: suppress errors for missing 'import React' in files for nextjs
     react/react-in-jsx-scope: 'off',
+    
+    # disable false positive with enums
+    no-shadow: 'off',
+    @typescript-eslint/no-shadow: ['error'],
   }
 settings:
   import/resolver:
