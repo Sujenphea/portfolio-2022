@@ -34,7 +34,11 @@ function ExperienceCanvas() {
             points={pointsSj}
             setScrollProgress={setScrollProgress}
           />
-          <Projects curvePoints={pointsSjCamera} projects={projects} />
+          <Projects
+            curvePoints={pointsSjCamera}
+            projects={projects}
+            rangeOnCurve={[0, 0.5]}
+          />
         </Suspense>
       </Canvas>
     </div>

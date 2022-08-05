@@ -3,7 +3,11 @@ import * as THREE from 'three'
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three'
 import { Text } from '@react-three/drei'
 
-const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
+const Projects = (props: {
+  curvePoints: Vector3[]
+  projects: string[]
+  rangeOnCurve: number[] // place projects on a certain section of curve
+}) => {
   // params
   const objectVerticalOffset = useRef(new Vector3(0, 10, 0))
   const objectNormalMultiplier = useRef(10) // horizontal displacement of object
@@ -40,6 +44,21 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     return position
   }
 
+  const numberLinearConverstion = (
+    value: number,
+    oldRange: number[],
+    newRange: number[]
+  ) => {
+    // o = (OldMax - OldMin)
+    // n = (NewMax - NewMin)
+    // NewValue = (((OldValue - OldMin) * n) / o) + NewMin
+
+    const oldDiff = oldRange[1] - oldRange[0]
+    const newDiff = newRange[1] - newRange[0]
+
+    return ((value - oldRange[0]) * newDiff) / oldDiff + newRange[0]
+  }
+
   // hooks
   useEffect(() => {
     // set length for ref
@@ -48,9 +67,14 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     // set mesh rotation
     meshRefs.current.forEach((ref, i) => {
       const location = (i + 1) / (props.projects.length + 1)
+      const normalisedLocation = numberLinearConverstion(
+        location,
+        [0, 1],
+        props.rangeOnCurve
+      )
 
       const lookAtPosition = calculatePosition(
-        location + lookAtPositionOffset.current,
+        normalisedLocation + lookAtPositionOffset.current,
         1
       )
 
@@ -83,9 +107,14 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
       {props.projects.map((name, i) => {
         // place first project further into the curve
         const location = (i + 1) / (props.projects.length + 1)
+        const normalisedLocation = numberLinearConverstion(
+          location,
+          [0, 1],
+          props.rangeOnCurve
+        )
 
         // position
-        const position = calculatePosition(location, 1)
+        const position = calculatePosition(normalisedLocation, 1)
 
         return (
           <mesh
@@ -94,7 +123,7 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
               meshRefs.current[i] = ref
             }}
             onClick={() => {
-              handleProjectClick(name, location)
+              handleProjectClick(name, normalisedLocation)
             }}
           >
             <planeGeometry args={[12, 9]} />
