@@ -12,6 +12,9 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
   )
 
+  // state
+  const [projectDescription, setProjectDescription] = useState('hello world')
+
   // refs
   const meshRefs = useRef<
     (Mesh<BufferGeometry, Material | Material[]> | null)[]
@@ -71,7 +74,7 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
     textRef.current.lookAt(lookAtPosition)
 
     // modify text
-    // textRef.current.children
+    setProjectDescription(`hello world ${name}`)
   }
 
   return (
@@ -107,7 +110,7 @@ const Projects = (props: { curvePoints: Vector3[]; projects: string[] }) => {
         anchorY="middle"
         ref={textRef}
       >
-        hello world!
+        {projectDescription}
       </Text>
     </group>
   )
