@@ -1,14 +1,15 @@
-import { Canvas } from '@react-three/fiber'
 import { Suspense, useState } from 'react'
+
+import { Canvas } from '@react-three/fiber'
 
 import Cameras from './Cameras'
 import Lights from './Lights'
-import Works from './models/Works'
 
+import AboutMe from './models/AboutMe'
+import Works from './models/Works'
 import Projects from './models/Projects'
 import SJParticlesScroll from './models/SJParticlesScroll'
 
-import AboutMe from './models/AboutMe'
 import pointsSj from './points/points-sj'
 import pointsSjCamera from './points/points-sj-camera'
 

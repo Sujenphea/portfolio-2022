@@ -1,5 +1,6 @@
-import { PointMaterial, Points } from '@react-three/drei'
 import { useState } from 'react'
+
+import { PointMaterial, Points } from '@react-three/drei'
 
 const SJParticles = (props: { points: number[][] }) => {
   const [points] = useState(new Float32Array(props.points.flatMap((i) => i)))

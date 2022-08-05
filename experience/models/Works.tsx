@@ -1,16 +1,17 @@
 import { memo, useEffect, useRef, useState } from 'react'
+
 import * as THREE from 'three'
-import { BufferGeometry, Material, Mesh, Vector3 } from 'three'
 import { Text } from '@react-three/drei'
+
 import ProjectType from '../types/projectType'
 
 const Works = (props: {
-  curvePoints: Vector3[]
+  curvePoints: THREE.Vector3[]
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
 }) => {
   // params
-  const objectVerticalOffset = useRef(new Vector3(0, 10, 0))
+  const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
   const objectNormalMultiplier = useRef(10) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.01)
   const [curve] = useState(
@@ -22,9 +23,12 @@ const Works = (props: {
 
   // refs
   const meshRefs = useRef<
-    (Mesh<BufferGeometry, Material | Material[]> | null)[]
+    (THREE.Mesh<
+      THREE.BufferGeometry,
+      THREE.Material | THREE.Material[]
+    > | null)[]
   >([])
-  const textRef = useRef<Mesh>(null!)
+  const textRef = useRef<THREE.Mesh>(null!)
 
   // helpers
   const calculatePosition = (
@@ -36,7 +40,7 @@ const Works = (props: {
 
     // get normal to curve
     const tangent = curve.getTangentAt(locationOnCurve)
-    const normal = new Vector3()
+    const normal = new THREE.Vector3()
       .copy(tangent)
       .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
       .normalize()

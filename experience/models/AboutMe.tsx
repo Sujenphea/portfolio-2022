@@ -1,20 +1,20 @@
-import { Text } from '@react-three/drei'
 import { memo, useEffect, useRef, useState } from 'react'
+
+import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { Mesh, Vector3 } from 'three'
 
 const AboutMe = (props: {
-  curvePoints: Vector3[]
+  curvePoints: THREE.Vector3[]
   positionOnCurve: number
 }) => {
   // params
-  const objectVerticalOffset = useRef(new Vector3(0, 5, 0))
+  const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
   )
 
   // refs
-  const textRef = useRef<Mesh>(null!)
+  const textRef = useRef<THREE.Mesh>(null!)
 
   // helpers
   const calculatePosition = (locationOnCurve: number) => {

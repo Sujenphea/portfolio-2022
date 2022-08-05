@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import {
   PointMaterial,
   Points,
@@ -5,7 +7,6 @@ import {
   useScroll,
 } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { Dispatch, SetStateAction, useState } from 'react'
 
 const Particles = (props: {
   points: number[][]
