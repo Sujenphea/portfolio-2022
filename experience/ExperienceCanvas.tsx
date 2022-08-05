@@ -10,6 +10,7 @@ import SJParticlesScroll from './models/SJParticlesScroll'
 
 import pointsSj from './points/points-sj'
 import pointsSjCamera from './points/points-sj-camera'
+import AboutMe from './models/AboutMe'
 
 function ExperienceCanvas() {
   // states
@@ -35,10 +36,11 @@ function ExperienceCanvas() {
             points={pointsSj}
             setScrollProgress={setScrollProgress}
           />
+          <AboutMe curvePoints={pointsSjCamera} positionOnCurve={0.01} />
           <Works
             curvePoints={pointsSjCamera}
             projects={projects}
-            rangeOnCurve={[0, 0.5]}
+            rangeOnCurve={[0.01, 0.5]}
           />
           <Projects
             curvePoints={pointsSjCamera}
