@@ -2,10 +2,11 @@ import { memo, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three'
 import { Text } from '@react-three/drei'
+import ProjectType from '../types/projectType'
 
 const Works = (props: {
   curvePoints: Vector3[]
-  projects: string[]
+  projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
 }) => {
   // params
@@ -98,13 +99,13 @@ const Works = (props: {
     textRef.current.lookAt(lookAtPosition)
 
     // modify text
-    setProjectDescription(`work - ${name}`)
+    setProjectDescription(`${name}`)
   }
 
   return (
     <group>
       {/* render projects */}
-      {props.projects.map((name, i) => {
+      {props.projects.map((project, i) => {
         // place first project further into the curve
         const location = (i + 1) / (props.projects.length + 1)
         const normalisedLocation = numberLinearConverstion(
@@ -123,7 +124,7 @@ const Works = (props: {
               meshRefs.current[i] = ref
             }}
             onClick={() => {
-              handleProjectClick(name, normalisedLocation)
+              handleProjectClick(project.name, normalisedLocation)
             }}
           >
             <planeGeometry args={[12, 9]} />
