@@ -119,6 +119,7 @@ const Projects = (props: {
 
         return (
           <mesh
+            key={project.name + i.toString()}
             position={position}
             ref={(ref) => {
               meshRefs.current[i] = ref
