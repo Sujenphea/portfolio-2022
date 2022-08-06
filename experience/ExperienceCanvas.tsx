@@ -13,10 +13,10 @@ import SJParticlesScroll from './models/SJParticlesScroll'
 import pointsSj from './points/points-sj'
 import pointsSjCamera from './points/points-sj-camera'
 
-import projectsJSON from './data/projects.json'
-import worksJSON from './data/works.json'
+import projectsJSON from '../data/projects.json'
+import worksJSON from '../data/works.json'
 
-import CameraViewType from './types/cameraViewEnum'
+import CameraViewType from '../types/cameraViewEnum'
 
 const ExperienceCanvas = (props: { menuVisible: boolean }) => {
   // states

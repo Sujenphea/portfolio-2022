@@ -8,7 +8,7 @@ import {
 } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 
-import CameraViewType from '../types/cameraViewEnum'
+import CameraViewType from '../../types/cameraViewEnum'
 
 const Particles = (props: {
   points: number[][]

@@ -3,7 +3,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Text } from '@react-three/drei'
 
-import ProjectType from '../types/projectType'
+import ProjectType from '../../types/projectType'
 
 const Works = (props: {
   curvePoints: THREE.Vector3[]

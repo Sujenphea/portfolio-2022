@@ -4,9 +4,9 @@ import { PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-import { clamp } from './utils/math'
+import { clamp } from '../utils/math'
 
-import CameraViewType from './types/cameraViewEnum'
+import CameraViewType from '../types/cameraViewEnum'
 
 const Cameras = (props: {
   points: THREE.Vector3[]
