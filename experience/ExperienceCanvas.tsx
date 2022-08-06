@@ -18,12 +18,9 @@ import worksJSON from './data/works.json'
 
 import CameraViewType from './types/cameraViewEnum'
 
-function ExperienceCanvas() {
+const ExperienceCanvas = (props: { menuVisible: boolean }) => {
   // states
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [cameraView, setCameraView] = useState<CameraViewType>(
-    CameraViewType.FirstPerson
-  )
 
   return (
     <div
@@ -34,43 +31,30 @@ function ExperienceCanvas() {
 
         height: '100vh',
         width: '100vw',
+
+        zIndex: 0,
       }}
     >
-      {/* TEMP BUTTON */}
-      <button
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 15,
-          height: '100px',
-          width: '100px',
-          zIndex: 1000,
-
-          backgroundColor: 'red',
-        }}
-        type="button"
-        onClick={() => {
-          if (cameraView === CameraViewType.FirstPerson) {
-            setCameraView(CameraViewType.Overview)
-          } else {
-            setCameraView(CameraViewType.FirstPerson)
-          }
-        }}
-      >
-        change camera view
-      </button>
       <Canvas dpr={[1, 2]} linear>
         <Lights />
         <Cameras
           points={pointsSjCamera}
           scrollProgress={scrollProgress}
-          cameraView={cameraView}
+          cameraView={
+            props.menuVisible
+              ? CameraViewType.Overview
+              : CameraViewType.FirstPerson
+          }
         />
         <Suspense fallback={null}>
           <SJParticlesScroll
             points={pointsSj}
             setScrollProgress={setScrollProgress}
-            cameraView={cameraView}
+            cameraView={
+              props.menuVisible
+                ? CameraViewType.Overview
+                : CameraViewType.FirstPerson
+            }
           />
           <AboutMe curvePoints={pointsSjCamera} positionOnCurve={0.01} />
           <Works
