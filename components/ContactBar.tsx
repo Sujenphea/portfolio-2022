@@ -17,6 +17,7 @@ const SocialIcon = (props: { icon: IconDefinition; link: string }) => {
         padding: '0px 10px',
       }}
       href={props.link}
+      target="_blank"
     >
       <FontAwesomeIcon
         icon={props.icon}
