@@ -6,6 +6,7 @@ import MenuButton from '../components/MenuButton'
 import GlanceView from '../components/GlanceView'
 
 import ExperienceCanvas from '../experience/ExperienceCanvas'
+import ContactBar from '../components/ContactBar'
 
 export default function Home() {
   // states
@@ -32,6 +33,9 @@ export default function Home() {
       <Menu visible={menuVisible} />
       <ExperienceCanvas menuVisible={menuVisible} />
       <GlanceView visible={glanceViewVisible} />
+      <ContactBar
+        style={{ position: 'absolute', bottom: '15px', left: '15px' }}
+      />
     </div>
   )
 }
