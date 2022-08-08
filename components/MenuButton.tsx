@@ -8,7 +8,7 @@ const MenuButton = (props: {
         position: 'absolute',
         right: 0,
         top: 0,
-        padding: '20px',
+        margin: '20px',
 
         zIndex: 1000,
       }}
