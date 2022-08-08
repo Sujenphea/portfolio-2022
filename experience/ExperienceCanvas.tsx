@@ -1,6 +1,7 @@
 import { Suspense, useState } from 'react'
 
 import { Canvas } from '@react-three/fiber'
+import { Vector3 } from 'three'
 
 import Cameras from './Cameras'
 import Lights from './Lights'
@@ -17,10 +18,30 @@ import projectsJSON from '../data/projects.json'
 import worksJSON from '../data/works.json'
 
 import CameraViewType from '../types/cameraViewEnum'
+import CameraData from '../types/cameraData'
 
-const ExperienceCanvas = (props: { menuVisible: boolean }) => {
+const ExperienceCanvas = (props: {
+  cameraView: CameraViewType
+  changeCameraView: (cameraView: CameraViewType) => void
+}) => {
   // states
   const [scrollProgress, setScrollProgress] = useState(0)
+  // - camera position when cameraView is looking at project
+  const [projectCameraData, setProjectCameraData] = useState<CameraData>({
+    position: new Vector3(),
+    lookAt: new Vector3(),
+  })
+
+  // handlers
+  // - change camera view type and position
+  const handleProjectClick = (
+    cameraPosition: Vector3,
+    cameraLookAt: Vector3
+  ) => {
+    props.changeCameraView(CameraViewType.Project)
+
+    setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
+  }
 
   return (
     <div
@@ -40,21 +61,14 @@ const ExperienceCanvas = (props: { menuVisible: boolean }) => {
         <Cameras
           points={pointsSjCamera}
           scrollProgress={scrollProgress}
-          cameraView={
-            props.menuVisible
-              ? CameraViewType.Overview
-              : CameraViewType.FirstPerson
-          }
+          cameraView={props.cameraView}
+          cameraData={projectCameraData}
         />
         <Suspense fallback={null}>
           <SJParticlesScroll
             points={pointsSj}
             setScrollProgress={setScrollProgress}
-            cameraView={
-              props.menuVisible
-                ? CameraViewType.Overview
-                : CameraViewType.FirstPerson
-            }
+            cameraView={props.cameraView}
           />
           <AboutMe curvePoints={pointsSjCamera} positionOnCurve={0.01} />
           <Works
@@ -66,6 +80,7 @@ const ExperienceCanvas = (props: { menuVisible: boolean }) => {
             curvePoints={pointsSjCamera}
             projects={projectsJSON}
             rangeOnCurve={[0.5, 1]}
+            projectClicked={handleProjectClick}
           />
         </Suspense>
       </Canvas>

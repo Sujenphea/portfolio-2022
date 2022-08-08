@@ -7,11 +7,13 @@ import * as THREE from 'three'
 import { clamp } from '../utils/math'
 
 import CameraViewType from '../types/cameraViewEnum'
+import CameraData from '../types/cameraData'
 
 const Cameras = (props: {
   points: THREE.Vector3[]
   scrollProgress: number
   cameraView: CameraViewType
+  cameraData: CameraData
 }) => {
   // params
   const [curve] = useState(new THREE.CatmullRomCurve3(props.points))
@@ -48,6 +50,11 @@ const Cameras = (props: {
       case CameraViewType.Overview:
         cameraRef.current.position.copy(new THREE.Vector3(0, 600, 0))
         cameraRef.current.lookAt(new THREE.Vector3(0, 99, 0))
+
+        return
+      case CameraViewType.Project:
+        cameraRef.current.position.copy(props.cameraData.position)
+        cameraRef.current.lookAt(props.cameraData.lookAt)
 
         return
     }

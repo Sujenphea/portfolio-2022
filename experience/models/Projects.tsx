@@ -1,6 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
 
-import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 
 import ProjectType from '../../types/projectType'
@@ -9,17 +8,18 @@ const Projects = (props: {
   curvePoints: THREE.Vector3[]
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
+  projectClicked: (
+    cameraPosition: THREE.Vector3,
+    cameraLookAt: THREE.Vector3
+  ) => void
 }) => {
   // params
   const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
   const objectNormalMultiplier = useRef(10) // horizontal displacement of object
-  const lookAtPositionOffset = useRef(-0.01)
+  const lookAtPositionOffset = useRef(-0.005)
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
   )
-
-  // state
-  const [projectDescription, setProjectDescription] = useState('hello world')
 
   // refs
   const meshRefs = useRef<
@@ -28,7 +28,6 @@ const Projects = (props: {
       THREE.Material | THREE.Material[]
     > | null)[]
   >([])
-  const textRef = useRef<THREE.Mesh>(null!)
 
   // helpers
   const calculatePosition = (
@@ -89,21 +88,10 @@ const Projects = (props: {
 
   // handlers
   const handleProjectClick = (name: string, location: number) => {
-    textRef.current.visible = !textRef.current.visible
+    const cameraPosition = calculatePosition(location - 0.005, 0)
+    const cameraLookAt = calculatePosition(location, 0)
 
-    // get position
-    const position = calculatePosition(location, -1)
-    textRef.current.position.copy(position)
-
-    // get lookAt Position
-    const lookAtPosition = calculatePosition(
-      location + lookAtPositionOffset.current,
-      -1
-    )
-    textRef.current.lookAt(lookAtPosition)
-
-    // modify text
-    setProjectDescription(`${name}`)
+    props.projectClicked(cameraPosition, cameraLookAt)
   }
 
   return (
@@ -137,16 +125,6 @@ const Projects = (props: {
           </mesh>
         )
       })}
-      <Text
-        color="pink"
-        fontSize={2}
-        visible={false}
-        anchorX="center"
-        anchorY="middle"
-        ref={textRef}
-      >
-        {projectDescription}
-      </Text>
     </group>
   )
 }
