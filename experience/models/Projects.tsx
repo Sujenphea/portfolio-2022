@@ -9,6 +9,7 @@ const Projects = (props: {
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
   projectClicked: (
+    project: ProjectType,
     cameraPosition: THREE.Vector3,
     cameraLookAt: THREE.Vector3
   ) => void
@@ -87,11 +88,11 @@ const Projects = (props: {
   }, [props.projects.length])
 
   // handlers
-  const handleProjectClick = (name: string, location: number) => {
+  const handleProjectClick = (project: ProjectType, location: number) => {
     const cameraPosition = calculatePosition(location - 0.005, 0)
     const cameraLookAt = calculatePosition(location, 0)
 
-    props.projectClicked(cameraPosition, cameraLookAt)
+    props.projectClicked(project, cameraPosition, cameraLookAt)
   }
 
   return (
@@ -117,7 +118,7 @@ const Projects = (props: {
               meshRefs.current[i] = ref
             }}
             onClick={() => {
-              handleProjectClick(project.name, normalisedLocation)
+              handleProjectClick(project, normalisedLocation)
             }}
           >
             <planeGeometry args={[12, 9]} />

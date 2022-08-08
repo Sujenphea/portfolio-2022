@@ -17,12 +17,15 @@ import pointsSjCamera from './points/points-sj-camera'
 import projectsJSON from '../data/projects.json'
 import worksJSON from '../data/works.json'
 
+import ProjectType from '../types/projectType'
+
 import CameraViewType from '../types/cameraViewEnum'
 import CameraData from '../types/cameraData'
 
 const ExperienceCanvas = (props: {
   cameraView: CameraViewType
   changeCameraView: (cameraView: CameraViewType) => void
+  changeProjectOverlay: (project: ProjectType) => void
 }) => {
   // states
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -35,9 +38,11 @@ const ExperienceCanvas = (props: {
   // handlers
   // - change camera view type and position
   const handleProjectClick = (
+    project: ProjectType,
     cameraPosition: Vector3,
     cameraLookAt: Vector3
   ) => {
+    props.changeProjectOverlay(project)
     props.changeCameraView(CameraViewType.Project)
 
     setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
