@@ -1,15 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/destructuring-assignment */
+import '../styles/sanitize.css'
 import '../styles/globals.css'
 import { AppProps } from 'next/app'
-import Head from 'next/head'
 
 function MyApp(props: AppProps) {
-  return (
-    <props.Component {...props.pageProps}>
-      <Head>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-      </Head>
-    </props.Component>
-  )
+  return <props.Component {...props.pageProps} />
 }
 
 export default MyApp
