@@ -6,6 +6,10 @@ import { CSSProperties, useRef, useState } from 'react'
 const ToggleButton = (props: {
   handleToggle: (isToggled: boolean) => void
   style: CSSProperties
+  leftText: string
+  rightText: string
+  untoggledColor: string
+  toggledColor: string
 }) => {
   // params
   const circleWidth = useRef(40) // percent
@@ -29,7 +33,9 @@ const ToggleButton = (props: {
       display: block;
       margin: 0 auto;
 
-      background-color: ${isToggled ? `#000` : `#fff`};
+      background-color: ${isToggled
+        ? props.untoggledColor
+        : props.toggledColor};
       border-radius: 999px;
 
       transition: 0.3s ease background-color;
@@ -60,15 +66,43 @@ const ToggleButton = (props: {
       top: 50%;
       transform: translateY(-50%);
 
-      background-color: ${isToggled ? `#fff` : `#000`};
+      background-color: ${isToggled
+        ? props.toggledColor
+        : props.untoggledColor};
       border-radius: 50%;
 
       z-index: 1;
     `,
   }
 
+  const textCss = {
+    leftText: css({}),
+    rightText: css({}),
+    labelContainer: css({
+      position: 'absolute',
+      top: '-25px',
+      width: '300%',
+
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+
+      color: isToggled ? props.toggledColor : props.untoggledColor,
+      fontSize: '14px',
+
+      transition: '0.1s ease',
+    }),
+  }
+
   return (
-    <div style={props.style}>
+    <div
+      style={{
+        ...props.style,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <input
         type="checkbox"
         id="toggle_checkbox"
@@ -85,8 +119,28 @@ const ToggleButton = (props: {
           <div css={toggleCss.circle} />
         </div>
       </label>
+      {/* text */}
+      <div css={textCss.labelContainer}>
+        <div css={textCss.leftText}>{props.leftText}</div>
+        <div css={textCss.rightText}>{props.rightText}</div>
+      </div>
     </div>
   )
+}
+
+ToggleButton.defaultProps = {
+  style: {
+    position: 'absolute',
+    top: '50vh',
+    left: '50vw',
+    width: '100px',
+    height: '50px',
+  },
+  handleToggle: () => {},
+  leftText: '',
+  rightText: '',
+  untoggledColor: 'black',
+  toggledColor: 'white',
 }
 
 export default ToggleButton
