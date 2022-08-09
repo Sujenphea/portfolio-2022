@@ -20,6 +20,9 @@ const MenuButton = (props: {
         }}
         style={{
           color: 'white',
+          backgroundColor: 'transparent',
+          outline: 'none',
+          border: 'none',
         }}
       >
         {props.visible ? 'close' : 'open'}
