@@ -51,6 +51,9 @@ export default function Home() {
     <div
       style={{
         backgroundColor: 'rgb(6, 10, 17)',
+
+        width: '100vw',
+        height: '100vh',
       }}
     >
       <MenuButton visible={menuVisible} handleToggleMenu={handleToggleMenu} />
