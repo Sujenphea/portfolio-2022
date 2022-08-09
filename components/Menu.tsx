@@ -1,3 +1,5 @@
+import ToggleButton from './ToggleButton'
+
 const Menu = (props: { visible: boolean }) => {
   return (
     <div
@@ -12,7 +14,7 @@ const Menu = (props: { visible: boolean }) => {
         height: '100vh',
 
         display: props.visible ? 'flex' : 'none',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
 
@@ -20,7 +22,15 @@ const Menu = (props: { visible: boolean }) => {
         color: 'white',
       }}
     >
-      {/* immersive column */}
+      <ToggleButton
+        style={{
+          position: 'relative',
+          width: '100px',
+          height: '50px',
+        }}
+        leftText="immersive"
+        rightText="glance"
+      />
       <div
         style={{
           width: '300px',
@@ -29,24 +39,9 @@ const Menu = (props: { visible: boolean }) => {
           textAlign: 'center',
         }}
       >
-        <h1>Immersive</h1>
-        <h3>Work</h3>
-        <h3>Project</h3>
-        <h3>About Me</h3>
-      </div>
-      {/* list column */}
-      <div
-        style={{
-          width: '300px',
-          padding: '30px',
-
-          textAlign: 'center',
-        }}
-      >
-        <h1>List</h1>
-        <h3>Work</h3>
-        <h3>Project</h3>
-        <h3>About Me</h3>
+        <h2>Work</h2>
+        <h2>Project</h2>
+        <h2>About Me</h2>
       </div>
     </div>
   )
