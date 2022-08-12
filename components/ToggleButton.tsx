@@ -87,7 +87,7 @@ const ToggleButton = (props: {
       justifyContent: 'space-evenly',
       alignItems: 'center',
 
-      color: isToggled ? props.toggledColor : props.untoggledColor,
+      color: isToggled ? props.untoggledColor : props.toggledColor,
       fontSize: '14px',
 
       transition: '0.1s ease',
