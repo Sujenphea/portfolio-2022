@@ -33,8 +33,8 @@ const Menu = (props: {
       <ToggleButton
         style={{
           position: 'relative',
-          width: '100px',
-          height: '50px',
+          width: '115px',
+          height: '80px',
         }}
         leftText="immersive"
         rightText="glance"
