@@ -1,6 +1,14 @@
 import ToggleButton from './ToggleButton'
 
-const Menu = (props: { visible: boolean }) => {
+const Menu = (props: {
+  visible: boolean
+  toggleView: (isGlanceView: boolean) => void
+}) => {
+  // handlers
+  const handleToggle = (isGlanceView: boolean) => {
+    props.toggleView(isGlanceView)
+  }
+
   return (
     <div
       style={{
@@ -8,7 +16,7 @@ const Menu = (props: { visible: boolean }) => {
         top: 0,
         left: 0,
 
-        zIndex: 1,
+        zIndex: 10,
 
         width: '100vw',
         height: '100vh',
@@ -30,6 +38,7 @@ const Menu = (props: { visible: boolean }) => {
         }}
         leftText="immersive"
         rightText="glance"
+        handleToggle={handleToggle}
       />
       <div
         style={{

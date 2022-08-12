@@ -1,6 +1,6 @@
 const MenuButton = (props: {
-  visible: boolean
-  handleToggleMenu: () => void
+  menuVisible: boolean
+  toggleMenu: () => void
 }) => {
   return (
     <div
@@ -16,7 +16,7 @@ const MenuButton = (props: {
       <button
         type="button"
         onClick={() => {
-          props.handleToggleMenu()
+          props.toggleMenu()
         }}
         style={{
           color: 'white',
@@ -25,7 +25,7 @@ const MenuButton = (props: {
           border: 'none',
         }}
       >
-        {props.visible ? 'close' : 'open'}
+        {props.menuVisible ? 'close' : 'open'}
       </button>
     </div>
   )

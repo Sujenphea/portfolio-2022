@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import CameraViewType from '../types/cameraViewEnum'
 
 import Menu from '../components/Menu'
@@ -35,7 +36,7 @@ export default function Home() {
     setCameraView(cameraView)
   }
 
-  // immersive view project overlay
+  // - immersive view project overlay
   const handleCloseProjectOverlay = () => {
     handleCameraViewChange(CameraViewType.FirstPerson)
 
@@ -47,6 +48,19 @@ export default function Home() {
     setCurrentOverlayProject(project)
   }
 
+  // - toggle between views
+  // -- two views: glance, immersive
+  // -- currently stored as boolean
+  const handleToggleView = (isGlanceView: boolean) => {
+    if (isGlanceView) {
+      handleCameraViewChange(CameraViewType.Overview)
+    } else {
+      handleCameraViewChange(CameraViewType.FirstPerson)
+    }
+
+    SetGlanceViewVisible(isGlanceView)
+  }
+
   return (
     <div
       style={{
@@ -56,8 +70,8 @@ export default function Home() {
         height: '100vh',
       }}
     >
-      <MenuButton visible={menuVisible} handleToggleMenu={handleToggleMenu} />
-      <Menu visible={menuVisible} />
+      <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+      <Menu visible={menuVisible} toggleView={handleToggleView} />
       <ExperienceCanvas
         cameraView={cameraView}
         changeCameraView={handleCameraViewChange}
