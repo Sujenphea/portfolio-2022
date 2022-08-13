@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
 
 import ProjectType from '../types/projectType'
@@ -24,76 +25,90 @@ const ProjectImmersiveOverlay = (props: {
     }
   }, [props.project])
 
+  // styles
+  const styles = {
+    containerStyle: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+
+      display: ${overlayVisible ? `flex` : `none`};
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      color: white;
+      zindex: 1;
+    `,
+    imageContainerStyle: css`
+      position: absolute;
+      aspect-ratio: 12/9;
+      height: calc(32%);
+
+      transform: translate(calc(-35vh), 0);
+    `,
+    imageStyle: css`
+      width: 100%;
+      height: 100%;
+
+      filter: brightness(70%);
+    `,
+    titleStyle: css`
+      position: absolute;
+      max-width: 200px;
+
+      text-transform: uppercase;
+      font-size: 20px;
+      font-size: calc(50% + 4vh);
+      transform: translate(calc(-55vh), 0);
+    `,
+    descriptionStyle: css`
+      display: flex;
+      flex-direction: column;
+      max-width: 40vw;
+
+      font-size: 20px;
+      font-size: calc(70% + 2vh);
+
+      transform: translate(calc(35vh + 2vw), 0);
+    `,
+    closeButtonStyle: css`
+      position: absolute;
+      top: 50px;
+      right: 30px;
+
+      color: white;
+      background-color: transparent;
+      border: none;
+    `,
+  }
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-
-        display: overlayVisible ? 'flex' : 'none',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-
-        color: 'white',
-
-        zIndex: 1,
-      }}
-    >
+    <div css={styles.containerStyle}>
       {/* image */}
-      <div>
+      <div css={styles.imageContainerStyle}>
         <img
-          style={{
-            width: '350px',
-            height: '230px',
-
-            filter: 'brightness(70%)',
-          }}
+          css={styles.imageStyle}
           src={'./testImage.png'}
           alt="sample image"
         />
       </div>
 
       {/* title */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '42vh',
-          left: '10vw',
-          maxWidth: '200px',
-
-          fontSize: '30px',
-        }}
-      >
-        {currentProject.name}
-      </div>
+      <div css={styles.titleStyle}>{currentProject.name}</div>
 
       {/* description */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          maxWidth: '40vw',
-
-          fontSize: '24px',
-        }}
-      >
+      <div css={styles.descriptionStyle}>
         <div>year: {currentProject.year}</div>
         <div>technologies: {currentProject.technologies}</div>
         <div>{currentProject.description}</div>
       </div>
+
       {/* close button */}
       <button
-        style={{
-          position: 'absolute',
-          top: '50px',
-          right: '30px',
-
-          color: 'white',
-        }}
+        css={styles.closeButtonStyle}
         type="button"
         onClick={() => {
           setOverlayVisible(false)
