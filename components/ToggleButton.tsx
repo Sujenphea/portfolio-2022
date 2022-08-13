@@ -81,19 +81,21 @@ const ToggleButton = (props: {
   const textCss = {
     leftText: css({}),
     rightText: css({}),
-    labelContainer: css({
-      position: 'relative',
-      width: props.widthOfLabels,
+    labelContainer: css`
+      position: relative;
+      width: ${props.widthOfLabels};
+      min-width: 180px;
 
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      color: isToggled ? props.untoggledColor : props.toggledColor,
-      fontSize: '14px',
+      color: ${isToggled ? props.untoggledColor : props.toggledColor};
+      font-size: 14px;
+      font-size: calc(100% + 0.25vw + 0.25vh);
 
-      transition: '0.1s ease',
-    }),
+      transition: 0.1s ease;
+    `,
   }
 
   return (
