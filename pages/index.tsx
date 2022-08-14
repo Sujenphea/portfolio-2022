@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { css } from '@emotion/react'
@@ -24,11 +24,26 @@ export default function Home() {
   const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
   const [currentOverlayProject, setCurrentOverlayProject] =
     useState<ProjectType>(null!)
+  const [isPortrait, setIsPortrait] = useState<boolean>(false)
 
   // hooks
   useEffect(() => {
     document.title = 'blackmatter'
-  })
+  }, [])
+
+  // - manage screen orientation
+  useEffect(() => {
+    function updateScreenOrientation() {
+      setIsPortrait(window.innerWidth / window.innerHeight < 1.2)
+    }
+
+    window.addEventListener('resize', updateScreenOrientation)
+    updateScreenOrientation()
+
+    return () => {
+      window.removeEventListener('resize', updateScreenOrientation)
+    }
+  }, [])
 
   // handlers
   const handleToggleMenu = () => {
@@ -117,11 +132,13 @@ export default function Home() {
           cameraView={cameraView}
           changeCameraView={handleCameraViewChange}
           changeProjectOverlay={handleProjectOverlayChange}
+          isPortrait={isPortrait}
         />
         <GlanceView visible={glanceViewVisible} />
         <ProjectImmersiveOverlay
           project={currentOverlayProject}
           closeProjectOverlay={handleCloseProjectOverlay}
+          isPortrait={isPortrait}
         />
         <ContactBar
           style={{ position: 'absolute', bottom: '15px', left: '15px' }}

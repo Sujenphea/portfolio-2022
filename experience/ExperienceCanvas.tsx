@@ -26,6 +26,7 @@ const ExperienceCanvas = (props: {
   cameraView: CameraViewType
   changeCameraView: (cameraView: CameraViewType) => void
   changeProjectOverlay: (project: ProjectType) => void
+  isPortrait: boolean // get orientation to adjust project focused camera location
 }) => {
   // states
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -86,6 +87,7 @@ const ExperienceCanvas = (props: {
             projects={projectsJSON}
             rangeOnCurve={[0.5, 1]}
             projectClicked={handleProjectClick}
+            isPortrait={props.isPortrait}
           />
         </Suspense>
       </Canvas>

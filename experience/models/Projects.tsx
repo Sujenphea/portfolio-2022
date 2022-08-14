@@ -13,6 +13,7 @@ const Projects = (props: {
     cameraPosition: THREE.Vector3,
     cameraLookAt: THREE.Vector3
   ) => void
+  isPortrait: boolean
 }) => {
   // params
   const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
@@ -89,7 +90,11 @@ const Projects = (props: {
 
   // handlers
   const handleProjectClick = (project: ProjectType, location: number) => {
-    const cameraPosition = calculatePosition(location - 0.005, 0)
+    const cameraLocation = props.isPortrait
+      ? location - 0.008
+      : location - 0.005
+
+    const cameraPosition = calculatePosition(cameraLocation, 0)
     const cameraLookAt = calculatePosition(location, 0)
 
     props.projectClicked(project, cameraPosition, cameraLookAt)
