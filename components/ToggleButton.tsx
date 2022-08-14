@@ -6,6 +6,7 @@ import { CSSProperties, useRef, useState } from 'react'
 const ToggleButton = (props: {
   handleToggle: (isToggled: boolean) => void
   style: CSSProperties
+  widthOfLabels: string
   leftText: string
   rightText: string
   untoggledColor: string
@@ -14,6 +15,8 @@ const ToggleButton = (props: {
   // params
   const circleWidth = useRef(40) // percent
   const circleOffset = useRef(5) // percent
+  const toggleWidth = useRef(85) // percent
+  const toggleHeight = useRef(60) // percent
 
   // states
   const [isToggled, setIsToggled] = useState(false)
@@ -27,8 +30,8 @@ const ToggleButton = (props: {
   const toggleCss = {
     label: css`
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: ${toggleWidth.current}%;
+      height: ${toggleHeight.current}%;
 
       display: block;
       margin: 0 auto;
@@ -46,6 +49,10 @@ const ToggleButton = (props: {
     `,
 
     circleWrapper: css`
+      display: flex;
+      justify-content: start;
+      align-items: center;
+
       width: 100%;
       height: 100%;
 
@@ -62,10 +69,6 @@ const ToggleButton = (props: {
       aspect-ratio: 1;
       margin-left: ${circleOffset.current}%;
 
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-
       background-color: ${isToggled
         ? props.toggledColor
         : props.untoggledColor};
@@ -78,20 +81,21 @@ const ToggleButton = (props: {
   const textCss = {
     leftText: css({}),
     rightText: css({}),
-    labelContainer: css({
-      position: 'absolute',
-      top: '-25px',
-      width: '300%',
+    labelContainer: css`
+      position: relative;
+      width: ${props.widthOfLabels};
+      min-width: 180px;
 
-      display: 'flex',
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      color: isToggled ? props.untoggledColor : props.toggledColor,
-      fontSize: '14px',
+      color: ${isToggled ? props.untoggledColor : props.toggledColor};
+      font-size: 14px;
+      font-size: calc(100% + 0.25vw + 0.25vh);
 
-      transition: '0.1s ease',
-    }),
+      transition: 0.1s ease;
+    `,
   }
 
   return (
@@ -99,10 +103,16 @@ const ToggleButton = (props: {
       style={{
         ...props.style,
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
+      {/* text */}
+      <div css={textCss.labelContainer}>
+        <div css={textCss.leftText}>{props.leftText}</div>
+        <div css={textCss.rightText}>{props.rightText}</div>
+      </div>
       <input
         type="checkbox"
         id="toggle_checkbox"
@@ -119,11 +129,6 @@ const ToggleButton = (props: {
           <div css={toggleCss.circle} />
         </div>
       </label>
-      {/* text */}
-      <div css={textCss.labelContainer}>
-        <div css={textCss.leftText}>{props.leftText}</div>
-        <div css={textCss.rightText}>{props.rightText}</div>
-      </div>
     </div>
   )
 }
@@ -133,9 +138,10 @@ ToggleButton.defaultProps = {
     position: 'absolute',
     top: '50vh',
     left: '50vw',
-    width: '100px',
-    height: '50px',
+    width: '115px',
+    height: '80px',
   },
+  widthOfLabels: '150%',
   handleToggle: () => {},
   leftText: '',
   rightText: '',

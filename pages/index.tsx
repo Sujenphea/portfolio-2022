@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
+
+import { css } from '@emotion/react'
 
 import CameraViewType from '../types/cameraViewEnum'
 
@@ -70,21 +73,60 @@ export default function Home() {
         height: '100vh',
       }}
     >
-      <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
-      <Menu visible={menuVisible} toggleView={handleToggleView} />
-      <ExperienceCanvas
-        cameraView={cameraView}
-        changeCameraView={handleCameraViewChange}
-        changeProjectOverlay={handleProjectOverlayChange}
-      />
-      <GlanceView visible={glanceViewVisible} />
-      <ProjectImmersiveOverlay
-        project={currentOverlayProject}
-        closeProjectOverlay={handleCloseProjectOverlay}
-      />
-      <ContactBar
-        style={{ position: 'absolute', bottom: '15px', left: '15px' }}
-      />
+      {/* mobile */}
+      <div
+        css={css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          height: 100vh;
+
+          color: white;
+          text-align: center;
+
+          @media (min-width: 768px) {
+            display: none;
+          }
+        `}
+      >
+        <h1>For optimal experiences, please rotate your device</h1>
+        <Image
+          src="/temp-rotate-phone.gif"
+          alt="my gif"
+          height={500}
+          width={500}
+        />
+        {/* fix: needs to be handled */}
+        {/* <button type="button">continue with sub-optimal experiences</button> */}
+      </div>
+      {/* non mobile */}
+      <div
+        css={css`
+          display: none;
+
+          @media (min-width: 768px) {
+            display: block;
+          }
+        `}
+      >
+        <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+        <Menu visible={menuVisible} toggleView={handleToggleView} />
+        <ExperienceCanvas
+          cameraView={cameraView}
+          changeCameraView={handleCameraViewChange}
+          changeProjectOverlay={handleProjectOverlayChange}
+        />
+        <GlanceView visible={glanceViewVisible} />
+        <ProjectImmersiveOverlay
+          project={currentOverlayProject}
+          closeProjectOverlay={handleCloseProjectOverlay}
+        />
+        <ContactBar
+          style={{ position: 'absolute', bottom: '15px', left: '15px' }}
+        />
+      </div>
     </div>
   )
 }
