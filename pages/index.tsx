@@ -21,6 +21,10 @@ export default function Home() {
   // states
   const [menuVisible, SetMenuVisible] = useState(false)
   const [glanceViewVisible, SetGlanceViewVisible] = useState(false)
+
+  // - assumptions
+  // -- FirstPerson: immersive
+  // -- Overview: glance, menu
   const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
   const [currentOverlayProject, setCurrentOverlayProject] =
     useState<ProjectType>(null!)
@@ -54,9 +58,16 @@ export default function Home() {
     setCameraView(cameraView)
   }
 
-  // - immersive view project overlay
+  // - project overlay (immersive and glance)
   const handleCloseProjectOverlay = () => {
-    handleCameraViewChange(CameraViewType.FirstPerson)
+    // if immersive view
+    if (cameraView === CameraViewType.Project) {
+      handleCameraViewChange(CameraViewType.FirstPerson)
+    }
+    // if glance view
+    else {
+      SetGlanceViewVisible(true)
+    }
 
     // reset overlay project so useEffect is called if same project clicked again
     setCurrentOverlayProject(null!)
@@ -64,6 +75,12 @@ export default function Home() {
 
   const handleProjectOverlayChange = (project: ProjectType) => {
     setCurrentOverlayProject(project)
+  }
+
+  // - glance view open project
+  const handleOpenGlanceViewProjectDetails = (project: ProjectType) => {
+    SetGlanceViewVisible(false)
+    handleProjectOverlayChange(project)
   }
 
   // - toggle between views
@@ -134,7 +151,10 @@ export default function Home() {
           changeProjectOverlay={handleProjectOverlayChange}
           isPortrait={isPortrait}
         />
-        <GlanceView visible={glanceViewVisible} />
+        <GlanceView
+          visible={glanceViewVisible}
+          handleProjectClicked={handleOpenGlanceViewProjectDetails}
+        />
         <ProjectImmersiveOverlay
           project={currentOverlayProject}
           closeProjectOverlay={handleCloseProjectOverlay}

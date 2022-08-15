@@ -8,7 +8,10 @@ import worksJSON from '../data/works.json'
 // purpose: view projects, works at a glance
 
 // display each project
-const ProjectView = (props: { project: ProjectType }) => {
+const ProjectView = (props: {
+  project: ProjectType
+  projectClicked: () => void
+}) => {
   // styles
   const styles = {
     containerCss: css`
@@ -26,6 +29,11 @@ const ProjectView = (props: { project: ProjectType }) => {
       overflow-x: hidden;
 
       text-align: start;
+      border-top: 1px solid white;
+
+      &:hover {
+        cursor: pointer;
+      }
 
       @media (min-width: 768px) {
         flex-direction: row;
@@ -50,7 +58,7 @@ const ProjectView = (props: { project: ProjectType }) => {
   }
 
   return (
-    <div css={styles.containerCss}>
+    <div css={styles.containerCss} onClick={props.projectClicked}>
       <div css={styles.titleCss}>{props.project.name}</div>
       {/* column */}
       <div css={styles.columnCss}>
@@ -62,7 +70,10 @@ const ProjectView = (props: { project: ProjectType }) => {
   )
 }
 
-const GlanceView = (props: { visible: boolean }) => {
+const GlanceView = (props: {
+  visible: boolean
+  handleProjectClicked: (project: ProjectType) => void
+}) => {
   // styles
   const styles = {
     containerCss: css`
@@ -102,11 +113,23 @@ const GlanceView = (props: { visible: boolean }) => {
     <div css={styles.containerCss}>
       <h1 css={styles.titleCss}>Projects</h1>
       {projectsJSON.map((project, i) => (
-        <ProjectView project={project} key={i} />
+        <ProjectView
+          project={project}
+          key={i}
+          projectClicked={() => {
+            props.handleProjectClicked(project)
+          }}
+        />
       ))}
       <h1 css={styles.titleCss}>Works</h1>
       {worksJSON.map((project, i) => (
-        <ProjectView project={project} key={i} />
+        <ProjectView
+          project={project}
+          key={i}
+          projectClicked={() => {
+            props.handleProjectClicked(project)
+          }}
+        />
       ))}
     </div>
   )
