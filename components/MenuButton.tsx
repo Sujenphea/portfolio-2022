@@ -1,13 +1,13 @@
+import { CSSProperties, useRef } from 'react'
 import { css } from '@emotion/react'
-import { useRef } from 'react'
 
 const MenuButton = (props: {
   menuVisible: boolean
   toggleMenu: () => void
+  style: CSSProperties
 }) => {
   // params
-  const width = '300'
-  const height = '300'
+  const height = useRef(props.style.height)
 
   // refs
   const buttonRef = useRef<HTMLButtonElement>(null!)
@@ -23,20 +23,18 @@ const MenuButton = (props: {
 
   // styles
   const styles = {
-    containerStyle: css`
-      width: ${width}px;
-      height: ${height}px;
-
-      zindex: 1000;
+    containerAnimationStyle: css`
+      width: 100%;
+      height: 100%;
 
       // active state
       & button.button-active span:nth-of-type(1) {
-        transform: translate(0, calc(${height}px * 0.5)) rotate(135deg)
+        transform: translate(0, calc(${height.current} * 0.5)) rotate(135deg)
           scale(1.1, 1);
       }
 
       & button.button-active span:nth-of-type(2) {
-        transform: translate(0, calc(${height}px * 0.2)) rotate(-45deg);
+        transform: translate(0, calc(${height.current} * 0.2)) rotate(-45deg);
       }
 
       & button.button-active span:nth-of-type(3) {
@@ -44,31 +42,31 @@ const MenuButton = (props: {
       }
 
       & button.button-active span:nth-of-type(4) {
-        transform: translate(0, calc(-${height}px * 0.2)) rotate(45deg)
+        transform: translate(0, calc(-${height.current} * 0.2)) rotate(45deg)
           scale(1.1, 1);
       }
 
       & button.button-active span:nth-of-type(5) {
-        transform: translate(0, calc(-${height}px * 0.5)) rotate(-135deg);
+        transform: translate(0, calc(-${height.current} * 0.5)) rotate(-135deg);
       }
 
       // hover active state
       & button.button-active:hover span:nth-of-type(1) {
-        transform: translate(0, calc(${height}px * 0.6)) rotate(135deg)
+        transform: translate(0, calc(${height.current} * 0.6)) rotate(135deg)
           scale(0.7, 1);
       }
 
       & button.button-active:hover span:nth-of-type(2) {
-        transform: translate(0, calc(${height}px * 0.1)) rotate(-45deg);
+        transform: translate(0, calc(${height.current} * 0.1)) rotate(-45deg);
       }
 
       & button.button-active:hover span:nth-of-type(4) {
-        transform: translate(0, calc(-${height}px * 0.1)) rotate(45deg)
+        transform: translate(0, calc(-${height.current} * 0.1)) rotate(45deg)
           scale(0.7, 1);
       }
 
       & button.button-active:hover span:nth-of-type(5) {
-        transform: translate(0, calc(-${height}px * 0.6)) rotate(-135deg);
+        transform: translate(0, calc(-${height.current} * 0.6)) rotate(-135deg);
       }
     `,
     buttonStyle: css`
@@ -105,8 +103,7 @@ const MenuButton = (props: {
     buttonSpanStyle: css`
       display: block;
       width: 100%;
-      height: 2%;
-      max-height: 3px;
+      height: 2px;
 
       background-color: #fff;
       border-radius: 3px;
@@ -116,24 +113,36 @@ const MenuButton = (props: {
   }
 
   return (
-    <div css={styles.containerStyle}>
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={(e) => {
-          e.preventDefault()
-          handleButtonClicked()
-        }}
-        css={styles.buttonStyle}
-      >
-        <span css={styles.buttonSpanStyle} />
-        <span css={styles.buttonSpanStyle} />
-        <span css={styles.buttonSpanStyle} />
-        <span css={styles.buttonSpanStyle} />
-        <span css={styles.buttonSpanStyle} />
-      </button>
+    <div style={props.style}>
+      <div css={styles.containerAnimationStyle}>
+        <button
+          ref={buttonRef}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            handleButtonClicked()
+          }}
+          css={styles.buttonStyle}
+        >
+          <span css={styles.buttonSpanStyle} />
+          <span css={styles.buttonSpanStyle} />
+          <span css={styles.buttonSpanStyle} />
+          <span css={styles.buttonSpanStyle} />
+          <span css={styles.buttonSpanStyle} />
+        </button>
+      </div>
     </div>
   )
 }
 
 export default MenuButton
+
+MenuButton.defaultProps = {
+  style: {
+    position: 'absolute',
+    right: '50vw',
+    top: '50vh',
+    width: '80px',
+    height: '60px',
+  },
+}
