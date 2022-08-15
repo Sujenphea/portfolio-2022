@@ -31,12 +31,12 @@ const MenuButton = (props: {
 
       // active state
       & button.button-active span:nth-of-type(1) {
-        transform: translate(0, calc(${width}px * 0.5)) rotate(135deg)
+        transform: translate(0, calc(${height}px * 0.5)) rotate(135deg)
           scale(1.1, 1);
       }
 
       & button.button-active span:nth-of-type(2) {
-        transform: translate(0, calc(${width}px * 0.2)) rotate(-45deg);
+        transform: translate(0, calc(${height}px * 0.2)) rotate(-45deg);
       }
 
       & button.button-active span:nth-of-type(3) {
@@ -44,31 +44,31 @@ const MenuButton = (props: {
       }
 
       & button.button-active span:nth-of-type(4) {
-        transform: translate(0, calc(-${width}px * 0.2)) rotate(45deg)
+        transform: translate(0, calc(-${height}px * 0.2)) rotate(45deg)
           scale(1.1, 1);
       }
 
       & button.button-active span:nth-of-type(5) {
-        transform: translate(0, calc(-${width}px * 0.5)) rotate(-135deg);
+        transform: translate(0, calc(-${height}px * 0.5)) rotate(-135deg);
       }
 
       // hover active state
       & button.button-active:hover span:nth-of-type(1) {
-        transform: translate(0, calc(${width}px * 0.6)) rotate(135deg)
+        transform: translate(0, calc(${height}px * 0.6)) rotate(135deg)
           scale(0.7, 1);
       }
 
       & button.button-active:hover span:nth-of-type(2) {
-        transform: translate(0, calc(${width}px * 0.1)) rotate(-45deg);
+        transform: translate(0, calc(${height}px * 0.1)) rotate(-45deg);
       }
 
       & button.button-active:hover span:nth-of-type(4) {
-        transform: translate(0, calc(-${width}px * 0.1)) rotate(45deg)
+        transform: translate(0, calc(-${height}px * 0.1)) rotate(45deg)
           scale(0.7, 1);
       }
 
       & button.button-active:hover span:nth-of-type(5) {
-        transform: translate(0, calc(-${width}px * 0.6)) rotate(-135deg);
+        transform: translate(0, calc(-${height}px * 0.6)) rotate(-135deg);
       }
     `,
     buttonStyle: css`
