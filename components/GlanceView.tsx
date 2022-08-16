@@ -87,7 +87,7 @@ const GlanceView = (props: {
       width: 100%;
       padding-top: 40px;
 
-      zindex: 1;
+      z-index: 1;
       overflow-y: scroll;
       overflow-x: hidden;
 
