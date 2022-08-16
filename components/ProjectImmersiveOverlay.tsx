@@ -6,10 +6,11 @@ import ProjectType from '../types/projectType'
 const ProjectImmersiveOverlay = (props: {
   project: ProjectType
   closeProjectOverlay: () => void
+  visible: boolean
   isPortrait: boolean
 }) => {
   // states
-  const [overlayVisible, setOverlayVisible] = useState(false)
+  // - makes sure project is not null
   const [currentProject, setCurrentProject] = useState<ProjectType>({
     name: '',
     company: '',
@@ -25,7 +26,6 @@ const ProjectImmersiveOverlay = (props: {
     if (props.project !== null) {
       currentIsPortrait.current = props.isPortrait
       setCurrentProject(props.project)
-      setOverlayVisible(true)
     }
   }, [props.project])
 
@@ -38,13 +38,13 @@ const ProjectImmersiveOverlay = (props: {
       width: 100vw;
       height: 100vh;
 
-      display: ${overlayVisible ? `flex` : `none`};
+      display: ${props.visible ? `flex` : `none`};
       flex-direction: row;
       justify-content: center;
       align-items: center;
 
       color: white;
-      zindex: 1;
+      z-index: 1;
     `,
     imageContainerStyle: css`
       position: absolute;
@@ -125,7 +125,6 @@ const ProjectImmersiveOverlay = (props: {
         css={styles.closeButtonStyle}
         type="button"
         onClick={() => {
-          setOverlayVisible(false)
           props.closeProjectOverlay()
         }}
       >

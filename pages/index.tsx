@@ -19,8 +19,10 @@ import ProjectType from '../types/projectType'
 
 export default function Home() {
   // states
-  const [menuVisible, SetMenuVisible] = useState(false)
-  const [glanceViewVisible, SetGlanceViewVisible] = useState(false)
+  const [menuVisible, setMenuVisible] = useState(false)
+  const [glanceViewVisible, setGlanceViewVisible] = useState(false)
+  // - show mobile overlay initially, and if in canvas or project immersive overlay
+  const [mobileOverlayVisible, setMobileOverlayVisible] = useState(true)
 
   // - assumptions
   // -- FirstPerson: immersive
@@ -51,11 +53,19 @@ export default function Home() {
 
   // handlers
   const handleToggleMenu = () => {
-    SetMenuVisible(!menuVisible)
+    setMenuVisible(!menuVisible)
   }
 
   const handleCameraViewChange = (cameraView: CameraViewType) => {
     setCameraView(cameraView)
+
+    // show mobile overlay again if size changes
+    if (
+      cameraView === CameraViewType.FirstPerson ||
+      cameraView === CameraViewType.Project
+    ) {
+      setMobileOverlayVisible(true)
+    }
   }
 
   // - project overlay (immersive and glance)
@@ -66,7 +76,7 @@ export default function Home() {
     }
     // if glance view
     else {
-      SetGlanceViewVisible(true)
+      setGlanceViewVisible(true)
     }
 
     // reset overlay project so useEffect is called if same project clicked again
@@ -79,7 +89,7 @@ export default function Home() {
 
   // - glance view open project
   const handleOpenGlanceViewProjectDetails = (project: ProjectType) => {
-    SetGlanceViewVisible(false)
+    setGlanceViewVisible(false)
     handleProjectOverlayChange(project)
   }
 
@@ -93,7 +103,7 @@ export default function Home() {
       handleCameraViewChange(CameraViewType.FirstPerson)
     }
 
-    SetGlanceViewVisible(isGlanceView)
+    setGlanceViewVisible(isGlanceView)
   }
 
   return (
@@ -108,12 +118,18 @@ export default function Home() {
       {/* mobile */}
       <div
         css={css`
-          display: flex;
+          display: ${mobileOverlayVisible ? `flex` : `none`};
           flex-direction: column;
           justify-content: center;
           align-items: center;
 
+          position: absolute;
+          top: 0;
+          left: 0;
           height: 100vh;
+          width: 100vw;
+          background-color: black;
+          z-index: 1800;
 
           color: white;
           text-align: center;
@@ -124,14 +140,25 @@ export default function Home() {
         `}
       >
         <h1>For optimal experiences, please rotate your device</h1>
+        <button
+          type="button"
+          onClick={() => {
+            handleCloseProjectOverlay()
+            setGlanceViewVisible(true)
+            console.log('dbg - change camera view to overview')
+
+            setCameraView(CameraViewType.Overview)
+            setMobileOverlayVisible(false)
+          }}
+        >
+          continue with sub-optimal experiences
+        </button>
         <Image
           src="/temp-rotate-phone.gif"
           alt="my gif"
           height={500}
           width={500}
         />
-        {/* fix: needs to be handled */}
-        {/* <button type="button">continue with sub-optimal experiences</button> */}
       </div>
       {/* non mobile */}
       <div
@@ -143,27 +170,28 @@ export default function Home() {
           }
         `}
       >
-        <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
-        <Menu visible={menuVisible} toggleView={handleToggleView} />
         <ExperienceCanvas
           cameraView={cameraView}
           changeCameraView={handleCameraViewChange}
           changeProjectOverlay={handleProjectOverlayChange}
           isPortrait={isPortrait}
         />
-        <GlanceView
-          visible={glanceViewVisible}
-          handleProjectClicked={handleOpenGlanceViewProjectDetails}
-        />
-        <ProjectImmersiveOverlay
-          project={currentOverlayProject}
-          closeProjectOverlay={handleCloseProjectOverlay}
-          isPortrait={isPortrait}
-        />
-        <ContactBar
-          style={{ position: 'absolute', bottom: '15px', left: '15px' }}
-        />
       </div>
+      <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+      <Menu visible={menuVisible} toggleView={handleToggleView} />
+      <GlanceView
+        visible={glanceViewVisible}
+        handleProjectClicked={handleOpenGlanceViewProjectDetails}
+      />
+      <ProjectImmersiveOverlay
+        project={currentOverlayProject}
+        visible={currentOverlayProject !== null}
+        closeProjectOverlay={handleCloseProjectOverlay}
+        isPortrait={isPortrait}
+      />
+      <ContactBar
+        style={{ position: 'absolute', bottom: '15px', left: '15px' }}
+      />
     </div>
   )
 }
