@@ -17,7 +17,7 @@ const Cameras = (props: {
 }) => {
   // params
   const [curve] = useState(new THREE.CatmullRomCurve3(props.points))
-  const cameraHeightOffset = useRef(20)
+  const cameraHeightOffset = useRef(1)
 
   // refs
   const position = useRef(new THREE.Vector3())

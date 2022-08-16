@@ -9,10 +9,9 @@ import Lights from './Lights'
 import AboutMe from './models/AboutMe'
 import Works from './models/Works'
 import Projects from './models/Projects'
-import SJParticlesScroll from './models/SJParticlesScroll'
+import SJLineScroll from './models/SJLineScroll'
 
 import pointsSj from './points/points-sj'
-import pointsSjCamera from './points/points-sj-camera'
 
 import projectsJSON from '../data/projects.json'
 import worksJSON from '../data/works.json'
@@ -65,25 +64,25 @@ const ExperienceCanvas = (props: {
       <Canvas dpr={[1, 2]} linear>
         <Lights />
         <Cameras
-          points={pointsSjCamera}
+          points={pointsSj}
           scrollProgress={scrollProgress}
           cameraView={props.cameraView}
           cameraData={projectCameraData}
         />
         <Suspense fallback={null}>
-          <SJParticlesScroll
+          <SJLineScroll
             points={pointsSj}
             setScrollProgress={setScrollProgress}
             cameraView={props.cameraView}
           />
-          <AboutMe curvePoints={pointsSjCamera} positionOnCurve={0.01} />
+          <AboutMe curvePoints={pointsSj} positionOnCurve={0.01} />
           <Works
-            curvePoints={pointsSjCamera}
+            curvePoints={pointsSj}
             projects={worksJSON}
             rangeOnCurve={[0.01, 0.5]}
           />
           <Projects
-            curvePoints={pointsSjCamera}
+            curvePoints={pointsSj}
             projects={projectsJSON}
             rangeOnCurve={[0.5, 1]}
             projectClicked={handleProjectClick}
