@@ -33,7 +33,7 @@ const SJLineScroll = (props: {
 }) => (
   <ScrollControls
     pages={5}
-    distance={10} // scroll speed
+    distance={15} // scroll speed
     damping={4}
     horizontal={false}
     infinite={false}
