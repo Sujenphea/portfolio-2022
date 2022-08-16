@@ -14,6 +14,7 @@ const MenuButton = (props: {
 
   // handlers
   const handleButtonClicked = () => {
+    props.toggleMenu()
     if (buttonRef.current.classList.contains('button-active')) {
       buttonRef.current.classList.remove('button-active')
     } else {
@@ -74,6 +75,7 @@ const MenuButton = (props: {
     buttonStyle: css`
       width: 100%;
       height: 100%;
+      cursor: pointer;
 
       display: flex;
       flex-direction: column;
@@ -118,7 +120,11 @@ const MenuButton = (props: {
   }
 
   return (
-    <div style={props.style}>
+    <div
+      style={{
+        ...props.style,
+      }}
+    >
       <div css={styles.containerAnimationStyle}>
         <button
           ref={buttonRef}
@@ -145,9 +151,10 @@ export default MenuButton
 MenuButton.defaultProps = {
   style: {
     position: 'absolute',
-    right: '50vw',
-    top: '50vh',
+    right: '15px',
+    top: '10px',
     height: '5vh',
+    zIndex: 100,
     aspectRatio: 1,
   },
 }
