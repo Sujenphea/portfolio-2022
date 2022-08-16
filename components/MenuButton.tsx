@@ -5,6 +5,8 @@ const MenuButton = (props: {
   menuVisible: boolean
   toggleMenu: () => void
   style: CSSProperties
+  primaryColor: string
+  secondaryColor: string
 }) => {
   // params
   const height = useRef(props.style.height)
@@ -51,7 +53,7 @@ const MenuButton = (props: {
 
       // hover active state
       & button.button-active:hover div:nth-of-type(1) {
-        background-color: #555;
+        background-color: ${props.secondaryColor};
         transform: translate(0, calc(${height.current} * 0.48)) rotate(180deg)
           scale(0.6, 1);
       }
@@ -62,7 +64,7 @@ const MenuButton = (props: {
       }
 
       & button.button-active:hover div:nth-of-type(4) {
-        background-color: #555;
+        background-color: ${props.secondaryColor};
         transform: translate(0, calc(-${height.current} * 0.24)) rotate(90deg)
           scale(0.6, 1);
       }
@@ -112,7 +114,7 @@ const MenuButton = (props: {
       height: 8%;
       max-height: 5px;
 
-      background-color: #fff;
+      background-color: ${props.primaryColor};
       border-radius: 3px;
 
       transition: all 0.25s;
@@ -157,4 +159,8 @@ MenuButton.defaultProps = {
     zIndex: 100,
     aspectRatio: 1,
   },
+  menuVisible: false,
+  toggleMenu: () => {},
+  primaryColor: '#fff',
+  secondaryColor: '#555',
 }
