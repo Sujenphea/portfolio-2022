@@ -23,7 +23,7 @@ const Particles = (props: {
     props.setScrollProgress(scrollData.offset)
   })
 
-  return <Line points={curve.getPoints(1200)} color="red" lineWidth={3} />
+  return <Line points={curve.getPoints(2000)} color="red" lineWidth={3} />
 }
 
 const SJLineScroll = (props: {
