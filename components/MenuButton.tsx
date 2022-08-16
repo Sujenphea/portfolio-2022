@@ -29,11 +29,11 @@ const MenuButton = (props: {
 
       // active state
       & button.button-active div:nth-of-type(1) {
-        transform: translate(0, calc(${height.current} * 0.43)) rotate(135deg);
+        transform: translate(0, calc(${height.current} * 0.48)) rotate(135deg);
       }
 
       & button.button-active div:nth-of-type(2) {
-        transform: translate(0, calc(${height.current} * 0.22)) rotate(-45deg);
+        transform: translate(0, calc(${height.current} * 0.24)) rotate(-45deg);
       }
 
       & button.button-active div:nth-of-type(3) {
@@ -41,33 +41,33 @@ const MenuButton = (props: {
       }
 
       & button.button-active div:nth-of-type(4) {
-        transform: translate(0, calc(-${height.current} * 0.22)) rotate(45deg);
+        transform: translate(0, calc(-${height.current} * 0.24)) rotate(45deg);
       }
 
       & button.button-active div:nth-of-type(5) {
-        transform: translate(0, calc(-${height.current} * 0.43)) rotate(-135deg);
+        transform: translate(0, calc(-${height.current} * 0.48)) rotate(-135deg);
       }
 
       // hover active state
       & button.button-active:hover div:nth-of-type(1) {
         background-color: #555;
-        transform: translate(0, calc(${height.current} * 0.43)) rotate(180deg)
+        transform: translate(0, calc(${height.current} * 0.48)) rotate(180deg)
           scale(0.6, 1);
       }
 
       & button.button-active:hover div:nth-of-type(2) {
-        transform: translate(0, calc(${height.current} * 0.22)) rotate(225deg)
+        transform: translate(0, calc(${height.current} * 0.24)) rotate(225deg)
           scale(1.2, 1);
       }
 
       & button.button-active:hover div:nth-of-type(4) {
         background-color: #555;
-        transform: translate(0, calc(-${height.current} * 0.22)) rotate(90deg)
+        transform: translate(0, calc(-${height.current} * 0.24)) rotate(90deg)
           scale(0.6, 1);
       }
 
       & button.button-active:hover div:nth-of-type(5) {
-        transform: translate(0, calc(-${height.current} * 0.43)) rotate(135deg)
+        transform: translate(0, calc(-${height.current} * 0.48)) rotate(135deg)
           scale(1.2, 1);
       }
     `,
@@ -83,6 +83,8 @@ const MenuButton = (props: {
       background-color: transparent;
       outline: none;
       border: none;
+      padding: 0;
+      margin: 0;
 
       transition: all 0.25s;
 
@@ -145,7 +147,7 @@ MenuButton.defaultProps = {
     position: 'absolute',
     right: '50vw',
     top: '50vh',
-    width: '10vw',
-    height: '4vh',
+    height: '5vh',
+    aspectRatio: 1,
   },
 }
