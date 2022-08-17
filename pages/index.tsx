@@ -1,9 +1,10 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { css } from '@emotion/react'
 
-import CameraViewType from '../types/cameraViewEnum'
+import CameraViewType from '../types/cameraViewType'
+import ProjectViewType from '../types/projectViewType'
 
 import Menu from '../components/Menu'
 import MenuButton from '../components/MenuButton'
@@ -19,26 +20,23 @@ import ProjectType from '../types/projectType'
 
 export default function Home() {
   // states
+  // - overlays
   const [menuVisible, setMenuVisible] = useState(false)
-  const [glanceViewVisible, setGlanceViewVisible] = useState(false)
-  // - show mobile overlay initially, and if in canvas or project immersive overlay
-  const [mobileOverlayVisible, setMobileOverlayVisible] = useState(true)
-
-  // - assumptions
-  // -- FirstPerson: immersive
-  // -- Overview: glance, menu
-  const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
-  const [currentOverlayProject, setCurrentOverlayProject] =
+  const [glanceViewVisible, setGlanceViewVisible] = useState(false) // enable hiding when project overlay is showing
+  const [mobileOverlayEnabled, setMobileOverlayEnabled] = useState(true) // enable overlay initially + change to immersive view
+  const [currentProjectOverlay, setCurrentProjectOverlay] =
     useState<ProjectType>(null!)
+
+  const [projectView, setProjectView] = useState(ProjectViewType.Immersive)
+  const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
   const [isPortrait, setIsPortrait] = useState<boolean>(false)
 
   // hooks
+  // - initial
   useEffect(() => {
     document.title = 'blackmatter'
-  }, [])
 
-  // - manage screen orientation
-  useEffect(() => {
+    // update screen orientation
     function updateScreenOrientation() {
       setIsPortrait(window.innerWidth / window.innerHeight < 1.2)
     }
@@ -51,59 +49,75 @@ export default function Home() {
     }
   }, [])
 
+  // - change in project view changes camera view
+  useEffect(() => {
+    setCurrentProjectOverlay(null!)
+
+    switch (projectView) {
+      case ProjectViewType.Immersive:
+        setCameraView(CameraViewType.FirstPerson)
+        setGlanceViewVisible(false)
+        setMobileOverlayEnabled(true)
+        return
+
+      case ProjectViewType.Glance:
+        setCameraView(CameraViewType.Overview)
+        setGlanceViewVisible(true)
+        setMobileOverlayEnabled(false)
+        return
+    }
+  }, [projectView])
+
   // handlers
   const handleToggleMenu = () => {
     setMenuVisible(!menuVisible)
   }
 
-  const handleCameraViewChange = (cameraView: CameraViewType) => {
-    setCameraView(cameraView)
-
-    // show mobile overlay again if size changes
-    if (
-      cameraView === CameraViewType.FirstPerson ||
-      cameraView === CameraViewType.Project
-    ) {
-      setMobileOverlayVisible(true)
+  // - toggle between boolean (immersive, glance)
+  const handleToggleView = (toGlanceView: boolean) => {
+    if (toGlanceView) {
+      setProjectView(ProjectViewType.Glance)
+    } else {
+      setProjectView(ProjectViewType.Immersive)
     }
+  }
+
+  const handleMobileOverlaySwitchToGlanceView = () => {
+    setProjectView(ProjectViewType.Glance)
+  }
+
+  // - glance view open project
+  const handleOpenGlanceViewProjectOverlay = (project: ProjectType) => {
+    handleChangeProjectOverlay(project)
+    setGlanceViewVisible(false)
+  }
+
+  const handleOpenImmersiveViewProjectOverlay = (
+    project: ProjectType,
+    cameraView: CameraViewType
+  ) => {
+    handleChangeProjectOverlay(project)
+    setCameraView(cameraView)
+  }
+
+  const handleChangeProjectOverlay = (project: ProjectType) => {
+    setCurrentProjectOverlay(project)
   }
 
   // - project overlay (immersive and glance)
   const handleCloseProjectOverlay = () => {
     // if immersive view
     if (cameraView === CameraViewType.Project) {
-      handleCameraViewChange(CameraViewType.FirstPerson)
+      setCameraView(CameraViewType.FirstPerson)
     }
+
     // if glance view
     else {
       setGlanceViewVisible(true)
     }
 
     // reset overlay project so useEffect is called if same project clicked again
-    setCurrentOverlayProject(null!)
-  }
-
-  const handleProjectOverlayChange = (project: ProjectType) => {
-    setCurrentOverlayProject(project)
-  }
-
-  // - glance view open project
-  const handleOpenGlanceViewProjectDetails = (project: ProjectType) => {
-    setGlanceViewVisible(false)
-    handleProjectOverlayChange(project)
-  }
-
-  // - toggle between views
-  // -- two views: glance, immersive
-  // -- currently stored as boolean
-  const handleToggleView = (isGlanceView: boolean) => {
-    if (isGlanceView) {
-      handleCameraViewChange(CameraViewType.Overview)
-    } else {
-      handleCameraViewChange(CameraViewType.FirstPerson)
-    }
-
-    setGlanceViewVisible(isGlanceView)
+    setCurrentProjectOverlay(null!)
   }
 
   return (
@@ -118,7 +132,7 @@ export default function Home() {
       {/* mobile */}
       <div
         css={css`
-          display: ${mobileOverlayVisible ? `flex` : `none`};
+          display: ${mobileOverlayEnabled ? `flex` : `none`};
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -143,12 +157,7 @@ export default function Home() {
         <button
           type="button"
           onClick={() => {
-            handleCloseProjectOverlay()
-            setGlanceViewVisible(true)
-            console.log('dbg - change camera view to overview')
-
-            setCameraView(CameraViewType.Overview)
-            setMobileOverlayVisible(false)
+            handleMobileOverlaySwitchToGlanceView()
           }}
         >
           continue with sub-optimal experiences
@@ -172,8 +181,7 @@ export default function Home() {
       >
         <ExperienceCanvas
           cameraView={cameraView}
-          changeCameraView={handleCameraViewChange}
-          changeProjectOverlay={handleProjectOverlayChange}
+          handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
           isPortrait={isPortrait}
         />
       </div>
@@ -181,11 +189,11 @@ export default function Home() {
       <Menu visible={menuVisible} toggleView={handleToggleView} />
       <GlanceView
         visible={glanceViewVisible}
-        handleProjectClicked={handleOpenGlanceViewProjectDetails}
+        handleProjectClicked={handleOpenGlanceViewProjectOverlay}
       />
       <ProjectImmersiveOverlay
-        project={currentOverlayProject}
-        visible={currentOverlayProject !== null}
+        project={currentProjectOverlay}
+        visible={currentProjectOverlay !== null}
         closeProjectOverlay={handleCloseProjectOverlay}
         isPortrait={isPortrait}
       />

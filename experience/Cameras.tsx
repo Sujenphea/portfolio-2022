@@ -6,7 +6,7 @@ import * as THREE from 'three'
 
 import { clamp } from '../utils/math'
 
-import CameraViewType from '../types/cameraViewEnum'
+import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
 
 const Cameras = (props: {

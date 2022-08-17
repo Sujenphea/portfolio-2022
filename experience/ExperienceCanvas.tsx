@@ -18,13 +18,15 @@ import worksJSON from '../data/works.json'
 
 import ProjectType from '../types/projectType'
 
-import CameraViewType from '../types/cameraViewEnum'
+import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
 
 const ExperienceCanvas = (props: {
   cameraView: CameraViewType
-  changeCameraView: (cameraView: CameraViewType) => void
-  changeProjectOverlay: (project: ProjectType) => void
+  handleProjectClicked: (
+    project: ProjectType,
+    cameraView: CameraViewType
+  ) => void
   isPortrait: boolean // get orientation to adjust project focused camera location
 }) => {
   // states
@@ -42,8 +44,7 @@ const ExperienceCanvas = (props: {
     cameraPosition: Vector3,
     cameraLookAt: Vector3
   ) => {
-    props.changeProjectOverlay(project)
-    props.changeCameraView(CameraViewType.Project)
+    props.handleProjectClicked(project, CameraViewType.Project)
 
     setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
   }

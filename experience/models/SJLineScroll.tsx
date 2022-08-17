@@ -4,7 +4,7 @@ import { CatmullRomCurve3, Vector3 } from 'three'
 import { Line, ScrollControls, useScroll } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 
-import CameraViewType from '../../types/cameraViewEnum'
+import CameraViewType from '../../types/cameraViewType'
 
 const Particles = (props: {
   points: Vector3[]

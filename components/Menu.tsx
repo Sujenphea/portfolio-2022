@@ -4,11 +4,11 @@ import ToggleButton from './ToggleButton'
 
 const Menu = (props: {
   visible: boolean
-  toggleView: (isGlanceView: boolean) => void
+  toggleView: (toGlanceView: boolean) => void
 }) => {
   // handlers
-  const handleToggle = (isGlanceView: boolean) => {
-    props.toggleView(isGlanceView)
+  const handleToggle = (toGlanceView: boolean) => {
+    props.toggleView(toGlanceView)
   }
 
   // styles
