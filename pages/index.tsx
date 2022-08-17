@@ -129,7 +129,7 @@ export default function Home() {
           height: 100vh;
           width: 100vw;
           background-color: black;
-          z-index: 1800;
+          z-index: 4;
 
           color: white;
           text-align: center;

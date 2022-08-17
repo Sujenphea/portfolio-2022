@@ -125,6 +125,7 @@ const MenuButton = (props: {
     <div
       style={{
         ...props.style,
+        zIndex: 3,
       }}
     >
       <div css={styles.containerAnimationStyle}>
@@ -156,7 +157,6 @@ MenuButton.defaultProps = {
     right: '15px',
     top: '10px',
     height: '5vh',
-    zIndex: 100,
     aspectRatio: 1,
   },
   menuVisible: false,

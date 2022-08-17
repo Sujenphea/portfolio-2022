@@ -30,7 +30,7 @@ const Menu = (props: {
         top: 0,
         left: 0,
 
-        zIndex: 10,
+        zIndex: 2,
 
         width: '100vw',
         height: '100vh',
