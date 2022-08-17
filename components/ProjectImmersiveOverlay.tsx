@@ -22,6 +22,36 @@ const ProjectImmersiveOverlay = (props: {
   // take orientation when project is clicked, don't update orientation otherwise
   const currentIsPortrait = useRef(false)
 
+  // refs
+  const containerRef = useRef<HTMLDivElement>(null!)
+  const testRef = useRef<HTMLDivElement>(null!)
+  const requestRef = useRef(0)
+  var currX = 0
+
+  // animation frame
+  // - update image scroll
+  const animate = () => {
+    // get translation based on scroll
+    const targetX = containerRef.current.getBoundingClientRect().top
+    currX += (targetX - currX) * 0.15
+    const translateX = -currX.toFixed(4)
+
+    // update translation
+    testRef.current.style.transform = `translateX(calc(${translateX}px + ${
+      currentIsPortrait.current ? `-22vh` : `-35vh`
+    }))`
+
+    // call next frame
+    requestRef.current = requestAnimationFrame(animate)
+  }
+
+  // hooks
+  // - call animation frame
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(requestRef.current)
+  }, []) // Make sure the effect runs only once
+
   useEffect(() => {
     if (props.project !== null) {
       currentIsPortrait.current = props.isPortrait
@@ -31,37 +61,52 @@ const ProjectImmersiveOverlay = (props: {
 
   // styles
   const styles = {
-    containerStyle: css`
-      position: absolute;
+    sectionStyle: css`
+      display: ${props.visible ? `block` : `none`};
+      position: fixed;
       top: 0;
+      bottom: 0;
+      right: 0;
       left: 0;
+
+      overflow: auto;
+
+      color: white;
+    `,
+    containerStyle: css`
+      height: calc(100vh * 2);
+    `,
+    modalStyle: css`
+      position: sticky;
+      top: 0;
       width: 100vw;
       height: 100vh;
 
-      display: ${props.visible ? `flex` : `none`};
+      display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
 
-      color: white;
-      z-index: 1;
+      overflow: hidden;
     `,
+
     imageContainerStyle: css`
-      position: absolute;
       aspect-ratio: 12/9;
       height: calc(${currentIsPortrait.current ? `20%` : `32%`});
 
-      transform: translate(
-        calc(${currentIsPortrait.current ? `-22vh` : `-35vh`}),
-        0
-      );
+      display: flex;
+      flex-direction: row;
+      justify-content: right;
+      flex-wrap: nowrap;
     `,
     imageStyle: css`
       width: 100%;
       height: 100%;
+      flex: 0 0 auto;
 
       filter: brightness(70%);
       opacity: 0.5;
+      margin-left: 20px;
     `,
     titleStyle: css`
       position: absolute;
@@ -100,37 +145,50 @@ const ProjectImmersiveOverlay = (props: {
   }
 
   return (
-    <div css={styles.containerStyle}>
-      {/* image */}
-      <div css={styles.imageContainerStyle}>
-        <img
-          css={styles.imageStyle}
-          src={'./testImage.png'}
-          alt="sample image"
-        />
+    <section css={styles.sectionStyle}>
+      <div css={styles.containerStyle} ref={containerRef}>
+        <div css={styles.modalStyle}>
+          <div css={styles.imageContainerStyle} ref={testRef}>
+            <img
+              css={styles.imageStyle}
+              src={'./testImage.png'}
+              alt="sample image"
+            />
+            <img
+              css={styles.imageStyle}
+              src={'./testImage.png'}
+              alt="sample image"
+            />
+            <img
+              css={styles.imageStyle}
+              src={'./testImage.png'}
+              alt="sample image"
+            />
+          </div>
+
+          {/* title */}
+          <div css={styles.titleStyle}>{currentProject.name}</div>
+
+          {/* description */}
+          <div css={styles.descriptionStyle}>
+            <div>year: {currentProject.year}</div>
+            <div>technologies: {currentProject.technologies}</div>
+            <div>{currentProject.description}</div>
+          </div>
+
+          {/* close button */}
+          <button
+            css={styles.closeButtonStyle}
+            type="button"
+            onClick={() => {
+              props.closeProjectOverlay()
+            }}
+          >
+            close project
+          </button>
+        </div>
       </div>
-
-      {/* title */}
-      <div css={styles.titleStyle}>{currentProject.name}</div>
-
-      {/* description */}
-      <div css={styles.descriptionStyle}>
-        <div>year: {currentProject.year}</div>
-        <div>technologies: {currentProject.technologies}</div>
-        <div>{currentProject.description}</div>
-      </div>
-
-      {/* close button */}
-      <button
-        css={styles.closeButtonStyle}
-        type="button"
-        onClick={() => {
-          props.closeProjectOverlay()
-        }}
-      >
-        close project
-      </button>
-    </div>
+    </section>
   )
 }
 
