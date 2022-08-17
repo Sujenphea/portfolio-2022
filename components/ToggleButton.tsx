@@ -6,7 +6,6 @@ import { CSSProperties, useRef, useState } from 'react'
 const ToggleButton = (props: {
   handleToggle: (isToggled: boolean) => void
   style: CSSProperties
-  widthOfLabels: string
   leftText: string
   rightText: string
   untoggledColor: string
@@ -79,22 +78,25 @@ const ToggleButton = (props: {
   }
 
   const textCss = {
-    leftText: css({}),
-    rightText: css({}),
-    labelContainer: css`
-      position: relative;
-      width: ${props.widthOfLabels};
-      min-width: 180px;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    leftText: css`
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
 
       color: ${isToggled ? props.untoggledColor : props.toggledColor};
       font-size: 14px;
-      font-size: calc(100% + 0.25vw + 0.25vh);
+      font-size: calc(80% + 0.25vw + 0.25vh);
+    `,
+    rightText: css`
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
 
-      transition: 0.1s ease;
+      color: ${isToggled ? props.untoggledColor : props.toggledColor};
+      font-size: 14px;
+      font-size: calc(80% + 0.25vw + 0.25vh);
     `,
   }
 
@@ -104,15 +106,12 @@ const ToggleButton = (props: {
         ...props.style,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
       }}
     >
-      {/* text */}
-      <div css={textCss.labelContainer}>
-        <div css={textCss.leftText}>{props.leftText}</div>
-        <div css={textCss.rightText}>{props.rightText}</div>
-      </div>
+      <div css={textCss.leftText}>{props.leftText}</div>
+
       <input
         type="checkbox"
         id="toggle_checkbox"
@@ -129,6 +128,8 @@ const ToggleButton = (props: {
           <div css={toggleCss.circle} />
         </div>
       </label>
+
+      <div css={textCss.rightText}>{props.rightText}</div>
     </div>
   )
 }
@@ -141,7 +142,6 @@ ToggleButton.defaultProps = {
     width: '115px',
     height: '80px',
   },
-  widthOfLabels: '150%',
   handleToggle: () => {},
   leftText: '',
   rightText: '',
