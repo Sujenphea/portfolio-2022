@@ -19,13 +19,11 @@ const ProjectImmersiveOverlay = (props: {
     year: 2000,
     link: '',
   })
-  // take orientation when project is clicked, don't update orientation otherwise
-  const currentIsPortrait = useRef(false)
 
   // refs
   const containerRef = useRef<HTMLDivElement>(null!)
-  const testRef = useRef<HTMLDivElement>(null!)
-  const requestRef = useRef(0)
+  const imageContainerRef = useRef<HTMLDivElement>(null!)
+  const requestRef = useRef(0) // animation frame
   var currX = 0
 
   // animation frame
@@ -37,8 +35,8 @@ const ProjectImmersiveOverlay = (props: {
     const translateX = -currX.toFixed(4)
 
     // update translation
-    testRef.current.style.transform = `translateX(calc(${translateX}px + ${
-      currentIsPortrait.current ? `-22vh` : `-35vh`
+    imageContainerRef.current.style.transform = `translateX(calc(${translateX}px + ${
+      props.isPortrait ? `-22vh` : `-35vh`
     }))`
 
     // call next frame
@@ -54,7 +52,6 @@ const ProjectImmersiveOverlay = (props: {
 
   useEffect(() => {
     if (props.project !== null) {
-      currentIsPortrait.current = props.isPortrait
       setCurrentProject(props.project)
     }
   }, [props.project])
@@ -92,7 +89,7 @@ const ProjectImmersiveOverlay = (props: {
 
     imageContainerStyle: css`
       aspect-ratio: 12/9;
-      height: calc(${currentIsPortrait.current ? `20%` : `32%`});
+      height: calc(${props.isPortrait ? `20%` : `32%`});
 
       display: flex;
       flex-direction: row;
@@ -114,11 +111,8 @@ const ProjectImmersiveOverlay = (props: {
 
       text-transform: uppercase;
       font-size: 20px;
-      font-size: calc(50% + ${currentIsPortrait.current ? `3vh` : `4vh`});
-      transform: translate(
-        calc(${currentIsPortrait.current ? `-35vh` : `-50vh`}),
-        0
-      );
+      font-size: calc(50% + ${props.isPortrait ? `3vh` : `4vh`});
+      transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
     `,
     descriptionStyle: css`
       display: flex;
@@ -126,10 +120,10 @@ const ProjectImmersiveOverlay = (props: {
       max-width: 40vw;
 
       font-size: 20px;
-      font-size: calc(${currentIsPortrait.current ? `40%` : `70%`} + 2vh);
+      font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
 
       transform: translate(
-        calc(${currentIsPortrait.current ? `22vh` : `35vh`} + 2vw),
+        calc(${props.isPortrait ? `22vh` : `35vh`} + 2vw),
         0
       );
     `,
@@ -148,7 +142,7 @@ const ProjectImmersiveOverlay = (props: {
     <section css={styles.sectionStyle}>
       <div css={styles.containerStyle} ref={containerRef}>
         <div css={styles.modalStyle}>
-          <div css={styles.imageContainerStyle} ref={testRef}>
+          <div css={styles.imageContainerStyle} ref={imageContainerRef}>
             <img
               css={styles.imageStyle}
               src={'./testImage.png'}

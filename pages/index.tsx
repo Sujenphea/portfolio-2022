@@ -183,6 +183,7 @@ export default function Home() {
           cameraView={cameraView}
           handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
           isPortrait={isPortrait}
+          currentProject={currentProjectOverlay}
         />
       </div>
       <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />

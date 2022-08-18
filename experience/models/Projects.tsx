@@ -3,6 +3,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 
 import ProjectType from '../../types/projectType'
+import CameraData from '../../types/cameraData'
 
 const Projects = (props: {
   curvePoints: THREE.Vector3[]
@@ -13,7 +14,9 @@ const Projects = (props: {
     cameraPosition: THREE.Vector3,
     cameraLookAt: THREE.Vector3
   ) => void
+  handleNewLocation: (data: CameraData) => void
   isPortrait: boolean
+  currentProject: ProjectType
 }) => {
   // params
   const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
@@ -22,6 +25,10 @@ const Projects = (props: {
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
   )
+
+  // states
+  const currentProject = useRef<ProjectType | null>(null)
+  const currentProjectLocation = useRef(0)
 
   // refs
   const meshRefs = useRef<
@@ -88,6 +95,30 @@ const Projects = (props: {
     })
   }, [props.projects.length])
 
+  // - dynamic size
+  useEffect(() => {
+    // calculate new position if a project is focused
+    if (currentProject.current !== null) {
+      const cameraLocation = props.isPortrait
+        ? currentProjectLocation.current - 0.008
+        : currentProjectLocation.current - 0.005
+
+      const cameraPosition = calculatePosition(cameraLocation, 0)
+      const cameraLookAt = calculatePosition(currentProjectLocation.current, 0)
+
+      // handler
+      props.handleNewLocation({
+        position: cameraPosition,
+        lookAt: cameraLookAt,
+      })
+    }
+  }, [props.isPortrait])
+
+  // update focused project
+  useEffect(() => {
+    currentProject.current = props.currentProject
+  }, [props.currentProject])
+
   // handlers
   const handleProjectClick = (project: ProjectType, location: number) => {
     const cameraLocation = props.isPortrait
@@ -97,7 +128,12 @@ const Projects = (props: {
     const cameraPosition = calculatePosition(cameraLocation, 0)
     const cameraLookAt = calculatePosition(location, 0)
 
+    // handler
     props.projectClicked(project, cameraPosition, cameraLookAt)
+
+    // update states
+    currentProjectLocation.current = location
+    currentProject.current = project
   }
 
   return (

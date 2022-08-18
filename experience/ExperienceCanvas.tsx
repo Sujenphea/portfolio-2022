@@ -28,6 +28,7 @@ const ExperienceCanvas = (props: {
     cameraView: CameraViewType
   ) => void
   isPortrait: boolean // get orientation to adjust project focused camera location
+  currentProject: ProjectType // if nil, save calculation cost of dynamic project size
 }) => {
   // states
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -87,7 +88,11 @@ const ExperienceCanvas = (props: {
             projects={projectsJSON}
             rangeOnCurve={[0.5, 1]}
             projectClicked={handleProjectClick}
+            handleNewLocation={(data: CameraData) => {
+              setProjectCameraData(data)
+            }}
             isPortrait={props.isPortrait}
+            currentProject={props.currentProject}
           />
         </Suspense>
       </Canvas>
