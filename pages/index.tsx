@@ -186,7 +186,11 @@ export default function Home() {
         />
       </div>
       <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
-      <Menu visible={menuVisible} toggleView={handleToggleView} />
+      <Menu
+        visible={menuVisible}
+        toggleView={handleToggleView}
+        projectView={projectView}
+      />
       <GlanceView
         visible={glanceViewVisible}
         handleProjectClicked={handleOpenGlanceViewProjectOverlay}

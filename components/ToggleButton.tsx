@@ -1,10 +1,10 @@
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/react'
-
-import { CSSProperties, useRef, useState } from 'react'
 
 // ref: https://codepen.io/alvarotrigo/pen/BamvwQB
 const ToggleButton = (props: {
   handleToggle: (isToggled: boolean) => void
+  value: boolean
   style: CSSProperties
   leftText: string
   rightText: string
@@ -24,6 +24,11 @@ const ToggleButton = (props: {
     setIsToggled(isToggled)
     props.handleToggle(isToggled)
   }
+
+  // hooks
+  useEffect(() => {
+    setIsToggled(props.value)
+  }, [props.value])
 
   // styles
   const toggleCss = {
@@ -144,6 +149,7 @@ ToggleButton.defaultProps = {
     height: '80px',
   },
   handleToggle: () => {},
+  value: false,
   leftText: '',
   rightText: '',
   untoggledColor: 'black',

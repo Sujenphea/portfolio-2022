@@ -1,10 +1,13 @@
 import { css } from '@emotion/react'
 
+import ProjectViewType from '../types/projectViewType'
+
 import ToggleButton from './ToggleButton'
 
 const Menu = (props: {
   visible: boolean
   toggleView: (toGlanceView: boolean) => void
+  projectView: ProjectViewType
 }) => {
   // handlers
   const handleToggle = (toGlanceView: boolean) => {
@@ -55,6 +58,7 @@ const Menu = (props: {
         leftText="immersive"
         rightText="glance"
         handleToggle={handleToggle}
+        value={props.projectView === ProjectViewType.Glance}
       />
       <div
         style={{
