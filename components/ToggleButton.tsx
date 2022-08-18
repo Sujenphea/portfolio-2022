@@ -65,6 +65,7 @@ const ToggleButton = (props: {
 
     circle: css`
       width: ${circleWidth.current}%;
+      height: 50px; // fallback value if aspect-ratio doesn't work
       aspect-ratio: 1;
       margin-left: ${circleOffset.current}%;
 

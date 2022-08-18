@@ -48,7 +48,7 @@ const Menu = (props: {
         style={{
           position: 'relative',
           width: '20vw',
-          aspectRatio: '1.5',
+          height: '35vw', // aspect ratio of 1.5
           maxWidth: '180px',
           maxHeight: '120px',
         }}

@@ -157,7 +157,7 @@ MenuButton.defaultProps = {
     right: '15px',
     top: '10px',
     height: '5vh',
-    aspectRatio: 1,
+    width: '5vh',
   },
   menuVisible: false,
   toggleMenu: () => {},
