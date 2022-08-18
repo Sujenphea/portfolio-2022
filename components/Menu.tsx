@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react'
 import { css } from '@emotion/react'
 
 import ProjectViewType from '../types/projectViewType'
@@ -15,62 +16,60 @@ const Menu = (props: {
   }
 
   // styles
-  const textCss = css`
-    padding: 0px;
-    margin: 5px;
-    font-size: 20px;
-    font-size: calc(100% + 0.75vw + 0.75vh);
+  const styles = {
+    containerStyle: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
 
-    @media (min-width: 768px) {
-      margin: 20px;
-    }
-  `
+      display: ${props.visible ? `flex` : `none`};
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      z-index: 2;
+      background-color: transparent;
+      color: white;
+    `,
+    toggleButtonStyle: {
+      position: 'relative',
+      width: '20vw',
+      height: '35vw', // aspect ratio of 1.5
+      maxWidth: '180px',
+      maxHeight: '120px',
+    } as CSSProperties,
+    categoriesStyle: css`
+      width: 300px;
+      padding: 10px;
+      text-align: center;
+    `,
+    categoryStyle: css`
+      padding: 0px;
+      margin: 5px;
+      font-size: 20px;
+      font-size: calc(100% + 0.75vw + 0.75vh);
+
+      @media (min-width: 768px) {
+        margin: 20px;
+      }
+    `,
+  }
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-
-        zIndex: 2,
-
-        width: '100vw',
-        height: '100vh',
-
-        display: props.visible ? 'flex' : 'none',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        backgroundColor: 'transparent',
-        color: 'white',
-      }}
-    >
+    <div css={styles.containerStyle}>
       <ToggleButton
-        style={{
-          position: 'relative',
-          width: '20vw',
-          height: '35vw', // aspect ratio of 1.5
-          maxWidth: '180px',
-          maxHeight: '120px',
-        }}
+        style={styles.toggleButtonStyle}
         leftText="immersive"
         rightText="glance"
         handleToggle={handleToggle}
         value={props.projectView === ProjectViewType.Glance}
       />
-      <div
-        style={{
-          width: '300px',
-          padding: '10px',
-
-          textAlign: 'center',
-        }}
-      >
-        <h2 css={textCss}>Work</h2>
-        <h2 css={textCss}>Project</h2>
-        <h2 css={textCss}>About Me</h2>
+      <div css={styles.categoriesStyle}>
+        <h2 css={styles.categoryStyle}>Work</h2>
+        <h2 css={styles.categoryStyle}>Project</h2>
+        <h2 css={styles.categoryStyle}>About Me</h2>
       </div>
     </div>
   )

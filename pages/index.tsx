@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { CSSProperties, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { css } from '@emotion/react'
@@ -120,39 +120,52 @@ export default function Home() {
     setCurrentProjectOverlay(null!)
   }
 
+  // styles
+  const styles = {
+    containerStyle: css`
+      background-color: rgb(6, 10, 17);
+      width: 100vw;
+      height: 100vh;
+    `,
+    mobileContainerStyle: css`
+      display: ${mobileOverlayEnabled ? `flex` : `none`};
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: black;
+      z-index: 4;
+
+      color: white;
+      text-align: center;
+
+      @media (min-width: 768px) {
+        display: none;
+      }
+    `,
+    nonMobileContainerStyle: css`
+      display: none;
+
+      @media (min-width: 768px) {
+        display: block;
+      }
+    `,
+    contactBarStyle: {
+      position: 'absolute',
+      bottom: '15px',
+      left: '15px',
+    } as CSSProperties,
+  }
+
   return (
-    <div
-      style={{
-        backgroundColor: 'rgb(6, 10, 17)',
-
-        width: '100vw',
-        height: '100vh',
-      }}
-    >
+    <div css={styles.containerStyle}>
       {/* mobile */}
-      <div
-        css={css`
-          display: ${mobileOverlayEnabled ? `flex` : `none`};
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 100vh;
-          width: 100vw;
-          background-color: black;
-          z-index: 4;
-
-          color: white;
-          text-align: center;
-
-          @media (min-width: 768px) {
-            display: none;
-          }
-        `}
-      >
+      <div css={styles.mobileContainerStyle}>
         <h1>For optimal experiences, please rotate your device</h1>
         <button
           type="button"
@@ -170,15 +183,7 @@ export default function Home() {
         />
       </div>
       {/* non mobile */}
-      <div
-        css={css`
-          display: none;
-
-          @media (min-width: 768px) {
-            display: block;
-          }
-        `}
-      >
+      <div css={styles.nonMobileContainerStyle}>
         <ExperienceCanvas
           cameraView={cameraView}
           handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
@@ -202,9 +207,7 @@ export default function Home() {
         closeProjectOverlay={handleCloseProjectOverlay}
         isPortrait={isPortrait}
       />
-      <ContactBar
-        style={{ position: 'absolute', bottom: '15px', left: '15px' }}
-      />
+      <ContactBar style={styles.contactBarStyle} />
     </div>
   )
 }

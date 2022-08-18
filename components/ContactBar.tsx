@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react'
+import { css } from '@emotion/react'
 
 import {
   faGithub,
@@ -9,22 +10,20 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SocialIcon = (props: { icon: IconDefinition; link: string }) => {
-  return (
-    <a
-      style={{
-        color: 'white',
+  // styles
+  const styles = {
+    linkStyle: css`
+      color: white;
+      padding: 0 10px;
+    `,
+    iconStyle: css`
+      height: 30px;
+    `,
+  }
 
-        padding: '0px 10px',
-      }}
-      href={props.link}
-      target="_blank"
-    >
-      <FontAwesomeIcon
-        icon={props.icon}
-        style={{
-          height: '30px',
-        }}
-      />
+  return (
+    <a css={styles.linkStyle} href={props.link} target="_blank">
+      <FontAwesomeIcon icon={props.icon} css={styles.iconStyle} />
     </a>
   )
 }

@@ -107,7 +107,6 @@ const MenuButton = (props: {
         transform: scale(0.5, 1);
       }
     `,
-
     buttonDivStyle: css`
       display: block;
       width: 100%;

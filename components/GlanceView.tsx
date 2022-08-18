@@ -121,6 +121,7 @@ const GlanceView = (props: {
           }}
         />
       ))}
+
       <h1 css={styles.titleCss}>Works</h1>
       {worksJSON.map((project, i) => (
         <ProjectView
