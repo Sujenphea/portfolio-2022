@@ -23,6 +23,8 @@ const Menu = (props: {
       left: 0;
       width: 100vw;
       height: 100vh;
+      padding-top: 10vh;
+      padding-bottom: 10vh;
 
       display: ${props.visible ? `flex` : `none`};
       flex-direction: column;
@@ -35,23 +37,24 @@ const Menu = (props: {
     `,
     toggleButtonStyle: {
       position: 'relative',
-      width: '20vw',
-      height: '35vw', // aspect ratio of 1.5
+      width: 'calc(5vw + 10vh)',
+      height: 'calc(5vw + 6vh)',
       maxWidth: '180px',
       maxHeight: '120px',
     } as CSSProperties,
     categoriesStyle: css`
       width: 300px;
       padding: 10px;
+      padding-top: 0;
       text-align: center;
     `,
     categoryStyle: css`
       padding: 0px;
-      margin: 5px;
+      margin: 0;
       font-size: 20px;
-      font-size: calc(100% + 0.75vw + 0.75vh);
+      font-size: calc(60% + 0.3vw + 2vh);
 
-      @media (min-width: 768px) {
+      @media (min-height: 300px) {
         margin: 20px;
       }
     `,

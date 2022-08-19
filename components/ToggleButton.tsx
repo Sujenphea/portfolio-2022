@@ -69,17 +69,25 @@ const ToggleButton = (props: {
     `,
 
     circle: css`
-      width: ${circleWidth.current}%;
-      height: 50px; // fallback value if aspect-ratio doesn't work
-      aspect-ratio: 1;
-      margin-left: ${circleOffset.current}%;
+      width: 40%;
 
       background-color: ${isToggled
         ? props.toggledColor
         : props.untoggledColor};
+      margin-left: ${circleOffset.current}%;
       border-radius: 50%;
 
       z-index: 1;
+
+      &:after {
+        content: '';
+        display: block;
+
+        /* Ensure the element is a square */
+        height: 0;
+        width: 100%;
+        padding-bottom: 100%;
+      }
     `,
   }
 
@@ -92,7 +100,7 @@ const ToggleButton = (props: {
 
       color: ${isToggled ? props.untoggledColor : props.toggledColor};
       font-size: 14px;
-      font-size: calc(80% + 0.25vw + 0.25vh);
+      font-size: calc(60% + 0.2vw + 0.6vh);
     `,
     rightText: css`
       position: absolute;
@@ -102,7 +110,7 @@ const ToggleButton = (props: {
 
       color: ${isToggled ? props.untoggledColor : props.toggledColor};
       font-size: 14px;
-      font-size: calc(80% + 0.25vw + 0.25vh);
+      font-size: calc(60% + 0.2vw + 0.6vh);
     `,
   }
 
