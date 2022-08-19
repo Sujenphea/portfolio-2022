@@ -12,7 +12,7 @@ const MenuButton = (props: {
   const height = useRef(props.style.height)
 
   // refs
-  const buttonRef = useRef<HTMLButtonElement>(null!)
+  const buttonRef = useRef<HTMLDivElement>(null!)
 
   // handlers
   const handleButtonClicked = () => {
@@ -31,45 +31,45 @@ const MenuButton = (props: {
       height: 100%;
 
       // active state
-      & button.button-active div:nth-of-type(1) {
+      & .button-active div:nth-of-type(1) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(135deg);
       }
 
-      & button.button-active div:nth-of-type(2) {
+      & .button-active div:nth-of-type(2) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(-45deg);
       }
 
-      & button.button-active div:nth-of-type(3) {
+      & .button-active div:nth-of-type(3) {
         transform: translateY(calc(${height.current} * 0.5)) scale(0, 1);
       }
 
-      & button.button-active div:nth-of-type(4) {
+      & .button-active div:nth-of-type(4) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(45deg);
       }
 
-      & button.button-active div:nth-of-type(5) {
+      & .button-active div:nth-of-type(5) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(-135deg);
       }
 
       // hover active state
-      & button.button-active:hover div:nth-of-type(1) {
+      & .button-active:hover div:nth-of-type(1) {
         background-color: ${props.secondaryColor};
         transform: translateY(calc(${height.current} * 0.5)) rotate(180deg)
           scale(0.6, 1);
       }
 
-      & button.button-active:hover div:nth-of-type(2) {
+      & .button-active:hover div:nth-of-type(2) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(225deg)
           scale(1.2, 1);
       }
 
-      & button.button-active:hover div:nth-of-type(4) {
+      & .button-active:hover div:nth-of-type(4) {
         background-color: ${props.secondaryColor};
         transform: translateY(calc(${height.current} * 0.5)) rotate(90deg)
           scale(0.6, 1);
       }
 
-      & button.button-active:hover div:nth-of-type(5) {
+      & .button-active:hover div:nth-of-type(5) {
         transform: translateY(calc(${height.current} * 0.5)) rotate(135deg)
           scale(1.2, 1);
       }
@@ -134,9 +134,8 @@ const MenuButton = (props: {
       }}
     >
       <div css={styles.containerAnimationStyle}>
-        <button
+        <div
           ref={buttonRef}
-          type="button"
           onClick={(e) => {
             e.preventDefault()
             handleButtonClicked()
@@ -173,7 +172,7 @@ const MenuButton = (props: {
               transform: translateY(calc(${height.current} * 0.8));
             `}
           />
-        </button>
+        </div>
       </div>
     </div>
   )
