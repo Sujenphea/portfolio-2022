@@ -32,45 +32,45 @@ const MenuButton = (props: {
 
       // active state
       & button.button-active div:nth-of-type(1) {
-        transform: translate(0, calc(${height.current} * 0.48)) rotate(135deg);
+        transform: translateY(calc(${height.current} * 0.5)) rotate(135deg);
       }
 
       & button.button-active div:nth-of-type(2) {
-        transform: translate(0, calc(${height.current} * 0.24)) rotate(-45deg);
+        transform: translateY(calc(${height.current} * 0.5)) rotate(-45deg);
       }
 
       & button.button-active div:nth-of-type(3) {
-        transform: scale(0, 1);
+        transform: translateY(calc(${height.current} * 0.5)) scale(0, 1);
       }
 
       & button.button-active div:nth-of-type(4) {
-        transform: translate(0, calc(-${height.current} * 0.24)) rotate(45deg);
+        transform: translateY(calc(${height.current} * 0.5)) rotate(45deg);
       }
 
       & button.button-active div:nth-of-type(5) {
-        transform: translate(0, calc(-${height.current} * 0.48)) rotate(-135deg);
+        transform: translateY(calc(${height.current} * 0.5)) rotate(-135deg);
       }
 
       // hover active state
       & button.button-active:hover div:nth-of-type(1) {
         background-color: ${props.secondaryColor};
-        transform: translate(0, calc(${height.current} * 0.48)) rotate(180deg)
+        transform: translateY(calc(${height.current} * 0.5)) rotate(180deg)
           scale(0.6, 1);
       }
 
       & button.button-active:hover div:nth-of-type(2) {
-        transform: translate(0, calc(${height.current} * 0.24)) rotate(225deg)
+        transform: translateY(calc(${height.current} * 0.5)) rotate(225deg)
           scale(1.2, 1);
       }
 
       & button.button-active:hover div:nth-of-type(4) {
         background-color: ${props.secondaryColor};
-        transform: translate(0, calc(-${height.current} * 0.24)) rotate(90deg)
+        transform: translateY(calc(${height.current} * 0.5)) rotate(90deg)
           scale(0.6, 1);
       }
 
       & button.button-active:hover div:nth-of-type(5) {
-        transform: translate(0, calc(-${height.current} * 0.48)) rotate(135deg)
+        transform: translateY(calc(${height.current} * 0.5)) rotate(135deg)
           scale(1.2, 1);
       }
     `,
@@ -78,10 +78,6 @@ const MenuButton = (props: {
       width: 100%;
       height: 100%;
       cursor: pointer;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
 
       color: white;
       background-color: transparent;
@@ -93,18 +89,24 @@ const MenuButton = (props: {
       transition: all 0.25s;
 
       // shrink div on hover
-      &:hover div:nth-of-type(1),
-      &:hover div:nth-of-type(5) {
-        transform: scale(0.9, 1);
+      &:hover div:nth-of-type(1) {
+        transform: translateY(calc(${height.current} * 0.2)) scale(1, 1);
       }
 
-      &:hover div:nth-of-type(2),
-      &:hover div:nth-of-type(4) {
-        transform: scale(0.25, 1);
+      &:hover div:nth-of-type(2) {
+        transform: translateY(calc(${height.current} * 0.35)) scale(0.75, 1);
       }
 
       &:hover div:nth-of-type(3) {
-        transform: scale(0.5, 1);
+        transform: translateY(calc(${height.current} * 0.5)) scale(0.5, 1);
+      }
+
+      &:hover div:nth-of-type(4) {
+        transform: translateY(calc(${height.current} * 0.65)) scale(0.75, 1);
+      }
+
+      &:hover div:nth-of-type(5) {
+        transform: translateY(calc(${height.current} * 0.8)) scale(1, 1);
       }
     `,
     buttonDivStyle: css`
@@ -113,8 +115,12 @@ const MenuButton = (props: {
       height: 8%;
       max-height: 5px;
 
+      position: absolute;
+      top: 0;
+      left: 0;
+
       background-color: ${props.primaryColor};
-      border-radius: 3px;
+      border-radius: 20px;
 
       transition: all 0.25s;
     `,
@@ -137,11 +143,36 @@ const MenuButton = (props: {
           }}
           css={styles.buttonStyle}
         >
-          <div css={styles.buttonDivStyle} />
-          <div css={styles.buttonDivStyle} />
-          <div css={styles.buttonDivStyle} />
-          <div css={styles.buttonDivStyle} />
-          <div css={styles.buttonDivStyle} />
+          <div
+            css={css`
+              ${styles.buttonDivStyle};
+              transform: translateY(calc(${height.current} * 0.2));
+            `}
+          />
+          <div
+            css={css`
+              ${styles.buttonDivStyle};
+              transform: translateY(calc(${height.current} * 0.35));
+            `}
+          />
+          <div
+            css={css`
+              ${styles.buttonDivStyle};
+              transform: translateY(calc(${height.current} * 0.5));
+            `}
+          />
+          <div
+            css={css`
+              ${styles.buttonDivStyle};
+              transform: translateY(calc(${height.current} * 0.65));
+            `}
+          />
+          <div
+            css={css`
+              ${styles.buttonDivStyle};
+              transform: translateY(calc(${height.current} * 0.8));
+            `}
+          />
         </button>
       </div>
     </div>
@@ -155,8 +186,8 @@ MenuButton.defaultProps = {
     position: 'absolute',
     right: '15px',
     top: '10px',
-    height: '5vh',
-    width: '5vh',
+    height: '7vh',
+    width: '7vh',
   },
   menuVisible: false,
   toggleMenu: () => {},
