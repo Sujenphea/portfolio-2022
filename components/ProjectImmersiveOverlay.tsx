@@ -9,6 +9,9 @@ const ProjectImmersiveOverlay = (props: {
   visible: boolean
   isPortrait: boolean
 }) => {
+  // params
+  const imageMarginLeft = useRef('5vh')
+
   // states
   // - makes sure project is not null
   const [currentProject, setCurrentProject] = useState<ProjectType>({
@@ -54,6 +57,16 @@ const ProjectImmersiveOverlay = (props: {
   useEffect(() => {
     if (props.project !== null) {
       setCurrentProject(props.project)
+    } else {
+      setCurrentProject({
+        name: '',
+        company: '',
+        description: '',
+        technologies: [],
+        year: 2000,
+        link: '',
+        images: [],
+      })
     }
   }, [props.project])
 
@@ -77,7 +90,13 @@ const ProjectImmersiveOverlay = (props: {
     `,
     containerStyle: css`
       @media (min-width: 768px) {
-        height: calc(100vh * 2);
+        height: calc(
+          100vh + ${currentProject.images.length - 1} *
+            (
+              ${props.isPortrait ? `32vh` : `51.2vh`} +
+                ${imageMarginLeft.current}
+            )
+        );
       }
     `,
     modalStyle: css`
@@ -127,7 +146,7 @@ const ProjectImmersiveOverlay = (props: {
         width: 100%;
         height: 100%;
 
-        margin-left: 20px;
+        margin-left: ${imageMarginLeft.current};
         flex: 0 0 auto;
       }
     `,
