@@ -25,6 +25,7 @@ const ProjectImmersiveOverlay = (props: {
   const imageContainerRef = useRef<HTMLDivElement>(null!)
   const requestRef = useRef(0) // animation frame
   const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
+  const [scrollTransformX, setScrollTransformX] = useState(0)
   var currX = 0
 
   // animation frame
@@ -36,9 +37,7 @@ const ProjectImmersiveOverlay = (props: {
     const translateX = -currX.toFixed(4)
 
     // update translation
-    imageContainerRef.current.style.transform = `translateX(calc(${translateX}px + ${
-      isPortraitRef.current ? `-20.5vh` : `-33vh`
-    }))`
+    setScrollTransformX(translateX)
 
     // call next frame
     requestRef.current = requestAnimationFrame(animate)
@@ -76,62 +75,91 @@ const ProjectImmersiveOverlay = (props: {
       color: white;
     `,
     containerStyle: css`
-      height: calc(100vh * 2);
+      @media (min-width: 768px) {
+        height: calc(100vh * 2);
+      }
     `,
     modalStyle: css`
       position: sticky;
       top: 0;
       width: 100vw;
-      height: 100vh;
 
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
 
       overflow: hidden;
+
+      @media (min-width: 768px) {
+        height: 100vh;
+        flex-direction: row;
+      }
     `,
 
     imageContainerStyle: css`
-      position: absolute;
       aspect-ratio: 12/9;
-      height: calc(${props.isPortrait ? `23.5%` : `38.5%`});
 
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: right;
       flex-wrap: nowrap;
+
+      @media (min-width: 768px) {
+        position: absolute;
+        height: calc(${props.isPortrait ? `23.5%` : `38.5%`});
+        transform: translateX(
+          calc(
+            ${scrollTransformX}px + ${props.isPortrait ? `-20.5vh` : `-33vh`}
+          )
+        );
+        flex-direction: row;
+      }
     `,
     imageStyle: css`
-      width: 100%;
-      height: 100%;
-      flex: 0 0 auto;
+      height: 40vh;
 
       filter: brightness(70%);
       opacity: 0.5;
-      margin-left: 20px;
+
+      @media (min-width: 768px) {
+        width: 100%;
+        height: 100%;
+
+        margin-left: 20px;
+        flex: 0 0 auto;
+      }
     `,
     titleStyle: css`
-      position: absolute;
       max-width: 200px;
 
       text-transform: uppercase;
       font-size: 20px;
       font-size: calc(50% + ${props.isPortrait ? `3vh` : `4vh`});
-      transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
+
+      margin-top: 5vh;
+      margin-bottom: 5vh;
+
+      @media (min-width: 768px) {
+        position: absolute;
+        transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
+      }
     `,
     descriptionStyle: css`
       display: flex;
       flex-direction: column;
-      max-width: 40vw;
+      max-width: 80vw;
 
       font-size: 20px;
       font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
 
-      transform: translate(
-        calc(${props.isPortrait ? `20.5vh` : `33vh`} + 2vw),
-        0
-      );
+      @media (min-width: 768px) {
+        max-width: 40vw;
+        transform: translate(
+          calc(${props.isPortrait ? `20.5vh` : `33vh`} + 2vw),
+          0
+        );
+      }
     `,
     closeButtonStyle: css`
       position: absolute;
@@ -148,6 +176,16 @@ const ProjectImmersiveOverlay = (props: {
     <section css={styles.sectionStyle}>
       <div css={styles.containerStyle} ref={containerRef}>
         <div css={styles.modalStyle}>
+          {/* title */}
+          <div css={styles.titleStyle}>{currentProject.name}</div>
+
+          {/* description */}
+          <div css={styles.descriptionStyle}>
+            <div>year: {currentProject.year}</div>
+            <div>technologies: {currentProject.technologies}</div>
+            <div>{currentProject.description}</div>
+          </div>
+
           <div css={styles.imageContainerStyle} ref={imageContainerRef}>
             <img
               css={styles.imageStyle}
@@ -164,16 +202,11 @@ const ProjectImmersiveOverlay = (props: {
               src={'./testImage.png'}
               alt="sample image"
             />
-          </div>
-
-          {/* title */}
-          <div css={styles.titleStyle}>{currentProject.name}</div>
-
-          {/* description */}
-          <div css={styles.descriptionStyle}>
-            <div>year: {currentProject.year}</div>
-            <div>technologies: {currentProject.technologies}</div>
-            <div>{currentProject.description}</div>
+            <img
+              css={styles.imageStyle}
+              src={'./testImage.png'}
+              alt="sample image"
+            />
           </div>
 
           {/* close button */}
