@@ -96,7 +96,6 @@ const ProjectImmersiveOverlay = (props: {
         flex-direction: row;
       }
     `,
-
     imageContainerStyle: css`
       aspect-ratio: 12/9;
 
@@ -108,12 +107,14 @@ const ProjectImmersiveOverlay = (props: {
       @media (min-width: 768px) {
         position: absolute;
         height: calc(${props.isPortrait ? `23.5%` : `38.5%`});
+
+        flex-direction: row;
+
         transform: translateX(
           calc(
             ${scrollTransformX}px + ${props.isPortrait ? `-20.5vh` : `-33vh`}
           )
         );
-        flex-direction: row;
       }
     `,
     imageStyle: css`
@@ -142,6 +143,9 @@ const ProjectImmersiveOverlay = (props: {
 
       @media (min-width: 768px) {
         position: absolute;
+
+        z-index: 2;
+
         transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
       }
     `,
@@ -157,6 +161,7 @@ const ProjectImmersiveOverlay = (props: {
         max-width: 40vw;
         position: absolute;
         left: 50vw;
+
         transform: translate(2vw, 0);
       }
     `,
