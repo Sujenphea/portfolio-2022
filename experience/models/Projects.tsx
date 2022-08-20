@@ -29,6 +29,7 @@ const Projects = (props: {
   // states
   const currentProject = useRef<ProjectType | null>(null)
   const currentProjectLocation = useRef(0)
+  const currentProjectIndex = useRef(0)
 
   // refs
   const meshRefs = useRef<
@@ -66,6 +67,18 @@ const Projects = (props: {
     const cameraLookAt = calculatePosition(location, 0)
 
     return [cameraPosition, cameraLookAt]
+  }
+
+  const updateMeshLookAtLocation = (
+    projectLocation: number,
+    projectIndex: number
+  ) => {
+    const newMeshLookAtPosition = props.isPortrait ? -0.008 : -0.005
+    const lookAtPosition = calculatePosition(
+      projectLocation + newMeshLookAtPosition,
+      1
+    )
+    meshRefs.current[projectIndex]?.lookAt(lookAtPosition)
   }
 
   const numberLinearConverstion = (
@@ -114,6 +127,12 @@ const Projects = (props: {
         currentProjectLocation.current
       )
 
+      // calculate mesh new lookAt position
+      updateMeshLookAtLocation(
+        currentProjectLocation.current,
+        currentProjectIndex.current
+      )
+
       // handler
       props.handleNewLocation({
         position: cameraPosition,
@@ -128,9 +147,16 @@ const Projects = (props: {
   }, [props.currentProject])
 
   // handlers
-  const handleProjectClick = (project: ProjectType, location: number) => {
+  const handleProjectClick = (
+    project: ProjectType,
+    location: number,
+    index: number
+  ) => {
     const [cameraPosition, cameraLookAt] =
       calculateFocusProjectCameraData(location)
+
+    // calculate mesh new lookAt position
+    updateMeshLookAtLocation(location, index)
 
     // handler
     props.projectClicked(project, cameraPosition, cameraLookAt)
@@ -138,6 +164,7 @@ const Projects = (props: {
     // update states
     currentProjectLocation.current = location
     currentProject.current = project
+    currentProjectIndex.current = index
   }
 
   return (
@@ -163,7 +190,7 @@ const Projects = (props: {
               meshRefs.current[i] = ref
             }}
             onClick={() => {
-              handleProjectClick(project, normalisedLocation)
+              handleProjectClick(project, normalisedLocation, i)
             }}
           >
             <planeGeometry args={[12, 9]} />
