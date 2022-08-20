@@ -19,22 +19,22 @@ const ProjectImmersiveOverlay = (props: {
     year: 2000,
     link: '',
   })
+  const [scrollTransformX, setScrollTransformX] = useState(0)
 
   // refs
   const containerRef = useRef<HTMLDivElement>(null!)
   const imageContainerRef = useRef<HTMLDivElement>(null!)
   const requestRef = useRef(0) // animation frame
   const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
-  const [scrollTransformX, setScrollTransformX] = useState(0)
-  var currX = 0
+  const currX = useRef(0)
 
   // animation frame
   // - update image scroll
   const animate = () => {
     // get translation based on scroll
     const targetX = containerRef.current.getBoundingClientRect().top
-    currX += (targetX - currX) * 0.15
-    const translateX = -currX.toFixed(4)
+    currX.current += (targetX - currX.current) * 0.15
+    const translateX = -currX.current.toFixed(4)
 
     // update translation
     setScrollTransformX(translateX)
@@ -97,8 +97,6 @@ const ProjectImmersiveOverlay = (props: {
       }
     `,
     imageContainerStyle: css`
-      aspect-ratio: 12/9;
-
       display: flex;
       flex-direction: column;
       justify-content: right;
@@ -106,13 +104,14 @@ const ProjectImmersiveOverlay = (props: {
 
       @media (min-width: 768px) {
         position: absolute;
-        height: calc(${props.isPortrait ? `23.5%` : `38.5%`});
+        width: calc(${props.isPortrait ? `32vh` : `51.2vh`});
+        height: calc(${props.isPortrait ? `24vh` : `38vh`});
 
         flex-direction: row;
 
         transform: translateX(
           calc(
-            ${scrollTransformX}px + ${props.isPortrait ? `-20.5vh` : `-33vh`}
+            ${scrollTransformX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`}
           )
         );
       }
