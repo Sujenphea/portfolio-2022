@@ -19,8 +19,8 @@ const Projects = (props: {
   currentProject: ProjectType
 }) => {
   // params
-  const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
-  const objectNormalMultiplier = useRef(10) // horizontal displacement of object
+  const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
+  const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
@@ -55,6 +55,17 @@ const Projects = (props: {
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
     return position
+  }
+
+  const calculateFocusProjectCameraData = (location: number) => {
+    const cameraLocation = props.isPortrait
+      ? location - 0.008
+      : location - 0.005
+
+    const cameraPosition = calculatePosition(cameraLocation, 0)
+    const cameraLookAt = calculatePosition(location, 0)
+
+    return [cameraPosition, cameraLookAt]
   }
 
   const numberLinearConverstion = (
@@ -99,12 +110,9 @@ const Projects = (props: {
   useEffect(() => {
     // calculate new position if a project is focused
     if (currentProject.current !== null) {
-      const cameraLocation = props.isPortrait
-        ? currentProjectLocation.current - 0.008
-        : currentProjectLocation.current - 0.005
-
-      const cameraPosition = calculatePosition(cameraLocation, 0)
-      const cameraLookAt = calculatePosition(currentProjectLocation.current, 0)
+      const [cameraPosition, cameraLookAt] = calculateFocusProjectCameraData(
+        currentProjectLocation.current
+      )
 
       // handler
       props.handleNewLocation({
@@ -121,12 +129,8 @@ const Projects = (props: {
 
   // handlers
   const handleProjectClick = (project: ProjectType, location: number) => {
-    const cameraLocation = props.isPortrait
-      ? location - 0.008
-      : location - 0.005
-
-    const cameraPosition = calculatePosition(cameraLocation, 0)
-    const cameraLookAt = calculatePosition(location, 0)
+    const [cameraPosition, cameraLookAt] =
+      calculateFocusProjectCameraData(location)
 
     // handler
     props.projectClicked(project, cameraPosition, cameraLookAt)
