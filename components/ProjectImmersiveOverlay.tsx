@@ -18,6 +18,7 @@ const ProjectImmersiveOverlay = (props: {
     technologies: [],
     year: 2000,
     link: '',
+    images: [],
   })
   const [scrollTransformX, setScrollTransformX] = useState(0)
 
@@ -190,26 +191,16 @@ const ProjectImmersiveOverlay = (props: {
           </div>
 
           <div css={styles.imageContainerStyle} ref={imageContainerRef}>
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
+            {currentProject.images.map((link, i) => {
+              return (
+                <img
+                  key={link + i}
+                  css={styles.imageStyle}
+                  src={link}
+                  alt="project image"
+                />
+              )
+            })}
           </div>
 
           {/* close button */}
