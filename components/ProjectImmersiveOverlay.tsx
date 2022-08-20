@@ -155,10 +155,9 @@ const ProjectImmersiveOverlay = (props: {
 
       @media (min-width: 768px) {
         max-width: 40vw;
-        transform: translate(
-          calc(${props.isPortrait ? `20.5vh` : `33vh`} + 2vw),
-          0
-        );
+        position: absolute;
+        left: 50vw;
+        transform: translate(2vw, 0);
       }
     `,
     closeButtonStyle: css`
