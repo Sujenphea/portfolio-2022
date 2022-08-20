@@ -68,10 +68,6 @@ export default function Home() {
     }
   }, [projectView])
 
-  useEffect(() => {
-    console.log('dbg - is portrait: ', isPortrait)
-  }, [isPortrait])
-
   // handlers
   const handleToggleMenu = () => {
     setMenuVisible(!menuVisible)
