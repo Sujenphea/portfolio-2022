@@ -24,6 +24,7 @@ const ProjectImmersiveOverlay = (props: {
   const containerRef = useRef<HTMLDivElement>(null!)
   const imageContainerRef = useRef<HTMLDivElement>(null!)
   const requestRef = useRef(0) // animation frame
+  const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
   var currX = 0
 
   // animation frame
@@ -36,7 +37,7 @@ const ProjectImmersiveOverlay = (props: {
 
     // update translation
     imageContainerRef.current.style.transform = `translateX(calc(${translateX}px + ${
-      props.isPortrait ? `-22vh` : `-35vh`
+      isPortraitRef.current ? `-20.5vh` : `-33vh`
     }))`
 
     // call next frame
@@ -55,6 +56,10 @@ const ProjectImmersiveOverlay = (props: {
       setCurrentProject(props.project)
     }
   }, [props.project])
+
+  useEffect(() => {
+    isPortraitRef.current = props.isPortrait
+  }, [props.isPortrait])
 
   // styles
   const styles = {
@@ -88,8 +93,9 @@ const ProjectImmersiveOverlay = (props: {
     `,
 
     imageContainerStyle: css`
+      position: absolute;
       aspect-ratio: 12/9;
-      height: calc(${props.isPortrait ? `20%` : `32%`});
+      height: calc(${props.isPortrait ? `23.5%` : `38.5%`});
 
       display: flex;
       flex-direction: row;
@@ -123,7 +129,7 @@ const ProjectImmersiveOverlay = (props: {
       font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
 
       transform: translate(
-        calc(${props.isPortrait ? `22vh` : `35vh`} + 2vw),
+        calc(${props.isPortrait ? `20.5vh` : `33vh`} + 2vw),
         0
       );
     `,
