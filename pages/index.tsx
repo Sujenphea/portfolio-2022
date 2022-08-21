@@ -38,7 +38,7 @@ export default function Home() {
 
     // update screen orientation
     function updateScreenOrientation() {
-      setIsPortrait(window.innerWidth / window.innerHeight < 1.2)
+      setIsPortrait(window.innerWidth / window.innerHeight < 1.3)
     }
 
     window.addEventListener('resize', updateScreenOrientation)

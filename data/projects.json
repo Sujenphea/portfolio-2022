@@ -5,7 +5,8 @@
     "description": "testProject1 Description",
     "technologies": ["go"],
     "year": 2021,
-    "link": "https://www.google.com"
+    "link": "https://www.google.com",
+    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
     "name": "testProject2",
@@ -13,7 +14,8 @@
     "description": "testProject2 Description",
     "technologies": ["go"],
     "year": 2021,
-    "link": "https://www.google.com"
+    "link": "https://www.google.com",
+    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
     "name": "testProject3",
@@ -21,7 +23,8 @@
     "description": "testProject3 Description",
     "technologies": ["go"],
     "year": 2021,
-    "link": "https://www.google.com"
+    "link": "https://www.google.com",
+    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
     "name": "testProject4",
@@ -29,7 +32,8 @@
     "description": "testProject4 Description",
     "technologies": ["go"],
     "year": 2021,
-    "link": "https://www.google.com"
+    "link": "https://www.google.com",
+    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
     "name": "testProject5",
@@ -37,6 +41,7 @@
     "description": "testProject5 Description",
     "technologies": ["go"],
     "year": 2021,
-    "link": "https://www.google.com"
+    "link": "https://www.google.com",
+    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   }
 ]

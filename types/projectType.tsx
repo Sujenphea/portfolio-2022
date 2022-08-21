@@ -5,6 +5,7 @@ type ProjectType = {
   technologies: string[]
   year: number
   link: string
+  images: string[]
 }
 
 export default ProjectType

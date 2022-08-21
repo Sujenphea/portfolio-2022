@@ -19,8 +19,8 @@ const Projects = (props: {
   currentProject: ProjectType
 }) => {
   // params
-  const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
-  const objectNormalMultiplier = useRef(10) // horizontal displacement of object
+  const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
+  const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
   const [curve] = useState(
     new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
@@ -29,6 +29,7 @@ const Projects = (props: {
   // states
   const currentProject = useRef<ProjectType | null>(null)
   const currentProjectLocation = useRef(0)
+  const currentProjectIndex = useRef(0)
 
   // refs
   const meshRefs = useRef<
@@ -55,6 +56,29 @@ const Projects = (props: {
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
     return position
+  }
+
+  const calculateFocusProjectCameraData = (location: number) => {
+    const cameraLocation = props.isPortrait
+      ? location - 0.008
+      : location - 0.005
+
+    const cameraPosition = calculatePosition(cameraLocation, 0)
+    const cameraLookAt = calculatePosition(location, 0)
+
+    return [cameraPosition, cameraLookAt]
+  }
+
+  const updateMeshLookAtLocation = (
+    projectLocation: number,
+    projectIndex: number
+  ) => {
+    const newMeshLookAtPosition = props.isPortrait ? -0.008 : -0.005
+    const lookAtPosition = calculatePosition(
+      projectLocation + newMeshLookAtPosition,
+      1
+    )
+    meshRefs.current[projectIndex]?.lookAt(lookAtPosition)
   }
 
   const numberLinearConverstion = (
@@ -99,12 +123,15 @@ const Projects = (props: {
   useEffect(() => {
     // calculate new position if a project is focused
     if (currentProject.current !== null) {
-      const cameraLocation = props.isPortrait
-        ? currentProjectLocation.current - 0.008
-        : currentProjectLocation.current - 0.005
+      const [cameraPosition, cameraLookAt] = calculateFocusProjectCameraData(
+        currentProjectLocation.current
+      )
 
-      const cameraPosition = calculatePosition(cameraLocation, 0)
-      const cameraLookAt = calculatePosition(currentProjectLocation.current, 0)
+      // calculate mesh new lookAt position
+      updateMeshLookAtLocation(
+        currentProjectLocation.current,
+        currentProjectIndex.current
+      )
 
       // handler
       props.handleNewLocation({
@@ -120,13 +147,16 @@ const Projects = (props: {
   }, [props.currentProject])
 
   // handlers
-  const handleProjectClick = (project: ProjectType, location: number) => {
-    const cameraLocation = props.isPortrait
-      ? location - 0.008
-      : location - 0.005
+  const handleProjectClick = (
+    project: ProjectType,
+    location: number,
+    index: number
+  ) => {
+    const [cameraPosition, cameraLookAt] =
+      calculateFocusProjectCameraData(location)
 
-    const cameraPosition = calculatePosition(cameraLocation, 0)
-    const cameraLookAt = calculatePosition(location, 0)
+    // calculate mesh new lookAt position
+    updateMeshLookAtLocation(location, index)
 
     // handler
     props.projectClicked(project, cameraPosition, cameraLookAt)
@@ -134,6 +164,7 @@ const Projects = (props: {
     // update states
     currentProjectLocation.current = location
     currentProject.current = project
+    currentProjectIndex.current = index
   }
 
   return (
@@ -159,7 +190,7 @@ const Projects = (props: {
               meshRefs.current[i] = ref
             }}
             onClick={() => {
-              handleProjectClick(project, normalisedLocation)
+              handleProjectClick(project, normalisedLocation, i)
             }}
           >
             <planeGeometry args={[12, 9]} />

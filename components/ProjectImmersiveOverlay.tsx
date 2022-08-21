@@ -9,6 +9,9 @@ const ProjectImmersiveOverlay = (props: {
   visible: boolean
   isPortrait: boolean
 }) => {
+  // params
+  const imageMarginLeft = useRef('5vh')
+
   // states
   // - makes sure project is not null
   const [currentProject, setCurrentProject] = useState<ProjectType>({
@@ -18,26 +21,27 @@ const ProjectImmersiveOverlay = (props: {
     technologies: [],
     year: 2000,
     link: '',
+    images: [],
   })
+  const [scrollTransformX, setScrollTransformX] = useState(0)
 
   // refs
   const containerRef = useRef<HTMLDivElement>(null!)
   const imageContainerRef = useRef<HTMLDivElement>(null!)
   const requestRef = useRef(0) // animation frame
-  var currX = 0
+  const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
+  const currX = useRef(0)
 
   // animation frame
   // - update image scroll
   const animate = () => {
     // get translation based on scroll
     const targetX = containerRef.current.getBoundingClientRect().top
-    currX += (targetX - currX) * 0.15
-    const translateX = -currX.toFixed(4)
+    currX.current += (targetX - currX.current) * 0.15
+    const translateX = -currX.current.toFixed(4)
 
     // update translation
-    imageContainerRef.current.style.transform = `translateX(calc(${translateX}px + ${
-      props.isPortrait ? `-22vh` : `-35vh`
-    }))`
+    setScrollTransformX(translateX)
 
     // call next frame
     requestRef.current = requestAnimationFrame(animate)
@@ -53,8 +57,22 @@ const ProjectImmersiveOverlay = (props: {
   useEffect(() => {
     if (props.project !== null) {
       setCurrentProject(props.project)
+    } else {
+      setCurrentProject({
+        name: '',
+        company: '',
+        description: '',
+        technologies: [],
+        year: 2000,
+        link: '',
+        images: [],
+      })
     }
   }, [props.project])
+
+  useEffect(() => {
+    isPortraitRef.current = props.isPortrait
+  }, [props.isPortrait])
 
   // styles
   const styles = {
@@ -71,61 +89,100 @@ const ProjectImmersiveOverlay = (props: {
       color: white;
     `,
     containerStyle: css`
-      height: calc(100vh * 2);
+      @media (min-width: 768px) {
+        height: calc(
+          100vh + ${currentProject.images.length - 1} *
+            (
+              ${props.isPortrait ? `32vh` : `51.2vh`} +
+                ${imageMarginLeft.current}
+            )
+        );
+      }
     `,
     modalStyle: css`
       position: sticky;
       top: 0;
       width: 100vw;
-      height: 100vh;
 
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
 
       overflow: hidden;
+
+      @media (min-width: 768px) {
+        height: 100vh;
+        flex-direction: row;
+      }
     `,
-
     imageContainerStyle: css`
-      aspect-ratio: 12/9;
-      height: calc(${props.isPortrait ? `20%` : `32%`});
-
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: right;
       flex-wrap: nowrap;
+
+      @media (min-width: 768px) {
+        position: absolute;
+        width: calc(${props.isPortrait ? `32vh` : `51.2vh`});
+        height: calc(${props.isPortrait ? `24vh` : `38vh`});
+
+        flex-direction: row;
+
+        transform: translateX(
+          calc(
+            ${scrollTransformX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`}
+          )
+        );
+      }
     `,
     imageStyle: css`
-      width: 100%;
-      height: 100%;
-      flex: 0 0 auto;
+      height: 40vh;
 
       filter: brightness(70%);
       opacity: 0.5;
-      margin-left: 20px;
+
+      @media (min-width: 768px) {
+        width: 100%;
+        height: 100%;
+
+        margin-left: ${imageMarginLeft.current};
+        flex: 0 0 auto;
+      }
     `,
     titleStyle: css`
-      position: absolute;
       max-width: 200px;
 
       text-transform: uppercase;
       font-size: 20px;
       font-size: calc(50% + ${props.isPortrait ? `3vh` : `4vh`});
-      transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
+
+      margin-top: 5vh;
+      margin-bottom: 5vh;
+
+      @media (min-width: 768px) {
+        position: absolute;
+
+        z-index: 2;
+
+        transform: translate(calc(${props.isPortrait ? `-35vh` : `-50vh`}), 0);
+      }
     `,
     descriptionStyle: css`
       display: flex;
       flex-direction: column;
-      max-width: 40vw;
+      max-width: 80vw;
 
       font-size: 20px;
       font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
 
-      transform: translate(
-        calc(${props.isPortrait ? `22vh` : `35vh`} + 2vw),
-        0
-      );
+      @media (min-width: 768px) {
+        max-width: 40vw;
+        position: absolute;
+        left: 50vw;
+
+        transform: translate(2vw, 0);
+      }
     `,
     closeButtonStyle: css`
       position: absolute;
@@ -142,24 +199,6 @@ const ProjectImmersiveOverlay = (props: {
     <section css={styles.sectionStyle}>
       <div css={styles.containerStyle} ref={containerRef}>
         <div css={styles.modalStyle}>
-          <div css={styles.imageContainerStyle} ref={imageContainerRef}>
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-            <img
-              css={styles.imageStyle}
-              src={'./testImage.png'}
-              alt="sample image"
-            />
-          </div>
-
           {/* title */}
           <div css={styles.titleStyle}>{currentProject.name}</div>
 
@@ -168,6 +207,19 @@ const ProjectImmersiveOverlay = (props: {
             <div>year: {currentProject.year}</div>
             <div>technologies: {currentProject.technologies}</div>
             <div>{currentProject.description}</div>
+          </div>
+
+          <div css={styles.imageContainerStyle} ref={imageContainerRef}>
+            {currentProject.images.map((link, i) => {
+              return (
+                <img
+                  key={link + i}
+                  css={styles.imageStyle}
+                  src={link}
+                  alt="project image"
+                />
+              )
+            })}
           </div>
 
           {/* close button */}
