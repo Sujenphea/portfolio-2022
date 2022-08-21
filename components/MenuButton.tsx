@@ -63,6 +63,10 @@ const MenuButton = (props: {
           scale(1.2, 1);
       }
 
+      & .button-active:hover div:nth-of-type(3) {
+        transform: translateY(calc(${height.current} * 0.5)) scale(0, 1);
+      }
+
       & .button-active:hover div:nth-of-type(4) {
         background-color: ${props.secondaryColor};
         transform: translateY(calc(${height.current} * 0.5)) rotate(90deg)
