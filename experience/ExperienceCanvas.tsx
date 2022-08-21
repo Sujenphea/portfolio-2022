@@ -1,7 +1,7 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 
-import { Canvas, extend, Object3DNode } from '@react-three/fiber'
-import { ShaderMaterial, Vector3 } from 'three'
+import { Canvas, extend, Object3DNode, useLoader } from '@react-three/fiber'
+import { ShaderMaterial, Texture, TextureLoader, Vector3 } from 'three'
 import { Box, shaderMaterial } from '@react-three/drei'
 
 import Cameras from './Cameras'
@@ -103,7 +103,11 @@ const ExperienceCanvas = (props: {
   )
 }
 
-const MyShaderMaterial = shaderMaterial({}, vertexShader, fragmentShader)
+const MyShaderMaterial = shaderMaterial(
+  { uTexture: new Texture() },
+  vertexShader,
+  fragmentShader
+)
 extend({ MyShaderMaterial })
 
 declare global {
@@ -115,10 +119,17 @@ declare global {
 }
 
 const TestObject = () => {
+  const imageTexture = useLoader(TextureLoader, './testImage.png')
+  const ref = useRef<ShaderMaterial>(null!)
+
+  useEffect(() => {
+    ref.current.uniforms.uTexture = { value: imageTexture }
+  }, [imageTexture])
+
   return (
     <mesh position={[5, 0, 0]}>
       <planeGeometry args={[12, 9]} />
-      <myShaderMaterial />
+      <myShaderMaterial ref={ref} />
     </mesh>
   )
 }
