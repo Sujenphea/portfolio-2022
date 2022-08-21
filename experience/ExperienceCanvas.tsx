@@ -1,7 +1,8 @@
 import { Suspense, useState } from 'react'
 
-import { Canvas } from '@react-three/fiber'
-import { Vector3 } from 'three'
+import { Canvas, extend, Object3DNode } from '@react-three/fiber'
+import { ShaderMaterial, Vector3 } from 'three'
+import { Box, shaderMaterial } from '@react-three/drei'
 
 import Cameras from './Cameras'
 
@@ -19,6 +20,9 @@ import ProjectType from '../types/projectType'
 
 import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
+
+import fragmentShader from './shaders/fragment.glsl'
+import vertexShader from './shaders/vertex.glsl'
 
 const ExperienceCanvas = (props: {
   cameraView: CameraViewType
@@ -93,8 +97,29 @@ const ExperienceCanvas = (props: {
             currentProject={props.currentProject}
           />
         </Suspense>
+        <TestObject />
       </Canvas>
     </div>
+  )
+}
+
+const MyShaderMaterial = shaderMaterial({}, vertexShader, fragmentShader)
+extend({ MyShaderMaterial })
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      myShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>
+    }
+  }
+}
+
+const TestObject = () => {
+  return (
+    <mesh position={[5, 0, 0]}>
+      <planeGeometry args={[12, 9]} />
+      <myShaderMaterial />
+    </mesh>
   )
 }
 

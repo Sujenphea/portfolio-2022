@@ -17,7 +17,9 @@
     "@react-three/drei": "^9.14.3",
     "@react-three/fiber": "^8.0.27",
     "@types/three": "^0.141.0",
+    "glslify-loader": "^2.0.0",
     "next": "^12.2.0",
+    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.142.0"
