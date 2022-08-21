@@ -4,7 +4,6 @@ import { Canvas } from '@react-three/fiber'
 import { Vector3 } from 'three'
 
 import Cameras from './Cameras'
-import Lights from './Lights'
 
 import AboutMe from './models/AboutMe'
 import Works from './models/Works'
@@ -64,7 +63,6 @@ const ExperienceCanvas = (props: {
       }}
     >
       <Canvas dpr={[1, 2]} linear>
-        <Lights />
         <Cameras
           points={pointsSj}
           scrollProgress={scrollProgress}
