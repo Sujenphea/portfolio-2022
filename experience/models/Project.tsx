@@ -1,8 +1,10 @@
 import { useRef, useEffect } from 'react'
 
-import { Texture, ShaderMaterial, TextureLoader } from 'three'
+import { Texture, ShaderMaterial, TextureLoader, Vector3 } from 'three'
 import { extend, Object3DNode, useLoader } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
+
+import ProjectType from '../../types/projectType'
 
 import fragmentShader from '../shaders/fragment.glsl'
 import vertexShader from '../shaders/vertex.glsl'
@@ -22,8 +24,8 @@ declare global {
   }
 }
 
-const Project = () => {
-  const imageTexture = useLoader(TextureLoader, './testImage.png')
+const Project = (props: { project: ProjectType; position: number[] }) => {
+  const imageTexture = useLoader(TextureLoader, props.project.images[0])
   const ref = useRef<ShaderMaterial>(null!)
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const Project = () => {
   }, [imageTexture])
 
   return (
-    <mesh position={[5, 0, 0]}>
+    <mesh position={new Vector3(...props.position)}>
       <planeGeometry args={[12, 9]} />
       <myShaderMaterial ref={ref} />
     </mesh>
@@ -39,3 +41,7 @@ const Project = () => {
 }
 
 export default Project
+
+Project.defaultProps = {
+  position: [0, 0, 0],
+}

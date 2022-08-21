@@ -95,7 +95,7 @@ const ExperienceCanvas = (props: {
             currentProject={props.currentProject}
           />
         </Suspense>
-        <Project />
+        <Project project={projectsJSON[0]} />
       </Canvas>
     </div>
   )
