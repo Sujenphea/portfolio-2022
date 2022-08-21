@@ -9,6 +9,7 @@ import Cameras from './Cameras'
 import AboutMe from './models/AboutMe'
 import Works from './models/Works'
 import Projects from './models/Projects'
+import Project from './models/Project'
 import SJLineScroll from './models/SJLineScroll'
 
 import pointsSj from './points/points-sj'
@@ -20,9 +21,6 @@ import ProjectType from '../types/projectType'
 
 import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
-
-import fragmentShader from './shaders/fragment.glsl'
-import vertexShader from './shaders/vertex.glsl'
 
 const ExperienceCanvas = (props: {
   cameraView: CameraViewType
@@ -97,40 +95,9 @@ const ExperienceCanvas = (props: {
             currentProject={props.currentProject}
           />
         </Suspense>
-        <TestObject />
+        <Project />
       </Canvas>
     </div>
-  )
-}
-
-const MyShaderMaterial = shaderMaterial(
-  { uTexture: new Texture() },
-  vertexShader,
-  fragmentShader
-)
-extend({ MyShaderMaterial })
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      myShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>
-    }
-  }
-}
-
-const TestObject = () => {
-  const imageTexture = useLoader(TextureLoader, './testImage.png')
-  const ref = useRef<ShaderMaterial>(null!)
-
-  useEffect(() => {
-    ref.current.uniforms.uTexture = { value: imageTexture }
-  }, [imageTexture])
-
-  return (
-    <mesh position={[5, 0, 0]}>
-      <planeGeometry args={[12, 9]} />
-      <myShaderMaterial ref={ref} />
-    </mesh>
   )
 }
 
