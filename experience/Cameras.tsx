@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
@@ -23,6 +23,7 @@ const Cameras = (props: {
   // refs
   const position = useRef(new THREE.Vector3())
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!)
+  const ghostMesh = useRef<THREE.Mesh>(null!)
 
   // tick
   // - update camera position
@@ -58,23 +59,35 @@ const Cameras = (props: {
         newCameraPosition.lerp(props.cameraData.position, 0.2)
 
         cameraRef.current.position.copy(newCameraPosition)
-        cameraRef.current.lookAt(props.cameraData.lookAt)
+
+        ghostMesh.current.position.lerp(props.cameraData.lookAt, 0.2)
+        cameraRef.current.lookAt(
+          ghostMesh.current.position.x,
+          ghostMesh.current.position.y,
+          ghostMesh.current.position.z
+        )
 
         return
     }
   })
 
   return (
-    <PerspectiveCamera
-      makeDefault
-      ref={cameraRef}
-      aspect={window.innerWidth / window.innerHeight}
-      fov={84}
-      near={0.01}
-      far={1000}
-      position={[0, 0, 0]}
-      onUpdate={(self) => self.updateProjectionMatrix()}
-    />
+    <group>
+      <PerspectiveCamera
+        makeDefault
+        ref={cameraRef}
+        aspect={window.innerWidth / window.innerHeight}
+        fov={84}
+        near={0.01}
+        far={1000}
+        position={[0, 0, 0]}
+        onUpdate={(self) => self.updateProjectionMatrix()}
+      />
+      <mesh ref={ghostMesh}>
+        <boxBufferGeometry attach="geometry" args={[0.1, 0.08, 0.003]} />
+        <meshBasicMaterial wireframe color="red" />
+      </mesh>
+    </group>
   )
 }
 
