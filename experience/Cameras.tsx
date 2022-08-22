@@ -23,11 +23,13 @@ const Cameras = (props: {
   // refs
   const position = useRef(new THREE.Vector3())
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!)
-  const ghostMesh = useRef<THREE.Mesh>(null!)
+  const ghostMesh = useRef<THREE.Mesh>(null!) // purpose: animate camera lookAt
 
   // tick
   // - update camera position
   useFrame(() => {
+    const newCameraPosition = new Vector3().copy(cameraRef.current.position)
+
     switch (props.cameraView) {
       case CameraViewType.FirstPerson:
         // get position on curve
@@ -40,13 +42,19 @@ const Cameras = (props: {
           new THREE.Vector3(0, cameraHeightOffset.current, 0)
         ) // position offset
 
-        cameraRef.current.position.copy(position.current)
+        newCameraPosition.lerp(position.current, 0.2)
+        cameraRef.current.position.copy(newCameraPosition)
 
         // set camera direction
         const cameraDirection = curve.getPointAt(lookAtProgress)
         cameraDirection.add(new THREE.Vector3(0, cameraHeightOffset.current, 0)) // direction offset
 
-        cameraRef.current.lookAt(cameraDirection)
+        ghostMesh.current.position.lerp(cameraDirection, 0.2)
+        cameraRef.current.lookAt(
+          ghostMesh.current.position.x,
+          ghostMesh.current.position.y,
+          ghostMesh.current.position.z
+        )
 
         return
       case CameraViewType.Overview:
@@ -55,11 +63,11 @@ const Cameras = (props: {
 
         return
       case CameraViewType.Project:
-        const newCameraPosition = new Vector3().copy(cameraRef.current.position)
+        // animate position
         newCameraPosition.lerp(props.cameraData.position, 0.2)
-
         cameraRef.current.position.copy(newCameraPosition)
 
+        // aniamte lookAt
         ghostMesh.current.position.lerp(props.cameraData.lookAt, 0.2)
         cameraRef.current.lookAt(
           ghostMesh.current.position.x,
@@ -85,7 +93,7 @@ const Cameras = (props: {
       />
       <mesh ref={ghostMesh}>
         <boxBufferGeometry attach="geometry" args={[0.1, 0.08, 0.003]} />
-        <meshBasicMaterial wireframe color="red" />
+        <meshBasicMaterial wireframe color="blue" />
       </mesh>
     </group>
   )
