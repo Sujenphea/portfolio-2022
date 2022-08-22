@@ -1,8 +1,16 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { Texture, ShaderMaterial, TextureLoader, Vector3 } from 'three'
-import { extend, Object3DNode, useLoader } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
+import { extend, Object3DNode, useLoader } from '@react-three/fiber'
+import {
+  BufferGeometry,
+  Material,
+  Mesh,
+  ShaderMaterial,
+  Texture,
+  TextureLoader,
+  Vector3,
+} from 'three'
 
 import ProjectType from '../../types/projectType'
 
@@ -24,7 +32,12 @@ declare global {
   }
 }
 
-const Project = (props: { project: ProjectType; position: number[] }) => {
+const Project = (props: {
+  project: ProjectType
+  position: Vector3
+  handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
+  handleProjectClick: () => void
+}) => {
   const imageTexture = useLoader(TextureLoader, props.project.images[0])
   const ref = useRef<ShaderMaterial>(null!)
 
@@ -33,7 +46,13 @@ const Project = (props: { project: ProjectType; position: number[] }) => {
   }, [imageTexture])
 
   return (
-    <mesh position={new Vector3(...props.position)}>
+    <mesh
+      position={props.position}
+      ref={(ref) => {
+        props.handleRef(ref)
+      }}
+      onClick={props.handleProjectClick}
+    >
       <planeGeometry args={[12, 9]} />
       <myShaderMaterial ref={ref} />
     </mesh>

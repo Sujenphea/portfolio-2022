@@ -1,15 +1,13 @@
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useState } from 'react'
 
-import { Canvas, extend, Object3DNode, useLoader } from '@react-three/fiber'
-import { ShaderMaterial, Texture, TextureLoader, Vector3 } from 'three'
-import { Box, shaderMaterial } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { Vector3 } from 'three'
 
 import Cameras from './Cameras'
 
 import AboutMe from './models/AboutMe'
 import Works from './models/Works'
 import Projects from './models/Projects'
-import Project from './models/Project'
 import SJLineScroll from './models/SJLineScroll'
 
 import pointsSj from './points/points-sj'
@@ -95,7 +93,6 @@ const ExperienceCanvas = (props: {
             currentProject={props.currentProject}
           />
         </Suspense>
-        <Project project={projectsJSON[0]} />
       </Canvas>
     </div>
   )

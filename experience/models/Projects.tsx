@@ -2,6 +2,8 @@ import { memo, useEffect, useRef, useState } from 'react'
 
 import * as THREE from 'three'
 
+import Project from './Project'
+
 import ProjectType from '../../types/projectType'
 import CameraData from '../../types/cameraData'
 
@@ -78,6 +80,7 @@ const Projects = (props: {
       projectLocation + newMeshLookAtPosition,
       1
     )
+
     meshRefs.current[projectIndex]?.lookAt(lookAtPosition)
   }
 
@@ -183,19 +186,17 @@ const Projects = (props: {
         const position = calculatePosition(normalisedLocation, 1)
 
         return (
-          <mesh
+          <Project
             key={project.name + i.toString()}
+            project={project}
             position={position}
-            ref={(ref) => {
-              meshRefs.current[i] = ref
-            }}
-            onClick={() => {
+            handleProjectClick={() => {
               handleProjectClick(project, normalisedLocation, i)
             }}
-          >
-            <planeGeometry args={[12, 9]} />
-            <meshBasicMaterial color={0x00ff00} />
-          </mesh>
+            handleRef={(ref) => {
+              meshRefs.current[i] = ref
+            }}
+          />
         )
       })}
     </group>
