@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { Vector3 } from 'three'
 
 import { clamp } from '../utils/math'
 
@@ -53,7 +54,10 @@ const Cameras = (props: {
 
         return
       case CameraViewType.Project:
-        cameraRef.current.position.copy(props.cameraData.position)
+        const newCameraPosition = new Vector3().copy(cameraRef.current.position)
+        newCameraPosition.lerp(props.cameraData.position, 0.2)
+
+        cameraRef.current.position.copy(newCameraPosition)
         cameraRef.current.lookAt(props.cameraData.lookAt)
 
         return
