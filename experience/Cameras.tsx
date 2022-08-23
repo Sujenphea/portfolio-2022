@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
@@ -20,14 +20,36 @@ const Cameras = (props: {
   const [curve] = useState(new THREE.CatmullRomCurve3(props.points))
   const cameraHeightOffset = useRef(1)
 
+  // states
+  const animateOverview = useRef(false) // animate first person camera's position, lookAt
+
   // refs
   const position = useRef(new THREE.Vector3())
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!)
-  const ghostMesh = useRef<THREE.Mesh>(null!)
+  const ghostMesh = useRef<THREE.Mesh>(null!) // purpose: animate camera lookAt
+  const prevCameraView = useRef(CameraViewType.FirstPerson)
+
+  // states
+  // - change animation type in first person camera
+  useEffect(() => {
+    // if change from any to first person (animate for 0.6s)
+    if (props.cameraView !== CameraViewType.FirstPerson) {
+      animateOverview.current = true
+    } else if (prevCameraView.current !== CameraViewType.FirstPerson) {
+      console.log('timeout')
+      setTimeout(() => {
+        animateOverview.current = false
+      }, 600)
+    }
+
+    prevCameraView.current = props.cameraView
+  }, [props.cameraView])
 
   // tick
   // - update camera position
   useFrame(() => {
+    const newCameraPosition = new Vector3().copy(cameraRef.current.position)
+
     switch (props.cameraView) {
       case CameraViewType.FirstPerson:
         // get position on curve
@@ -40,26 +62,49 @@ const Cameras = (props: {
           new THREE.Vector3(0, cameraHeightOffset.current, 0)
         ) // position offset
 
-        cameraRef.current.position.copy(position.current)
+        // animate if closing project
+        // don't animate if scrolling
+        newCameraPosition.lerp(
+          position.current,
+          animateOverview.current ? 0.2 : 1
+        )
+        cameraRef.current.position.copy(newCameraPosition)
 
         // set camera direction
         const cameraDirection = curve.getPointAt(lookAtProgress)
         cameraDirection.add(new THREE.Vector3(0, cameraHeightOffset.current, 0)) // direction offset
 
-        cameraRef.current.lookAt(cameraDirection)
+        ghostMesh.current.position.lerp(
+          cameraDirection,
+          animateOverview.current ? 0.2 : 1
+        )
+        cameraRef.current.lookAt(
+          ghostMesh.current.position.x,
+          ghostMesh.current.position.y,
+          ghostMesh.current.position.z
+        )
 
         return
       case CameraViewType.Overview:
-        cameraRef.current.position.copy(new THREE.Vector3(0, 600, 0))
-        cameraRef.current.lookAt(new THREE.Vector3(0, 99, 0))
+        newCameraPosition.lerp(new THREE.Vector3(0, 600, 0), 0.2)
+        cameraRef.current.position.copy(newCameraPosition)
+
+        ghostMesh.current.position.lerp(new THREE.Vector3(0, 99, 0), 0.2)
+        cameraRef.current.lookAt(
+          ghostMesh.current.position.x,
+          ghostMesh.current.position.y,
+          ghostMesh.current.position.z
+        )
+
+        cameraRef.current.rotation.z = Math.PI * 0
 
         return
       case CameraViewType.Project:
-        const newCameraPosition = new Vector3().copy(cameraRef.current.position)
+        // animate position
         newCameraPosition.lerp(props.cameraData.position, 0.2)
-
         cameraRef.current.position.copy(newCameraPosition)
 
+        // aniamte lookAt
         ghostMesh.current.position.lerp(props.cameraData.lookAt, 0.2)
         cameraRef.current.lookAt(
           ghostMesh.current.position.x,
@@ -84,8 +129,7 @@ const Cameras = (props: {
         onUpdate={(self) => self.updateProjectionMatrix()}
       />
       <mesh ref={ghostMesh}>
-        <boxBufferGeometry attach="geometry" args={[0.1, 0.08, 0.003]} />
-        <meshBasicMaterial wireframe color="red" />
+        <boxGeometry args={[0, 0, 0]} />
       </mesh>
     </group>
   )
