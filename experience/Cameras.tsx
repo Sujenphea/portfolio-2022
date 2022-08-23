@@ -129,8 +129,7 @@ const Cameras = (props: {
         onUpdate={(self) => self.updateProjectionMatrix()}
       />
       <mesh ref={ghostMesh}>
-        <boxBufferGeometry attach="geometry" args={[0.1, 0.08, 0.003]} />
-        <meshBasicMaterial wireframe color="blue" />
+        <boxGeometry args={[0, 0, 0]} />
       </mesh>
     </group>
   )
