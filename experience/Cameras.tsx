@@ -21,7 +21,7 @@ const Cameras = (props: {
   const cameraHeightOffset = useRef(1)
 
   // states
-  const closingProject = useRef(false) // animate first person camera's position, lookAt
+  const animateOverview = useRef(false) // animate first person camera's position, lookAt
 
   // refs
   const position = useRef(new THREE.Vector3())
@@ -32,15 +32,13 @@ const Cameras = (props: {
   // states
   // - change animation type in first person camera
   useEffect(() => {
-    // if change from project to first person (animate for 0.6s)
-    if (props.cameraView === CameraViewType.Project) {
-      closingProject.current = true
-    } else if (
-      props.cameraView === CameraViewType.FirstPerson &&
-      prevCameraView.current === CameraViewType.Project
-    ) {
+    // if change from any to first person (animate for 0.6s)
+    if (props.cameraView !== CameraViewType.FirstPerson) {
+      animateOverview.current = true
+    } else if (prevCameraView.current !== CameraViewType.FirstPerson) {
+      console.log('timeout')
       setTimeout(() => {
-        closingProject.current = false
+        animateOverview.current = false
       }, 600)
     }
 
@@ -68,7 +66,7 @@ const Cameras = (props: {
         // don't animate if scrolling
         newCameraPosition.lerp(
           position.current,
-          closingProject.current ? 0.2 : 1
+          animateOverview.current ? 0.2 : 1
         )
         cameraRef.current.position.copy(newCameraPosition)
 
@@ -78,7 +76,7 @@ const Cameras = (props: {
 
         ghostMesh.current.position.lerp(
           cameraDirection,
-          closingProject.current ? 0.2 : 1
+          animateOverview.current ? 0.2 : 1
         )
         cameraRef.current.lookAt(
           ghostMesh.current.position.x,
@@ -88,11 +86,17 @@ const Cameras = (props: {
 
         return
       case CameraViewType.Overview:
-        // cameraRef.current.position.copy(new THREE.Vector3(0, 600, 0))
         newCameraPosition.lerp(new THREE.Vector3(0, 600, 0), 0.2)
         cameraRef.current.position.copy(newCameraPosition)
 
-        cameraRef.current.lookAt(new THREE.Vector3(0, 99, 0))
+        ghostMesh.current.position.lerp(new THREE.Vector3(0, 99, 0), 0.2)
+        cameraRef.current.lookAt(
+          ghostMesh.current.position.x,
+          ghostMesh.current.position.y,
+          ghostMesh.current.position.z
+        )
+
+        cameraRef.current.rotation.z = Math.PI * 0
 
         return
       case CameraViewType.Project:
