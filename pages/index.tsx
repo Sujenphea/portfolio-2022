@@ -1,10 +1,11 @@
-import { CSSProperties, useEffect, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 import { css } from '@emotion/react'
 
 import CameraViewType from '../types/cameraViewType'
 import ProjectViewType from '../types/projectViewType'
+import AnimateHandle from '../types/animateHandlerType'
 
 import Name from '../components/Name'
 
@@ -32,6 +33,10 @@ export default function Home() {
   const [projectView, setProjectView] = useState(ProjectViewType.Immersive)
   const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
   const [isPortrait, setIsPortrait] = useState<boolean>(false)
+
+  // refs
+  const requestRef = useRef(0) // animation frame
+  const projectOverlayRef = useRef<AnimateHandle>(null) // to call animate() in project overlay
 
   // hooks
   // - initial
@@ -69,6 +74,20 @@ export default function Home() {
         return
     }
   }, [projectView])
+
+  // - call animation frame
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(requestRef.current)
+  }, []) // Make sure the effect runs only once
+
+  // animation frame
+  // - update image scroll
+  const animate = () => {
+    projectOverlayRef.current?.animate()
+    // call next frame
+    requestRef.current = requestAnimationFrame(animate)
+  }
 
   // handlers
   const handleToggleMenu = () => {
@@ -205,6 +224,7 @@ export default function Home() {
         handleProjectClicked={handleOpenGlanceViewProjectOverlay}
       />
       <ProjectImmersiveOverlay
+        ref={projectOverlayRef}
         project={currentProjectOverlay}
         visible={currentProjectOverlay !== null}
         closeProjectOverlay={handleCloseProjectOverlay}
