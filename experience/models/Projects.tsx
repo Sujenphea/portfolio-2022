@@ -1,4 +1,11 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import {
+  forwardRef,
+  memo,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
 import * as THREE from 'three'
 
@@ -6,8 +13,9 @@ import Project from './Project'
 
 import ProjectType from '../../types/projectType'
 import CameraData from '../../types/cameraData'
+import AnimateHandle from '../../types/animateHandlerType'
 
-const Projects = (props: {
+type Props = {
   curvePoints: THREE.Vector3[]
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
@@ -19,7 +27,9 @@ const Projects = (props: {
   handleNewLocation: (data: CameraData) => void
   isPortrait: boolean
   currentProject: ProjectType
-}) => {
+}
+
+const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
   // params
   const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
@@ -31,7 +41,8 @@ const Projects = (props: {
   // states
   const currentProject = useRef<ProjectType | null>(null)
   const currentProjectLocation = useRef(0)
-  const currentProjectIndex = useRef(0)
+  const currentProjectIndex = useRef(-1)
+  const [closeProjectIndex, setCloseProjectIndex] = useState(-1)
 
   // refs
   const meshRefs = useRef<
@@ -40,6 +51,16 @@ const Projects = (props: {
       THREE.Material | THREE.Material[]
     > | null)[]
   >([])
+  const projectRefs = useRef<(AnimateHandle | null)[]>([])
+
+  // animation frame
+  useImperativeHandle(forwardedRef, () => ({
+    animate(time) {
+      projectRefs.current.forEach((ref) => {
+        ref?.animate(time)
+      })
+    },
+  }))
 
   // helpers
   const calculatePosition = (
@@ -103,6 +124,7 @@ const Projects = (props: {
   useEffect(() => {
     // set length for ref
     meshRefs.current = meshRefs.current.slice(0, props.projects.length)
+    projectRefs.current = projectRefs.current.slice(0, props.projects.length)
 
     // set mesh rotation
     meshRefs.current.forEach((ref, i) => {
@@ -146,6 +168,10 @@ const Projects = (props: {
 
   // update focused project
   useEffect(() => {
+    if (props.currentProject === null) {
+      setCloseProjectIndex(currentProjectIndex.current)
+    }
+
     currentProject.current = props.currentProject
   }, [props.currentProject])
 
@@ -168,6 +194,7 @@ const Projects = (props: {
     currentProjectLocation.current = location
     currentProject.current = project
     currentProjectIndex.current = index
+    setCloseProjectIndex(-1)
   }
 
   return (
@@ -187,9 +214,13 @@ const Projects = (props: {
 
         return (
           <Project
+            ref={(ref) => {
+              projectRefs.current[i] = ref
+            }}
             key={project.name + i.toString()}
             project={project}
             position={position}
+            closeProject={closeProjectIndex === i}
             handleProjectClick={() => {
               handleProjectClick(project, normalisedLocation, i)
             }}
@@ -201,6 +232,6 @@ const Projects = (props: {
       })}
     </group>
   )
-}
+})
 
 export default memo(Projects)

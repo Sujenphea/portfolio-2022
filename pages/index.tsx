@@ -37,6 +37,7 @@ export default function Home() {
   // refs
   const requestRef = useRef(0) // animation frame
   const projectOverlayRef = useRef<AnimateHandle>(null) // to call animate() in project overlay
+  const canvasRef = useRef<AnimateHandle>(null) // to call animate() in project overlay
 
   // hooks
   // - initial
@@ -83,8 +84,10 @@ export default function Home() {
 
   // animation frame
   // - update image scroll
-  const animate = () => {
-    projectOverlayRef.current?.animate()
+  const animate = (time: number) => {
+    canvasRef.current?.animate(time)
+    projectOverlayRef.current?.animate(time)
+
     // call next frame
     requestRef.current = requestAnimationFrame(animate)
   }
@@ -206,6 +209,7 @@ export default function Home() {
       {/* non mobile */}
       <div css={styles.nonMobileContainerStyle}>
         <ExperienceCanvas
+          ref={canvasRef}
           cameraView={cameraView}
           handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
           isPortrait={isPortrait}

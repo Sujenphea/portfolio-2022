@@ -1,7 +1,13 @@
-import { useEffect, useRef } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
 import { shaderMaterial } from '@react-three/drei'
-import { extend, Object3DNode, useLoader } from '@react-three/fiber'
+import { extend, Object3DNode, useFrame, useLoader } from '@react-three/fiber'
 import {
   BufferGeometry,
   Material,
@@ -13,12 +19,15 @@ import {
 } from 'three'
 
 import ProjectType from '../../types/projectType'
+import AnimateHandle from '../../types/animateHandlerType'
 
 import fragmentShader from '../shaders/fragment.glsl'
 import vertexShader from '../shaders/vertex.glsl'
 
+import { Easing, Tween, update } from '@tweenjs/tween.js'
+
 const MyShaderMaterial = shaderMaterial(
-  { uTexture: new Texture() },
+  { uTexture: new Texture(), uOpacity: 1 },
   vertexShader,
   fragmentShader
 )
@@ -32,18 +41,59 @@ declare global {
   }
 }
 
-const Project = (props: {
+type Props = {
   project: ProjectType
   position: Vector3
+  closeProject: boolean
   handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
   handleProjectClick: () => void
-}) => {
+}
+
+const Project = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
   const imageTexture = useLoader(TextureLoader, props.project.images[0])
-  const ref = useRef<ShaderMaterial>(null!)
+  const shaderRef = useRef<ShaderMaterial>(null!)
 
   useEffect(() => {
-    ref.current.uniforms.uTexture = { value: imageTexture }
+    shaderRef.current.uniforms.uTexture = { value: imageTexture }
   }, [imageTexture])
+
+  useEffect(() => {
+    if (props.closeProject) {
+      new Tween({ x: 0 })
+        .to({ x: 1 }, 300)
+        .easing(Easing.Quadratic.In)
+        .onUpdate(({ x }) => {
+          shaderRef.current.uniforms.uOpacity = { value: x }
+        })
+        .start()
+    }
+  }, [props.closeProject])
+
+  // animation frame
+  // - update image scroll
+  const animate = (time: number) => {
+    update(time) // tween update
+  }
+
+  // handle render animation frame
+  useImperativeHandle(forwardedRef, () => ({
+    animate(time: number) {
+      animate(time)
+    },
+  }))
+
+  // handlers
+  const handleProjectClick = () => {
+    props.handleProjectClick()
+
+    new Tween({ x: 1 })
+      .to({ x: 0 }, 300)
+      .easing(Easing.Quadratic.In)
+      .onUpdate(({ x }) => {
+        shaderRef.current.uniforms.uOpacity = { value: x }
+      })
+      .start()
+  }
 
   return (
     <mesh
@@ -51,16 +101,16 @@ const Project = (props: {
       ref={(ref) => {
         props.handleRef(ref)
       }}
-      onClick={props.handleProjectClick}
+      onClick={handleProjectClick}
     >
       <planeGeometry args={[12, 9]} />
-      <myShaderMaterial ref={ref} />
+      <myShaderMaterial ref={shaderRef} transparent />
     </mesh>
   )
-}
+})
 
 export default Project
 
 Project.defaultProps = {
-  position: [0, 0, 0],
+  position: new Vector3(0, 0, 0),
 }

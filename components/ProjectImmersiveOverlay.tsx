@@ -18,7 +18,7 @@ type Props = {
 }
 
 const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
-  (props, ref) => {
+  (props, forwardedRef) => {
     // params
     const imageMarginLeft = useRef('5vh')
 
@@ -54,7 +54,7 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
     }
 
     // handle render animation frame
-    useImperativeHandle(ref, () => ({
+    useImperativeHandle(forwardedRef, () => ({
       animate() {
         animate()
       },
@@ -62,18 +62,9 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
 
     // hooks
     useEffect(() => {
+      // if set project when null -> animation not smooth
       if (props.project !== null) {
         setCurrentProject(props.project)
-      } else {
-        setCurrentProject({
-          name: '',
-          company: '',
-          description: '',
-          technologies: [],
-          year: 2000,
-          link: '',
-          images: [],
-        })
       }
     }, [props.project])
 
@@ -82,9 +73,20 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
     }, [props.isPortrait])
 
     // styles
+    const animations = {
+      normalAnimation: css`
+        opacity: ${props.visible ? 1 : 0};
+        transition: visibility 0.2s, opacity 0.2s linear;
+      `,
+      delayedImageContainerAnimation: css`
+        opacity: ${props.visible ? 1 : 0};
+        transition: visibility 0.2s, opacity 0.2s;
+      `,
+    }
     const styles = {
       sectionStyle: css`
-        display: ${props.visible ? `block` : `none`};
+        display: block;
+        visibility: ${props.visible ? `visible` : `hidden`};
         position: fixed;
         top: 0;
         bottom: 0;
@@ -111,6 +113,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         top: 0;
         width: 100vw;
 
+        background-color: rgba(40, 40, 40, 0.5);
+
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -128,6 +132,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         flex-direction: column;
         justify-content: right;
         flex-wrap: nowrap;
+
+        ${animations.delayedImageContainerAnimation}
 
         @media (min-width: 768px) {
           position: absolute;
@@ -147,7 +153,6 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         height: 40vh;
 
         filter: brightness(70%);
-        opacity: 0.5;
 
         @media (min-width: 768px) {
           width: 100%;
@@ -167,6 +172,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         margin-top: 5vh;
         margin-bottom: 5vh;
 
+        ${animations.normalAnimation}
+
         @media (min-width: 768px) {
           position: absolute;
 
@@ -185,6 +192,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
 
         font-size: 20px;
         font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
+
+        ${animations.normalAnimation}
 
         @media (min-width: 768px) {
           max-width: 40vw;
