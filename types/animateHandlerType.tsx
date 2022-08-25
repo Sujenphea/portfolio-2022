@@ -1,6 +1,6 @@
 // allow components to respond to renderAnimationFrame
 type AnimateHandle = {
-  animate: () => void
+  animate: (time: number) => void
 }
 
 export default AnimateHandle
