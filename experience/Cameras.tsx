@@ -36,7 +36,6 @@ const Cameras = (props: {
     if (props.cameraView !== CameraViewType.FirstPerson) {
       animateOverview.current = true
     } else if (prevCameraView.current !== CameraViewType.FirstPerson) {
-      console.log('timeout')
       setTimeout(() => {
         animateOverview.current = false
       }, 600)
