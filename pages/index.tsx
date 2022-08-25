@@ -7,10 +7,7 @@ import CameraViewType from '../types/cameraViewType'
 import ProjectViewType from '../types/projectViewType'
 import AnimateHandle from '../types/animateHandlerType'
 
-import Name from '../components/Name'
-
 import Menu from '../components/Menu'
-import MenuButton from '../components/MenuButton'
 
 import GlanceView from '../components/GlanceView'
 

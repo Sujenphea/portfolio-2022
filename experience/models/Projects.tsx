@@ -146,6 +146,7 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
   // - dynamic size
   useEffect(() => {
+    // BUG: curve.getPointAt(...) undefined if resizing is too fast
     // calculate new position if a project is focused
     if (currentProject.current !== null) {
       const [cameraPosition, cameraLookAt] = calculateFocusProjectCameraData(
