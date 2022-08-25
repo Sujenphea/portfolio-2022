@@ -18,11 +18,11 @@ const ProjectView = (props: {
       position: relative;
       width: 100%;
       height: 200px;
-      padding-left: 80px;
+      padding-left: 8vw;
 
       display: flex;
       flex-direction: column;
-      justify-content: start;
+      justify-content: center;
       align-items: start;
 
       overflow-y: scroll;
@@ -37,8 +37,15 @@ const ProjectView = (props: {
 
       @media (min-width: 768px) {
         flex-direction: row;
+        justify-content: start;
         align-items: center;
       }
+    `,
+    titleCss: css`
+      text-transform: uppercase;
+      font-weight: 400;
+      font-size: 24px;
+      font-size: calc(100% + 1.5vw + 1vh);
     `,
     columnCss: css`
       display: flex;
@@ -46,14 +53,18 @@ const ProjectView = (props: {
       justify-content: left;
       align-items: left;
 
+      font-family: SourceSansPro;
+      font-weight: 300;
+      font-size: 16px;
+      font-size: calc(60% + 0.5vw + 0.5vh);
+
       @media (min-width: 768px) {
         padding-left: 40px;
       }
     `,
-    titleCss: css`
-      text-transform: uppercase;
-      font-size: 24px;
-      font-size: calc(100% + 1.5vw + 1vh);
+    detailCss: css`
+      padding-top: 5px;
+      padding-bottom: 5px;
     `,
   }
 
@@ -62,9 +73,9 @@ const ProjectView = (props: {
       <div css={styles.titleCss}>{props.project.name}</div>
       {/* column */}
       <div css={styles.columnCss}>
-        <div>{props.project.company}</div>
-        <div>{props.project.technologies}</div>
-        <div>{props.project.year}</div>
+        <div css={styles.detailCss}>{props.project.company}</div>
+        <div css={styles.detailCss}>{props.project.technologies}</div>
+        <div css={styles.detailCss}>{props.project.year}</div>
       </div>
     </div>
   )
@@ -78,7 +89,7 @@ const GlanceView = (props: {
   const animations = {
     normalAnimation: css`
       opacity: ${props.visible ? 1 : 0};
-      transition: visibility 0.2s, opacity 0.2s linear;
+      transition: visibility 0.2s, opacity 0.2s linear, background-color 0.2s;
     `,
   }
 
@@ -100,7 +111,7 @@ const GlanceView = (props: {
       overflow-x: hidden;
 
       text-align: center;
-      background-color: transparent;
+      background-color: rgba(10, 10, 10, 0.5);
       color: white;
 
       ${animations.normalAnimation}
@@ -110,11 +121,13 @@ const GlanceView = (props: {
       }
     `,
     titleCss: css`
+      text-transform: uppercase;
+      font-weight: 600;
       font-size: 32px;
-      font-size: calc(100% + 1.5vw + 1.5vh);
+      font-size: calc(100% + 1.8vw + 1.8vh);
 
       @media (min-width: 768px) {
-        padding-left: 80px;
+        padding-left: 3vw;
       }
     `,
   }
