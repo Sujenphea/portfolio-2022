@@ -16,6 +16,13 @@ const Menu = (props: {
   }
 
   // styles
+  const animations = {
+    normalAnimation: css`
+      opacity: ${props.visible ? 1 : 0};
+      transition: visibility 0.15s, opacity 0.15s linear;
+    `,
+  }
+
   const styles = {
     containerStyle: css`
       position: absolute;
@@ -26,7 +33,8 @@ const Menu = (props: {
       padding-top: 10vh;
       padding-bottom: 10vh;
 
-      display: ${props.visible ? `flex` : `none`};
+      display: flex;
+      visibility: ${props.visible ? `visible` : `hidden`};
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -34,6 +42,8 @@ const Menu = (props: {
       z-index: 2;
       background-color: transparent;
       color: white;
+
+      ${animations.normalAnimation}
     `,
     toggleButtonStyle: {
       position: 'relative',

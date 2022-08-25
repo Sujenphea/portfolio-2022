@@ -75,6 +75,13 @@ const GlanceView = (props: {
   handleProjectClicked: (project: ProjectType) => void
 }) => {
   // styles
+  const animations = {
+    normalAnimation: css`
+      opacity: ${props.visible ? 1 : 0};
+      transition: visibility 0.2s, opacity 0.2s linear;
+    `,
+  }
+
   const styles = {
     containerCss: css`
       position: absolute;
@@ -83,7 +90,8 @@ const GlanceView = (props: {
       right: 0;
       bottom: 0;
 
-      display: ${props.visible ? `block` : `none`};
+      display: block;
+      visibility: ${props.visible ? `visible` : `hidden`};
       width: 100%;
       padding-top: 40px;
 
@@ -94,6 +102,8 @@ const GlanceView = (props: {
       text-align: center;
       background-color: transparent;
       color: white;
+
+      ${animations.normalAnimation}
 
       @media (min-width: 768px) {
         text-align: start;
