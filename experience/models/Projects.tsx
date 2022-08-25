@@ -41,7 +41,8 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
   // states
   const currentProject = useRef<ProjectType | null>(null)
   const currentProjectLocation = useRef(0)
-  const currentProjectIndex = useRef(0)
+  const currentProjectIndex = useRef(-1)
+  const [closeProjectIndex, setCloseProjectIndex] = useState(-1)
 
   // refs
   const meshRefs = useRef<
@@ -167,6 +168,10 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
   // update focused project
   useEffect(() => {
+    if (props.currentProject === null) {
+      setCloseProjectIndex(currentProjectIndex.current)
+    }
+
     currentProject.current = props.currentProject
   }, [props.currentProject])
 
@@ -189,6 +194,7 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
     currentProjectLocation.current = location
     currentProject.current = project
     currentProjectIndex.current = index
+    setCloseProjectIndex(-1)
   }
 
   return (
@@ -214,6 +220,7 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
             key={project.name + i.toString()}
             project={project}
             position={position}
+            closeProject={closeProjectIndex === i}
             handleProjectClick={() => {
               handleProjectClick(project, normalisedLocation, i)
             }}

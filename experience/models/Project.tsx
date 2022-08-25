@@ -24,10 +24,10 @@ import AnimateHandle from '../../types/animateHandlerType'
 import fragmentShader from '../shaders/fragment.glsl'
 import vertexShader from '../shaders/vertex.glsl'
 
-import { Tween, update } from '@tweenjs/tween.js'
+import { Easing, Tween, update } from '@tweenjs/tween.js'
 
 const MyShaderMaterial = shaderMaterial(
-  { uTexture: new Texture(), uOpacity: 1, uScale: 1 },
+  { uTexture: new Texture(), uOpacity: 1 },
   vertexShader,
   fragmentShader
 )
@@ -44,6 +44,7 @@ declare global {
 type Props = {
   project: ProjectType
   position: Vector3
+  closeProject: boolean
   handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
   handleProjectClick: () => void
 }
@@ -55,6 +56,18 @@ const Project = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
   useEffect(() => {
     shaderRef.current.uniforms.uTexture = { value: imageTexture }
   }, [imageTexture])
+
+  useEffect(() => {
+    if (props.closeProject) {
+      new Tween({ x: 0 })
+        .to({ x: 1 }, 300)
+        .easing(Easing.Quadratic.In)
+        .onUpdate(({ x }) => {
+          shaderRef.current.uniforms.uOpacity = { value: x }
+        })
+        .start()
+    }
+  }, [props.closeProject])
 
   // animation frame
   // - update image scroll
@@ -69,25 +82,29 @@ const Project = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
     },
   }))
 
+  // handlers
+  const handleProjectClick = () => {
+    props.handleProjectClick()
+
+    new Tween({ x: 1 })
+      .to({ x: 0 }, 300)
+      .easing(Easing.Quadratic.In)
+      .onUpdate(({ x }) => {
+        shaderRef.current.uniforms.uOpacity = { value: x }
+      })
+      .start()
+  }
+
   return (
     <mesh
       position={props.position}
       ref={(ref) => {
         props.handleRef(ref)
       }}
-      onClick={() => {
-        props.handleProjectClick()
-
-        new Tween({ x: 1 })
-          .to({ x: 0.5 }, 500)
-          .onUpdate(({ x }) => {
-            shaderRef.current.uniforms.uScale = { value: x }
-          })
-          .start()
-      }}
+      onClick={handleProjectClick}
     >
       <planeGeometry args={[12, 9]} />
-      <myShaderMaterial ref={shaderRef} />
+      <myShaderMaterial ref={shaderRef} transparent />
     </mesh>
   )
 })

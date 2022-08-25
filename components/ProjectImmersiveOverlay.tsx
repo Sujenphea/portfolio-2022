@@ -80,7 +80,7 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
       `,
       delayedImageContainerAnimation: css`
         opacity: ${props.visible ? 1 : 0};
-        transition: opacity 0.3s ease-in-out 0.1s;
+        transition: visibility 0.2s, opacity 0.2s;
       `,
     }
     const styles = {
