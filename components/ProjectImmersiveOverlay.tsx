@@ -163,6 +163,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
       `,
       imageStyle: css`
         height: 40vh;
+        padding-top: 20px;
+        padding-bottom: 20px;
 
         filter: brightness(70%);
 
@@ -170,6 +172,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
           width: 100%;
           height: 100%;
 
+          padding-top: 0px;
+          padding-bottom: 0px;
           margin-left: ${imageMarginLeft.current};
           flex: 0 0 auto;
         }
@@ -178,7 +182,8 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         max-width: 200px;
 
         text-transform: uppercase;
-        font-size: 20px;
+        font-weight: 600;
+        font-size: 38px;
         font-size: calc(50% + ${props.isPortrait ? `3vh` : `4vh`});
 
         margin-top: 5vh;
@@ -202,8 +207,10 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         flex-direction: column;
         max-width: 80vw;
 
+        font-family: SourceSansPro;
+        font-weight: 300;
         font-size: 20px;
-        font-size: calc(${props.isPortrait ? `40%` : `70%`} + 2vh);
+        font-size: calc(${props.isPortrait ? `40%` : `40%`} + 0.9vh + 0.5vw);
 
         ${animations.normalAnimation}
 
@@ -217,8 +224,7 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
       `,
       closeButtonStyle: css`
         position: absolute;
-        top: 50px;
-        right: 30px;
+        top: calc(20px + 5vh + 5vw);
 
         color: white;
         background-color: transparent;
