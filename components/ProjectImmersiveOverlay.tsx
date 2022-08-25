@@ -62,9 +62,13 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
 
     // hooks
     useEffect(() => {
-      // if set project when null -> animation not smooth
+      // two cases:
+      // - if set project when null -> animation not smooth
+      // - scroll needs images array to be null -> reset scrolling
       if (props.project !== null) {
         setCurrentProject(props.project)
+      } else {
+        setCurrentProject({ ...currentProject, images: [] })
       }
     }, [props.project])
 
