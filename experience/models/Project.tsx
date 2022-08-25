@@ -24,8 +24,10 @@ import AnimateHandle from '../../types/animateHandlerType'
 import fragmentShader from '../shaders/fragment.glsl'
 import vertexShader from '../shaders/vertex.glsl'
 
+import { Tween, update } from '@tweenjs/tween.js'
+
 const MyShaderMaterial = shaderMaterial(
-  { uTexture: new Texture() },
+  { uTexture: new Texture(), uOpacity: 1, uScale: 1 },
   vertexShader,
   fragmentShader
 )
@@ -56,7 +58,9 @@ const Project = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
   // animation frame
   // - update image scroll
-  const animate = (time: number) => {}
+  const animate = (time: number) => {
+    update(time) // tween update
+  }
 
   // handle render animation frame
   useImperativeHandle(forwardedRef, () => ({
@@ -71,7 +75,16 @@ const Project = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
       ref={(ref) => {
         props.handleRef(ref)
       }}
-      onClick={props.handleProjectClick}
+      onClick={() => {
+        props.handleProjectClick()
+
+        new Tween({ x: 1 })
+          .to({ x: 0.5 }, 500)
+          .onUpdate(({ x }) => {
+            shaderRef.current.uniforms.uScale = { value: x }
+          })
+          .start()
+      }}
     >
       <planeGeometry args={[12, 9]} />
       <myShaderMaterial ref={shaderRef} />
