@@ -20,6 +20,7 @@ import ContactBar from '../components/ContactBar'
 
 import ProjectImmersiveOverlay from '../components/ProjectImmersiveOverlay'
 import ProjectType from '../types/projectType'
+import Header from '../components/Header'
 
 export default function Home() {
   // states
@@ -216,8 +217,7 @@ export default function Home() {
           currentProject={currentProjectOverlay}
         />
       </div>
-      <Name />
-      <MenuButton menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+      <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
       <Menu
         visible={menuVisible}
         toggleView={handleToggleView}
