@@ -40,6 +40,7 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
     const imageContainerRef = useRef<HTMLDivElement>(null!)
     const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
     const currX = useRef(0)
+    const currentTimeout: { current: NodeJS.Timeout | null } = useRef(null)
 
     // animation frame
     // - update image scroll
@@ -65,10 +66,17 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
       // two cases:
       // - if set project when null -> animation not smooth
       // - scroll needs images array to be null -> reset scrolling
+
       if (props.project !== null) {
         setCurrentProject(props.project)
+
+        // stop timeout to reset scroll (just in case)
+        clearTimeout(currentTimeout.current as NodeJS.Timeout)
       } else {
-        setCurrentProject({ ...currentProject, images: [] })
+        // set timeout to reset scroll
+        currentTimeout.current = setTimeout(() => {
+          setCurrentProject({ ...currentProject, images: [] })
+        }, 300)
       }
     }, [props.project])
 
