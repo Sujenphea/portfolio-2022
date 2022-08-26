@@ -30,7 +30,7 @@ const SocialIcon = (props: { icon: IconDefinition; link: string }) => {
 
 const ContactBar = (props: { style: CSSProperties }) => {
   return (
-    <div style={props.style}>
+    <div style={{ ...props.style, zIndex: 4 }}>
       <SocialIcon
         icon={faLinkedin}
         link={'https://www.linkedin.com/in/sujenphea/'}
