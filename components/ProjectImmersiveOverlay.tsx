@@ -143,6 +143,7 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         display: flex;
         flex-direction: column;
         justify-content: right;
+        align-items: center;
         flex-wrap: nowrap;
 
         ${animations.delayedImageContainerAnimation}
@@ -162,13 +163,14 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         }
       `,
       imageStyle: css`
-        height: 40vh;
         padding-top: 20px;
         padding-bottom: 20px;
+        max-width: 80%;
 
         filter: brightness(70%);
 
         @media (min-width: 768px) {
+          max-width: 100%;
           width: 100%;
           height: 100%;
 
