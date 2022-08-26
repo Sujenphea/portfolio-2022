@@ -178,28 +178,39 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
           flex: 0 0 auto;
         }
       `,
+      rowStyle: css`
+        margin-top: calc(6vh + 6vw);
+        margin-bottom: 5vh;
+        width: 100%;
+
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        @media (min-width: 768px) {
+          margin-top: 0;
+          margin-bottom: 0;
+
+          justify-content: center;
+        }
+      `,
       titleStyle: css`
-        max-width: 200px;
+        position: absolute;
 
         text-transform: uppercase;
         font-weight: 600;
         font-size: 38px;
-        font-size: calc(50% + ${props.isPortrait ? `3vh` : `4vh`});
+        font-size: calc(50% + ${props.isPortrait ? `1.5vh + 1.5vw` : `4vh`});
 
-        margin-top: 5vh;
-        margin-bottom: 5vh;
+        z-index: 2;
+        transform: translate(calc(${props.isPortrait ? `-26vh` : `-46vh`}), 0);
 
         ${animations.normalAnimation}
 
-        @media (min-width: 768px) {
-          position: absolute;
-
-          z-index: 2;
-
-          transform: translate(
-            calc(${props.isPortrait ? `-35vh` : `-50vh`}),
-            0
-          );
+        // smaller device
+        @media (max-width: 768px) {
+          left: 50%;
+          transform: translateX(-50%);
         }
       `,
       descriptionStyle: css`
@@ -223,12 +234,16 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
         }
       `,
       closeButtonStyle: css`
-        position: absolute;
-        top: calc(20px + 5vh + 5vw);
-
         color: white;
         background-color: transparent;
         border: none;
+
+        @media (min-width: 768px) {
+          position: absolute;
+          top: calc(5vh + 5vw);
+          left: 50%;
+          transform: translateX(-50%);
+        }
       `,
     }
 
@@ -236,8 +251,23 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
       <section css={styles.sectionStyle}>
         <div css={styles.containerStyle} ref={containerRef}>
           <div css={styles.modalStyle}>
-            {/* title */}
-            <div css={styles.titleStyle}>{currentProject.name}</div>
+            {/* title + button when width < 768px */}
+            {/* otherwise title, button positioned absolutely */}
+            <div css={styles.rowStyle}>
+              {/* title */}
+              <div css={styles.titleStyle}>{currentProject.name}</div>
+
+              {/* close button */}
+              <button
+                css={styles.closeButtonStyle}
+                type="button"
+                onClick={() => {
+                  props.closeProjectOverlay()
+                }}
+              >
+                close
+              </button>
+            </div>
 
             {/* description */}
             <div css={styles.descriptionStyle}>
@@ -258,17 +288,6 @@ const ProjectImmersiveOverlay = forwardRef<AnimateHandle, Props>(
                 )
               })}
             </div>
-
-            {/* close button */}
-            <button
-              css={styles.closeButtonStyle}
-              type="button"
-              onClick={() => {
-                props.closeProjectOverlay()
-              }}
-            >
-              close project
-            </button>
           </div>
         </div>
       </section>

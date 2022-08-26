@@ -12,7 +12,6 @@ const Header = (props: { menuVisible: boolean; toggleMenu: () => void }) => {
       width: 100vw;
       height: calc(5vh + 5vw);
       max-height: 100px;
-      min-height: 20px;
 
       display: flex;
       justify-content: right;
