@@ -30,7 +30,7 @@ type Props = {
 
 const Projects = (props: Props) => {
   // params
-  const objectVerticalOffset = useRef(new Vector3(0, 5, 0))
+  const objectVerticalOffset = useRef(5)
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
   const curve = useRef(
@@ -49,19 +49,23 @@ const Projects = (props: Props) => {
   >([])
   const projectGeometry = useRef(new PlaneGeometry(12, 9))
 
+  // - vectors
+  const tempVector = useRef(new Vector3())
+  const verticalUnitVector = useRef(new Vector3(0, 1, 0))
+
   // helpers
   const calculatePosition = (
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
     const position = curve.current.getPointAt(locationOnCurve)
-    position.add(objectVerticalOffset.current)
+    position.add(tempVector.current.set(0, objectVerticalOffset.current, 0))
 
     // get normal to curve
     const tangent = curve.current.getTangentAt(locationOnCurve)
-    const normal = new Vector3()
+    const normal = tempVector.current
       .copy(tangent)
-      .applyAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5)
+      .applyAxisAngle(verticalUnitVector.current, Math.PI * 0.5)
       .normalize()
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
@@ -203,7 +207,7 @@ const Projects = (props: Props) => {
           <Project
             key={project.name + i.toString()}
             geometry={projectGeometry.current}
-            project={project}
+            imageURL={project.images[0]}
             position={position}
             closeProject={closeProjectIndex === i}
             handleProjectClick={() => {

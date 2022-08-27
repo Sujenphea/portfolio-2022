@@ -38,7 +38,7 @@ declare global {
 // project
 type Props = {
   geometry: PlaneGeometry
-  project: ProjectType
+  imageURL: string
   position: Vector3
   closeProject: boolean
   handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
@@ -46,7 +46,7 @@ type Props = {
 }
 
 const Project = (props: Props) => {
-  const imageTexture = useLoader(TextureLoader, props.project.images[0])
+  const imageTexture = useLoader(TextureLoader, props.imageURL)
   const shaderRef = useRef<ShaderMaterial>(null!)
 
   useEffect(() => {
