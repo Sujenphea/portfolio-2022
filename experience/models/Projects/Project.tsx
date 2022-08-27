@@ -51,6 +51,7 @@ const Project = (props: Props) => {
 
   useEffect(() => {
     shaderRef.current.uniforms.uTexture = { value: imageTexture }
+    shaderRef.current.needsUpdate = true
   }, [imageTexture])
 
   // handlers
