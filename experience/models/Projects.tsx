@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  memo,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import * as THREE from 'three'
 
@@ -29,7 +22,7 @@ type Props = {
   currentProject: ProjectType
 }
 
-const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
+const Projects = (props: Props) => {
   // params
   const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
@@ -52,15 +45,6 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
     > | null)[]
   >([])
   const projectRefs = useRef<(AnimateHandle | null)[]>([])
-
-  // animation frame
-  useImperativeHandle(forwardedRef, () => ({
-    animate(time) {
-      projectRefs.current.forEach((ref) => {
-        ref?.animate(time)
-      })
-    },
-  }))
 
   // helpers
   const calculatePosition = (
@@ -215,9 +199,6 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
         return (
           <Project
-            ref={(ref) => {
-              projectRefs.current[i] = ref
-            }}
             key={project.name + i.toString()}
             project={project}
             position={position}
@@ -233,6 +214,6 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
       })}
     </group>
   )
-})
+}
 
 export default memo(Projects)

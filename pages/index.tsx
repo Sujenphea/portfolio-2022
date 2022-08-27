@@ -32,11 +32,6 @@ export default function Home() {
   const [cameraView, setCameraView] = useState(CameraViewType.FirstPerson)
   const [isPortrait, setIsPortrait] = useState<boolean>(false)
 
-  // refs
-  const requestRef = useRef(0) // animation frame
-  const projectOverlayRef = useRef<AnimateHandle>(null) // to call animate() in project overlay
-  const canvasRef = useRef<AnimateHandle>(null) // to call animate() in project overlay
-
   // hooks
   // - initial
   useEffect(() => {
@@ -73,22 +68,6 @@ export default function Home() {
         return
     }
   }, [projectView])
-
-  // - call animation frame
-  useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(requestRef.current)
-  }, []) // Make sure the effect runs only once
-
-  // animation frame
-  // - update image scroll
-  const animate = (time: number) => {
-    canvasRef.current?.animate(time)
-    projectOverlayRef.current?.animate(time)
-
-    // call next frame
-    requestRef.current = requestAnimationFrame(animate)
-  }
 
   // handlers
   const handleToggleMenu = () => {
@@ -207,7 +186,6 @@ export default function Home() {
       {/* non mobile */}
       <div css={styles.nonMobileContainerStyle}>
         <ExperienceCanvas
-          ref={canvasRef}
           cameraView={cameraView}
           handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
           isPortrait={isPortrait}
@@ -225,7 +203,6 @@ export default function Home() {
         handleProjectClicked={handleOpenGlanceViewProjectOverlay}
       />
       <ProjectImmersiveOverlay
-        ref={projectOverlayRef}
         project={currentProjectOverlay}
         visible={currentProjectOverlay !== null}
         closeProjectOverlay={handleCloseProjectOverlay}

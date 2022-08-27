@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  Suspense,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { Suspense, useState } from 'react'
 
 import { Canvas } from '@react-three/fiber'
 import { Vector3 } from 'three'
@@ -22,7 +16,6 @@ import projectsJSON from '../data/projects.json'
 import worksJSON from '../data/works.json'
 
 import ProjectType from '../types/projectType'
-import AnimateHandle from '../types/animateHandlerType'
 
 import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
@@ -37,87 +30,76 @@ type Props = {
   currentProject: ProjectType // if nil, save calculation cost of dynamic project size
 }
 
-const ExperienceCanvas = forwardRef<AnimateHandle, Props>(
-  (props, forwardedRef) => {
-    // states
-    const [scrollProgress, setScrollProgress] = useState(0)
-    // - camera position when cameraView is looking at project
-    const [projectCameraData, setProjectCameraData] = useState<CameraData>({
-      position: new Vector3(),
-      lookAt: new Vector3(),
-    })
+const ExperienceCanvas = (props: Props) => {
+  // states
+  const [scrollProgress, setScrollProgress] = useState(0)
+  // - camera position when cameraView is looking at project
+  const [projectCameraData, setProjectCameraData] = useState<CameraData>({
+    position: new Vector3(),
+    lookAt: new Vector3(),
+  })
 
-    // refs
-    const projectsRef = useRef<AnimateHandle>(null)
+  // handlers
+  // - change camera view type and position
+  const handleProjectClick = (
+    project: ProjectType,
+    cameraPosition: Vector3,
+    cameraLookAt: Vector3
+  ) => {
+    props.handleProjectClicked(project, CameraViewType.Project)
 
-    // animation frame
-    useImperativeHandle(forwardedRef, () => ({
-      animate(time) {
-        projectsRef.current?.animate(time)
-      },
-    }))
-
-    // handlers
-    // - change camera view type and position
-    const handleProjectClick = (
-      project: ProjectType,
-      cameraPosition: Vector3,
-      cameraLookAt: Vector3
-    ) => {
-      props.handleProjectClicked(project, CameraViewType.Project)
-
-      setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
-    }
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-
-          height: '100vh',
-          width: '100vw',
-
-          zIndex: 0,
-        }}
-      >
-        <Canvas dpr={[1, 2]} linear>
-          <Cameras
-            points={pointsSj}
-            scrollProgress={scrollProgress}
-            cameraView={props.cameraView}
-            cameraData={projectCameraData}
-          />
-          <Suspense fallback={null}>
-            <SJLineScroll
-              points={pointsSj}
-              setScrollProgress={setScrollProgress}
-              cameraView={props.cameraView}
-            />
-            <AboutMe curvePoints={pointsSj} positionOnCurve={0.01} />
-            <Works
-              curvePoints={pointsSj}
-              projects={worksJSON}
-              rangeOnCurve={[0.01, 0.5]}
-            />
-            <Projects
-              ref={projectsRef}
-              curvePoints={pointsSj}
-              projects={projectsJSON}
-              rangeOnCurve={[0.5, 1]}
-              projectClicked={handleProjectClick}
-              handleNewLocation={(data: CameraData) => {
-                setProjectCameraData(data)
-              }}
-              isPortrait={props.isPortrait}
-              currentProject={props.currentProject}
-            />
-          </Suspense>
-        </Canvas>
-      </div>
-    )
+    setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
   }
-)
+
+  // console.log('dbg - experience canvas')
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        height: '100vh',
+        width: '100vw',
+
+        zIndex: 0,
+      }}
+    >
+      <Canvas dpr={[1, 2]} linear>
+        <Cameras
+          points={pointsSj}
+          scrollProgress={scrollProgress}
+          cameraView={props.cameraView}
+          cameraData={projectCameraData}
+        />
+        <Suspense fallback={null}>
+          <SJLineScroll
+            points={pointsSj}
+            setScrollProgress={setScrollProgress}
+            cameraView={props.cameraView}
+          />
+          <AboutMe curvePoints={pointsSj} positionOnCurve={0.01} />
+          <Works
+            curvePoints={pointsSj}
+            projects={worksJSON}
+            rangeOnCurve={[0.01, 0.5]}
+          />
+          <Projects
+            curvePoints={pointsSj}
+            projects={projectsJSON}
+            rangeOnCurve={[0.5, 1]}
+            projectClicked={handleProjectClick}
+            handleNewLocation={(data: CameraData) => {
+              setProjectCameraData(data)
+            }}
+            isPortrait={props.isPortrait}
+            currentProject={props.currentProject}
+          />
+        </Suspense>
+      </Canvas>
+    </div>
+  )
+}
 
 export default ExperienceCanvas
