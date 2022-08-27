@@ -16,7 +16,7 @@ import CameraData from '../types/cameraData'
 
 const Cameras = (props: {
   curve: MutableRefObject<CatmullRomCurve3>
-  scrollProgress: number
+  scrollProgress: MutableRefObject<number>
   cameraView: CameraViewType
   cameraData: CameraData
 }) => {
@@ -61,8 +61,8 @@ const Cameras = (props: {
     switch (props.cameraView) {
       case CameraViewType.FirstPerson:
         // get position on curve
-        const initialProgress = clamp(props.scrollProgress, 0, 1)
-        const lookAtProgress = clamp(props.scrollProgress + 0.001, 0, 1)
+        const initialProgress = clamp(props.scrollProgress.current, 0, 1)
+        const lookAtProgress = clamp(props.scrollProgress.current + 0.001, 0, 1)
 
         // set camera position
         tempVector.current = props.curve.current.getPointAt(initialProgress)

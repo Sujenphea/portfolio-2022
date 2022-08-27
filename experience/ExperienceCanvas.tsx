@@ -32,7 +32,6 @@ type Props = {
 
 const ExperienceCanvas = (props: Props) => {
   // states
-  const [scrollProgress, setScrollProgress] = useState(0)
   // - camera position when cameraView is looking at project
   const [projectCameraData, setProjectCameraData] = useState<CameraData>({
     position: new Vector3(),
@@ -41,6 +40,7 @@ const ExperienceCanvas = (props: Props) => {
 
   // refs
   const curve = useRef(new CatmullRomCurve3(pointsSj, false, 'catmullrom'))
+  const scrollProgress = useRef(0)
 
   // handlers
   // - change camera view type and position
@@ -52,6 +52,10 @@ const ExperienceCanvas = (props: Props) => {
     props.handleProjectClicked(project, CameraViewType.Project)
 
     setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
+  }
+
+  const handleScrollProgress = (value: number) => {
+    scrollProgress.current = value
   }
 
   return (
@@ -77,7 +81,7 @@ const ExperienceCanvas = (props: Props) => {
         <Suspense fallback={null}>
           <SJLineScroll
             curve={curve}
-            setScrollProgress={setScrollProgress}
+            handleScrollProgress={handleScrollProgress}
             cameraView={props.cameraView}
           />
           <AboutMe curve={curve} positionOnCurve={0.01} />

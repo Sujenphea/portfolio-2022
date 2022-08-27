@@ -8,14 +8,14 @@ import CameraViewType from '../../types/cameraViewType'
 
 const Particles = (props: {
   curve: MutableRefObject<CatmullRomCurve3>
-  setScrollProgress: Dispatch<SetStateAction<number>>
+  handleScrollProgress: (value: number) => void
 }) => {
   const scrollData = useScroll()
 
   // tick
   useFrame(() => {
     // update scroll progress
-    props.setScrollProgress(scrollData.offset)
+    props.handleScrollProgress(scrollData.offset)
   })
 
   return (
@@ -29,7 +29,7 @@ const Particles = (props: {
 
 const SJLineScroll = (props: {
   curve: MutableRefObject<CatmullRomCurve3>
-  setScrollProgress: Dispatch<SetStateAction<number>>
+  handleScrollProgress: (value: number) => void
   cameraView: CameraViewType
 }) => (
   <ScrollControls
@@ -42,7 +42,7 @@ const SJLineScroll = (props: {
   >
     <Particles
       curve={props.curve}
-      setScrollProgress={props.setScrollProgress}
+      handleScrollProgress={props.handleScrollProgress}
     />
   </ScrollControls>
 )
