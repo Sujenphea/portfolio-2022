@@ -1,7 +1,7 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useRef, useState } from 'react'
 
 import { Canvas } from '@react-three/fiber'
-import { Vector3 } from 'three'
+import { CatmullRomCurve3, Vector3 } from 'three'
 
 import Cameras from './Cameras'
 
@@ -39,6 +39,9 @@ const ExperienceCanvas = (props: Props) => {
     lookAt: new Vector3(),
   })
 
+  // refs
+  const curve = useRef(new CatmullRomCurve3(pointsSj, false, 'catmullrom'))
+
   // handlers
   // - change camera view type and position
   const handleProjectClick = (
@@ -50,8 +53,6 @@ const ExperienceCanvas = (props: Props) => {
 
     setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
   }
-
-  // console.log('dbg - experience canvas')
 
   return (
     <div
@@ -68,25 +69,25 @@ const ExperienceCanvas = (props: Props) => {
     >
       <Canvas dpr={[1, 2]} linear>
         <Cameras
-          points={pointsSj}
+          curve={curve}
           scrollProgress={scrollProgress}
           cameraView={props.cameraView}
           cameraData={projectCameraData}
         />
         <Suspense fallback={null}>
           <SJLineScroll
-            points={pointsSj}
+            curve={curve}
             setScrollProgress={setScrollProgress}
             cameraView={props.cameraView}
           />
-          <AboutMe curvePoints={pointsSj} positionOnCurve={0.01} />
+          <AboutMe curve={curve} positionOnCurve={0.01} />
           <Works
-            curvePoints={pointsSj}
+            curve={curve}
             projects={worksJSON}
             rangeOnCurve={[0.01, 0.5]}
           />
           <Projects
-            curvePoints={pointsSj}
+            curve={curve}
             projects={projectsJSON}
             rangeOnCurve={[0.5, 1]}
             projectClicked={handleProjectClick}

@@ -12,7 +12,6 @@ import {
   Vector3,
 } from 'three'
 
-import ProjectType from '../../../types/projectType'
 import { shaderMaterial } from '@react-three/drei'
 
 import fragmentShader from './shaders/fragment.glsl'

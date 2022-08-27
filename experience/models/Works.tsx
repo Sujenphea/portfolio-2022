@@ -1,13 +1,12 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, MutableRefObject, useEffect, useRef, useState } from 'react'
 
-import * as THREE from 'three'
+import { CatmullRomCurve3, Vector3 } from 'three'
 import { Text } from '@react-three/drei'
 
 import ProjectType from '../../types/projectType'
-import { Vector3 } from 'three'
 
 const Works = (props: {
-  curvePoints: THREE.Vector3[]
+  curve: MutableRefObject<CatmullRomCurve3>
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
 }) => {
@@ -15,9 +14,6 @@ const Works = (props: {
   const objectVerticalOffset = useRef(10)
   const objectNormalMultiplier = useRef(10) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.01)
-  const [curve] = useState(
-    new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
-  )
 
   // state
   const [projectDescription, setProjectDescription] = useState('hello world')
@@ -40,11 +36,11 @@ const Works = (props: {
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
-    const position = curve.getPointAt(locationOnCurve)
+    const position = props.curve.current.getPointAt(locationOnCurve)
     position.add(tempVector.current.set(0, objectVerticalOffset.current, 0))
 
     // get normal to curve
-    const tangent = curve.getTangentAt(locationOnCurve)
+    const tangent = props.curve.current.getTangentAt(locationOnCurve)
     const normal = tempVector.current
       .copy(tangent)
       .applyAxisAngle(verticalUnitVector.current, Math.PI * 0.5)

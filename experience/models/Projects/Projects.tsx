@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 import {
   BufferGeometry,
@@ -15,7 +15,7 @@ import ProjectType from '../../../types/projectType'
 import CameraData from '../../../types/cameraData'
 
 type Props = {
-  curvePoints: Vector3[]
+  curve: MutableRefObject<CatmullRomCurve3>
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
   projectClicked: (
@@ -33,9 +33,6 @@ const Projects = (props: Props) => {
   const objectVerticalOffset = useRef(5)
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
-  const curve = useRef(
-    new CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
-  )
 
   // states
   const currentProject = useRef<ProjectType | null>(null)
@@ -58,11 +55,11 @@ const Projects = (props: Props) => {
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
-    const position = curve.current.getPointAt(locationOnCurve)
+    const position = props.curve.current.getPointAt(locationOnCurve)
     position.add(tempVector.current.set(0, objectVerticalOffset.current, 0))
 
     // get normal to curve
-    const tangent = curve.current.getTangentAt(locationOnCurve)
+    const tangent = props.curve.current.getTangentAt(locationOnCurve)
     const normal = tempVector.current
       .copy(tangent)
       .applyAxisAngle(verticalUnitVector.current, Math.PI * 0.5)
