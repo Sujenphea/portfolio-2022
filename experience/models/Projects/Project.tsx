@@ -19,7 +19,7 @@ import vertexShader from './shaders/vertex.glsl'
 
 // material
 const ProjectShaderMaterial = shaderMaterial(
-  { uTexture: new Texture(), uOpacity: 1 },
+  { uTexture: null, uOpacity: 1 },
   vertexShader,
   fragmentShader
 )
@@ -37,7 +37,7 @@ declare global {
 // project
 type Props = {
   geometry: PlaneGeometry
-  imageURL: string
+  image: Texture
   position: Vector3
   closeProject: boolean
   handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
@@ -45,13 +45,12 @@ type Props = {
 }
 
 const Project = (props: Props) => {
-  const imageTexture = useLoader(TextureLoader, props.imageURL)
   const shaderRef = useRef<ShaderMaterial>(null!)
 
   useEffect(() => {
-    shaderRef.current.uniforms.uTexture = { value: imageTexture }
+    shaderRef.current.uniforms.uTexture = { value: props.image }
     shaderRef.current.needsUpdate = true
-  }, [imageTexture])
+  }, [])
 
   // handlers
   const handleProjectClick = () => {

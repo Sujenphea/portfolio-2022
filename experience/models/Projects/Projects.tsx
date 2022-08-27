@@ -6,8 +6,10 @@ import {
   Material,
   Mesh,
   PlaneGeometry,
+  TextureLoader,
   Vector3,
 } from 'three'
+import { useLoader } from '@react-three/fiber'
 
 import Project from './Project'
 
@@ -45,6 +47,10 @@ const Projects = (props: Props) => {
     (Mesh<BufferGeometry, Material | Material[]> | null)[]
   >([])
   const projectGeometry = useRef(new PlaneGeometry(12, 9))
+  const images = useLoader(
+    TextureLoader,
+    props.projects.map((project) => project.images[0])
+  )
 
   // - vectors
   const tempVector = useRef(new Vector3())
@@ -129,7 +135,7 @@ const Projects = (props: Props) => {
 
       ref?.lookAt(lookAtPosition)
     })
-  }, [props.projects.length])
+  }, [props.projects])
 
   // - dynamic size
   useEffect(() => {
@@ -204,7 +210,7 @@ const Projects = (props: Props) => {
           <Project
             key={project.name + i.toString()}
             geometry={projectGeometry.current}
-            imageURL={project.images[0]}
+            image={images[i]}
             position={position}
             closeProject={closeProjectIndex === i}
             handleProjectClick={() => {
