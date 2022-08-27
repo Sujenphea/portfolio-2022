@@ -1,21 +1,27 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import * as THREE from 'three'
+import {
+  BufferGeometry,
+  CatmullRomCurve3,
+  Material,
+  Mesh,
+  PlaneGeometry,
+  Vector3,
+} from 'three'
 
 import Project from './Project'
 
-import ProjectType from '../../types/projectType'
-import CameraData from '../../types/cameraData'
-import AnimateHandle from '../../types/animateHandlerType'
+import ProjectType from '../../../types/projectType'
+import CameraData from '../../../types/cameraData'
 
 type Props = {
-  curvePoints: THREE.Vector3[]
+  curvePoints: Vector3[]
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
   projectClicked: (
     project: ProjectType,
-    cameraPosition: THREE.Vector3,
-    cameraLookAt: THREE.Vector3
+    cameraPosition: Vector3,
+    cameraLookAt: Vector3
   ) => void
   handleNewLocation: (data: CameraData) => void
   isPortrait: boolean
@@ -24,11 +30,11 @@ type Props = {
 
 const Projects = (props: Props) => {
   // params
-  const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
+  const objectVerticalOffset = useRef(new Vector3(0, 5, 0))
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
-  const [curve] = useState(
-    new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
+  const curve = useRef(
+    new CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
   )
 
   // states
@@ -39,26 +45,23 @@ const Projects = (props: Props) => {
 
   // refs
   const meshRefs = useRef<
-    (THREE.Mesh<
-      THREE.BufferGeometry,
-      THREE.Material | THREE.Material[]
-    > | null)[]
+    (Mesh<BufferGeometry, Material | Material[]> | null)[]
   >([])
-  const projectRefs = useRef<(AnimateHandle | null)[]>([])
+  const projectGeometry = useRef(new PlaneGeometry(12, 9))
 
   // helpers
   const calculatePosition = (
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
-    const position = curve.getPointAt(locationOnCurve)
+    const position = curve.current.getPointAt(locationOnCurve)
     position.add(objectVerticalOffset.current)
 
     // get normal to curve
-    const tangent = curve.getTangentAt(locationOnCurve)
-    const normal = new THREE.Vector3()
+    const tangent = curve.current.getTangentAt(locationOnCurve)
+    const normal = new Vector3()
       .copy(tangent)
-      .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+      .applyAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5)
       .normalize()
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
@@ -108,7 +111,6 @@ const Projects = (props: Props) => {
   useEffect(() => {
     // set length for ref
     meshRefs.current = meshRefs.current.slice(0, props.projects.length)
-    projectRefs.current = projectRefs.current.slice(0, props.projects.length)
 
     // set mesh rotation
     meshRefs.current.forEach((ref, i) => {
@@ -200,6 +202,7 @@ const Projects = (props: Props) => {
         return (
           <Project
             key={project.name + i.toString()}
+            geometry={projectGeometry.current}
             project={project}
             position={position}
             closeProject={closeProjectIndex === i}
@@ -216,4 +219,4 @@ const Projects = (props: Props) => {
   )
 }
 
-export default memo(Projects)
+export default Projects

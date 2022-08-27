@@ -1,38 +1,43 @@
 import { useEffect, useRef } from 'react'
 
-import { shaderMaterial } from '@react-three/drei'
 import { extend, Object3DNode, useLoader } from '@react-three/fiber'
 import {
   BufferGeometry,
   Material,
   Mesh,
+  PlaneGeometry,
   ShaderMaterial,
   Texture,
   TextureLoader,
   Vector3,
 } from 'three'
 
-import ProjectType from '../../types/projectType'
+import ProjectType from '../../../types/projectType'
+import { shaderMaterial } from '@react-three/drei'
 
-import fragmentShader from '../shaders/fragment.glsl'
-import vertexShader from '../shaders/vertex.glsl'
+import fragmentShader from './shaders/fragment.glsl'
+import vertexShader from './shaders/vertex.glsl'
 
-const MyShaderMaterial = shaderMaterial(
+// material
+const ProjectShaderMaterial = shaderMaterial(
   { uTexture: new Texture(), uOpacity: 1 },
   vertexShader,
   fragmentShader
 )
-extend({ MyShaderMaterial })
+
+extend({ ProjectShaderMaterial })
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      myShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>
+      projectShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>
     }
   }
 }
 
+// project
 type Props = {
+  geometry: PlaneGeometry
   project: ProjectType
   position: Vector3
   closeProject: boolean
@@ -60,9 +65,9 @@ const Project = (props: Props) => {
         props.handleRef(ref)
       }}
       onClick={handleProjectClick}
+      geometry={props.geometry}
     >
-      <planeGeometry args={[12, 9]} />
-      <myShaderMaterial ref={shaderRef} transparent />
+      <projectShaderMaterial ref={shaderRef} transparent />
     </mesh>
   )
 }

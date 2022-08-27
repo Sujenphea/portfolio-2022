@@ -7,7 +7,7 @@ import Cameras from './Cameras'
 
 import AboutMe from './models/AboutMe'
 import Works from './models/Works'
-import Projects from './models/Projects'
+import Projects from './models/Projects/Projects'
 import SJLineScroll from './models/SJLineScroll'
 
 import pointsSj from './points/points-sj'
