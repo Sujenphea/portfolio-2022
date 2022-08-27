@@ -18,7 +18,7 @@ const Cameras = (props: {
   curve: MutableRefObject<CatmullRomCurve3>
   scrollProgress: MutableRefObject<number>
   cameraView: CameraViewType
-  cameraData: CameraData
+  cameraData: MutableRefObject<CameraData>
 }) => {
   // params
   const cameraHeightOffset = useRef(1)
@@ -76,7 +76,7 @@ const Cameras = (props: {
         )
         cameraRef.current.position.copy(newCameraPosition.current)
 
-        // set camera direction
+        // set camera lookAt
         const cameraDirection = props.curve.current.getPointAt(lookAtProgress)
         cameraDirection.add(cameraHeightOffsetVector.current) // direction offset
 
@@ -92,10 +92,12 @@ const Cameras = (props: {
 
         return
       case CameraViewType.Overview:
+        // camera position
         tempVector.current.set(0, 600, 0)
         newCameraPosition.current.lerp(tempVector.current, 0.2)
         cameraRef.current.position.copy(newCameraPosition.current)
 
+        // camera lookAt
         tempVector.current.set(0, 99, 0)
         ghostMesh.current.position.lerp(tempVector.current, 0.2)
         cameraRef.current.lookAt(
@@ -104,16 +106,17 @@ const Cameras = (props: {
           ghostMesh.current.position.z
         )
 
+        // rotate sj to face the same direction
         cameraRef.current.rotation.z = Math.PI * 0
 
         return
       case CameraViewType.Project:
         // animate position
-        newCameraPosition.current.lerp(props.cameraData.position, 0.2)
+        newCameraPosition.current.lerp(props.cameraData.current.position, 0.2)
         cameraRef.current.position.copy(newCameraPosition.current)
 
         // aniamte lookAt
-        ghostMesh.current.position.lerp(props.cameraData.lookAt, 0.2)
+        ghostMesh.current.position.lerp(props.cameraData.current.lookAt, 0.2)
         cameraRef.current.lookAt(
           ghostMesh.current.position.x,
           ghostMesh.current.position.y,

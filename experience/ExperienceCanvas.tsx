@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useRef } from 'react'
 
 import { Canvas } from '@react-three/fiber'
 import { CatmullRomCurve3, Vector3 } from 'three'
@@ -31,16 +31,14 @@ type Props = {
 }
 
 const ExperienceCanvas = (props: Props) => {
-  // states
-  // - camera position when cameraView is looking at project
-  const [projectCameraData, setProjectCameraData] = useState<CameraData>({
-    position: new Vector3(),
-    lookAt: new Vector3(),
-  })
-
   // refs
   const curve = useRef(new CatmullRomCurve3(pointsSj, false, 'catmullrom'))
   const scrollProgress = useRef(0)
+  // - camera position when cameraView is looking at project
+  const projectCameraData = useRef({
+    position: new Vector3(),
+    lookAt: new Vector3(),
+  })
 
   // handlers
   // - change camera view type and position
@@ -51,7 +49,10 @@ const ExperienceCanvas = (props: Props) => {
   ) => {
     props.handleProjectClicked(project, CameraViewType.Project)
 
-    setProjectCameraData({ position: cameraPosition, lookAt: cameraLookAt })
+    projectCameraData.current = {
+      position: cameraPosition,
+      lookAt: cameraLookAt,
+    }
   }
 
   const handleScrollProgress = (value: number) => {
@@ -96,7 +97,7 @@ const ExperienceCanvas = (props: Props) => {
             rangeOnCurve={[0.5, 1]}
             projectClicked={handleProjectClick}
             handleNewLocation={(data: CameraData) => {
-              setProjectCameraData(data)
+              projectCameraData.current = data
             }}
             isPortrait={props.isPortrait}
             currentProject={props.currentProject}
