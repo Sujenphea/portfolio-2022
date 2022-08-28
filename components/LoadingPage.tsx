@@ -21,6 +21,12 @@ const LoadingPage = () => {
     }
   `
 
+  const fadeUpIn = keyframes`
+    to {
+      transform: translateY(0);
+    }
+  `
+
   const styles = {
     containerStyle: css`
       width: 100vw;
@@ -48,15 +54,25 @@ const LoadingPage = () => {
       animation: ${fadeIn} 1s ease-in forwards,
         ${nameShrink} 0.8s ease-out 1s forwards;
     `,
+    descriptionContainerStyle: css`
+      overflow: hidden;
+    `,
     descriptionStyle: css`
       font-weight: 400;
+
+      transform: translateY(100%);
+
+      // animation
+      animation: ${fadeUpIn} 1s 1.8s forwards;
     `,
   }
 
   return (
     <div css={styles.containerStyle}>
       <div css={styles.nameStyle}>Sujen Phea</div>
-      <div css={styles.descriptionStyle}>Web Developer. iOS Developer.</div>
+      <div css={styles.descriptionContainerStyle}>
+        <div css={styles.descriptionStyle}>Web Developer. iOS Developer.</div>
+      </div>
     </div>
   )
 }
