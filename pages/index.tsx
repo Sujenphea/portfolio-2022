@@ -18,6 +18,7 @@ import ContactBar from '../components/ContactBar'
 import ProjectImmersiveOverlay from '../components/ProjectImmersiveOverlay'
 import ProjectType from '../types/projectType'
 import Header from '../components/Header'
+import LoadingPage from '../components/LoadingPage'
 
 export default function Home() {
   // states
@@ -165,6 +166,8 @@ export default function Home() {
 
   return (
     <div css={styles.containerStyle}>
+      <LoadingPage />
+
       {/* mobile */}
       <div css={styles.mobileContainerStyle}>
         <h1>For optimal experiences, please rotate your device</h1>
@@ -183,6 +186,7 @@ export default function Home() {
           width={500}
         />
       </div>
+
       {/* non mobile */}
       <div css={styles.nonMobileContainerStyle}>
         <ExperienceCanvas
@@ -192,6 +196,7 @@ export default function Home() {
           currentProject={currentProjectOverlay}
         />
       </div>
+
       <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
       <Menu
         visible={menuVisible}
