@@ -25,14 +25,14 @@ const ProjectImmersiveOverlay = (props: Props) => {
     link: '',
     images: [],
   })
-  const [scrollTransformX, setScrollTransformX] = useState(0)
 
   // refs
-  const containerRef = useRef<HTMLDivElement>(null!)
-  const imageContainerRef = useRef<HTMLDivElement>(null!)
-  const isPortraitRef = useRef(false) // purpose: so animation frame can get latest data
-  const currX = useRef(0)
-  const currentTimeout: { current: NodeJS.Timeout | null } = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null!) // to get scroll position
+  const imageContainerRef = useRef<HTMLDivElement>(null!) // to set scroll translation
+
+  // - animation frame
+  const currX = useRef(0) // ref for animation
+  const currentTimeout: { current: NodeJS.Timeout | null } = useRef(null) // timeout for resetting scroll animation
   const requestRef = useRef(0) // animation frame
 
   // animation frame
@@ -44,7 +44,11 @@ const ProjectImmersiveOverlay = (props: Props) => {
     const translateX = -currX.current.toFixed(4)
 
     // update translation
-    setScrollTransformX(translateX)
+    imageContainerRef.current.style.transform = `
+      translateX(
+        calc(${translateX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`})
+      )
+    `
 
     // call next frame
     requestRef.current = requestAnimationFrame(animate)
@@ -75,10 +79,6 @@ const ProjectImmersiveOverlay = (props: Props) => {
       }, 300)
     }
   }, [props.project])
-
-  useEffect(() => {
-    isPortraitRef.current = props.isPortrait
-  }, [props.isPortrait])
 
   // styles
   const animations = {
@@ -144,18 +144,16 @@ const ProjectImmersiveOverlay = (props: Props) => {
 
       ${animations.delayedImageContainerAnimation}
 
+      @media(max-width: 768px) {
+        transform: none !important;
+      }
+
       @media (min-width: 768px) {
         position: absolute;
         width: calc(${props.isPortrait ? `32vh` : `51.2vh`});
         height: calc(${props.isPortrait ? `24vh` : `38vh`});
 
         flex-direction: row;
-
-        transform: translateX(
-          calc(
-            ${scrollTransformX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`}
-          )
-        );
       }
     `,
     imageStyle: css`
