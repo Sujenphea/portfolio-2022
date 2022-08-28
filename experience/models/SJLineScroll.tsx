@@ -1,34 +1,35 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, MutableRefObject, SetStateAction } from 'react'
 
-import { CatmullRomCurve3, Vector3 } from 'three'
+import { CatmullRomCurve3 } from 'three'
 import { Line, ScrollControls, useScroll } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 
 import CameraViewType from '../../types/cameraViewType'
 
 const Particles = (props: {
-  points: Vector3[]
-  setScrollProgress: Dispatch<SetStateAction<number>>
+  curve: MutableRefObject<CatmullRomCurve3>
+  handleScrollProgress: (value: number) => void
 }) => {
-  // hooks
-  const [curve] = useState(
-    new CatmullRomCurve3(props.points, false, 'catmullrom')
-  )
-
   const scrollData = useScroll()
 
   // tick
   useFrame(() => {
     // update scroll progress
-    props.setScrollProgress(scrollData.offset)
+    props.handleScrollProgress(scrollData.offset)
   })
 
-  return <Line points={curve.getPoints(2000)} color="red" lineWidth={3} />
+  return (
+    <Line
+      points={props.curve.current.getPoints(2000)}
+      color="red"
+      lineWidth={3}
+    />
+  )
 }
 
 const SJLineScroll = (props: {
-  points: Vector3[]
-  setScrollProgress: Dispatch<SetStateAction<number>>
+  curve: MutableRefObject<CatmullRomCurve3>
+  handleScrollProgress: (value: number) => void
   cameraView: CameraViewType
 }) => (
   <ScrollControls
@@ -40,8 +41,8 @@ const SJLineScroll = (props: {
     enabled={props.cameraView === CameraViewType.FirstPerson}
   >
     <Particles
-      points={props.points}
-      setScrollProgress={props.setScrollProgress}
+      curve={props.curve}
+      handleScrollProgress={props.handleScrollProgress}
     />
   </ScrollControls>
 )

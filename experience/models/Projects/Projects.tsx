@@ -1,42 +1,40 @@
-import {
-  forwardRef,
-  memo,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
-import * as THREE from 'three'
+import {
+  BufferGeometry,
+  CatmullRomCurve3,
+  Material,
+  Mesh,
+  PlaneGeometry,
+  TextureLoader,
+  Vector3,
+} from 'three'
+import { useLoader } from '@react-three/fiber'
 
 import Project from './Project'
 
-import ProjectType from '../../types/projectType'
-import CameraData from '../../types/cameraData'
-import AnimateHandle from '../../types/animateHandlerType'
+import ProjectType from '../../../types/projectType'
+import CameraData from '../../../types/cameraData'
 
 type Props = {
-  curvePoints: THREE.Vector3[]
+  curve: MutableRefObject<CatmullRomCurve3>
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
   projectClicked: (
     project: ProjectType,
-    cameraPosition: THREE.Vector3,
-    cameraLookAt: THREE.Vector3
+    cameraPosition: Vector3,
+    cameraLookAt: Vector3
   ) => void
   handleNewLocation: (data: CameraData) => void
   isPortrait: boolean
   currentProject: ProjectType
 }
 
-const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
+const Projects = (props: Props) => {
   // params
-  const objectVerticalOffset = useRef(new THREE.Vector3(0, 5, 0))
+  const objectVerticalOffset = useRef(5)
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.005)
-  const [curve] = useState(
-    new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
-  )
 
   // states
   const currentProject = useRef<ProjectType | null>(null)
@@ -46,35 +44,31 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
   // refs
   const meshRefs = useRef<
-    (THREE.Mesh<
-      THREE.BufferGeometry,
-      THREE.Material | THREE.Material[]
-    > | null)[]
+    (Mesh<BufferGeometry, Material | Material[]> | null)[]
   >([])
-  const projectRefs = useRef<(AnimateHandle | null)[]>([])
+  const projectGeometry = useRef(new PlaneGeometry(12, 9))
+  const images = useLoader(
+    TextureLoader,
+    props.projects.map((project) => project.images[0])
+  )
 
-  // animation frame
-  useImperativeHandle(forwardedRef, () => ({
-    animate(time) {
-      projectRefs.current.forEach((ref) => {
-        ref?.animate(time)
-      })
-    },
-  }))
+  // - vectors
+  const tempVector = useRef(new Vector3())
+  const verticalUnitVector = useRef(new Vector3(0, 1, 0))
 
   // helpers
   const calculatePosition = (
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
-    const position = curve.getPointAt(locationOnCurve)
-    position.add(objectVerticalOffset.current)
+    const position = props.curve.current.getPointAt(locationOnCurve)
+    position.add(tempVector.current.set(0, objectVerticalOffset.current, 0))
 
     // get normal to curve
-    const tangent = curve.getTangentAt(locationOnCurve)
-    const normal = new THREE.Vector3()
+    const tangent = props.curve.current.getTangentAt(locationOnCurve)
+    const normal = tempVector.current
       .copy(tangent)
-      .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+      .applyAxisAngle(verticalUnitVector.current, Math.PI * 0.5)
       .normalize()
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
@@ -124,7 +118,6 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
   useEffect(() => {
     // set length for ref
     meshRefs.current = meshRefs.current.slice(0, props.projects.length)
-    projectRefs.current = projectRefs.current.slice(0, props.projects.length)
 
     // set mesh rotation
     meshRefs.current.forEach((ref, i) => {
@@ -142,7 +135,7 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
       ref?.lookAt(lookAtPosition)
     })
-  }, [props.projects.length])
+  }, [props.projects])
 
   // - dynamic size
   useEffect(() => {
@@ -215,11 +208,9 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
 
         return (
           <Project
-            ref={(ref) => {
-              projectRefs.current[i] = ref
-            }}
             key={project.name + i.toString()}
-            project={project}
+            geometry={projectGeometry.current}
+            image={images[i]}
             position={position}
             closeProject={closeProjectIndex === i}
             handleProjectClick={() => {
@@ -233,6 +224,6 @@ const Projects = forwardRef<AnimateHandle, Props>((props, forwardedRef) => {
       })}
     </group>
   )
-})
+}
 
-export default memo(Projects)
+export default Projects

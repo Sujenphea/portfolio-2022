@@ -1,22 +1,19 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, MutableRefObject, useEffect, useRef, useState } from 'react'
 
-import * as THREE from 'three'
+import { CatmullRomCurve3, Vector3 } from 'three'
 import { Text } from '@react-three/drei'
 
 import ProjectType from '../../types/projectType'
 
 const Works = (props: {
-  curvePoints: THREE.Vector3[]
+  curve: MutableRefObject<CatmullRomCurve3>
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
 }) => {
   // params
-  const objectVerticalOffset = useRef(new THREE.Vector3(0, 10, 0))
+  const objectVerticalOffset = useRef(10)
   const objectNormalMultiplier = useRef(10) // horizontal displacement of object
   const lookAtPositionOffset = useRef(-0.01)
-  const [curve] = useState(
-    new THREE.CatmullRomCurve3(props.curvePoints, false, 'catmullrom')
-  )
 
   // state
   const [projectDescription, setProjectDescription] = useState('hello world')
@@ -30,19 +27,23 @@ const Works = (props: {
   >([])
   const textRef = useRef<THREE.Mesh>(null!)
 
+  // - vectors
+  const tempVector = useRef(new Vector3())
+  const verticalUnitVector = useRef(new Vector3(0, 1, 0))
+
   // helpers
   const calculatePosition = (
     locationOnCurve: number,
     side: number // 1 for left side, -1 for right side
   ) => {
-    const position = curve.getPointAt(locationOnCurve)
-    position.add(objectVerticalOffset.current)
+    const position = props.curve.current.getPointAt(locationOnCurve)
+    position.add(tempVector.current.set(0, objectVerticalOffset.current, 0))
 
     // get normal to curve
-    const tangent = curve.getTangentAt(locationOnCurve)
-    const normal = new THREE.Vector3()
+    const tangent = props.curve.current.getTangentAt(locationOnCurve)
+    const normal = tempVector.current
       .copy(tangent)
-      .applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.5)
+      .applyAxisAngle(verticalUnitVector.current, Math.PI * 0.5)
       .normalize()
     position.add(normal.multiplyScalar(side * objectNormalMultiplier.current))
 
