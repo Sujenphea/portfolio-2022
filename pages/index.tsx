@@ -125,7 +125,13 @@ export default function Home() {
   // styles
   const styles = {
     containerStyle: css`
-      background-color: rgb(6, 10, 17);
+      background: rgb(211, 239, 255);
+      background: linear-gradient(
+        45deg,
+        rgba(211, 239, 255, 1) 0%,
+        rgba(107, 93, 255, 1) 100%
+      );
+
       width: 100vw;
       height: 100vh;
     `,
@@ -186,7 +192,6 @@ export default function Home() {
           width={500}
         />
       </div>
-
       {/* non mobile */}
       <div css={styles.nonMobileContainerStyle}>
         <ExperienceCanvas
@@ -196,7 +201,6 @@ export default function Home() {
           currentProject={currentProjectOverlay}
         />
       </div>
-
       <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
       <Menu
         visible={menuVisible}

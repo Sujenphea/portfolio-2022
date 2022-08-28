@@ -1,31 +1,23 @@
 import { css, keyframes } from '@emotion/react'
 
 const LoadingPage = () => {
-  const nameShrink = keyframes`
-    from {
-      letter-spacing: calc(5vw);
-    }
-
-    to {
-      letter-spacing: normal;
-    }
-  `
-
-  const fadeIn = keyframes`
-    from {
-      opacity: 0%;
-    }
-
-    to {
-      opacity: 100%;
-    }
-  `
-
-  const fadeUpIn = keyframes`
-    to {
-      transform: translateY(0);
-    }
-  `
+  const animations = {
+    nameShrink: keyframes`
+      to {
+        letter-spacing: normal;
+      }
+    `,
+    fadeIn: keyframes`
+      to {
+        opacity: 100%;
+      }
+    `,
+    fadeUp: keyframes`
+      to {
+        transform: translateY(0);
+      }
+    `,
+  }
 
   const styles = {
     containerStyle: css`
@@ -38,7 +30,6 @@ const LoadingPage = () => {
       align-items: center;
 
       z-index: 5;
-      background-color: red;
     `,
     nameStyle: css`
       opacity: 0;
@@ -49,10 +40,11 @@ const LoadingPage = () => {
 
       text-align: center;
       letter-spacing: calc(5vw);
+      text-transform: uppercase;
 
       // animation
-      animation: ${fadeIn} 1s ease-in forwards,
-        ${nameShrink} 0.8s ease-out 1s forwards;
+      animation: ${animations.fadeIn} 1s ease-in forwards,
+        ${animations.nameShrink} 0.8s ease-out 1s forwards;
     `,
     descriptionContainerStyle: css`
       overflow: hidden;
@@ -63,7 +55,7 @@ const LoadingPage = () => {
       transform: translateY(100%);
 
       // animation
-      animation: ${fadeUpIn} 1s 1.8s forwards;
+      animation: ${animations.fadeUp} 1s 1.8s forwards;
     `,
   }
 
