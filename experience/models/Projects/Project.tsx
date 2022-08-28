@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { extend, Object3DNode, useLoader } from '@react-three/fiber'
+import { extend, Object3DNode, useFrame } from '@react-three/fiber'
 import {
   BufferGeometry,
   Material,
@@ -8,10 +8,9 @@ import {
   PlaneGeometry,
   ShaderMaterial,
   Texture,
-  TextureLoader,
   Vector3,
 } from 'three'
-
+import { lerp } from 'three/src/math/MathUtils'
 import { shaderMaterial } from '@react-three/drei'
 
 import fragmentShader from './shaders/fragment.glsl'
@@ -46,15 +45,33 @@ type Props = {
 
 const Project = (props: Props) => {
   const shaderRef = useRef<ShaderMaterial>(null!)
+  const currentOpacity = useRef(1)
+  const idealOpacity = useRef(1)
 
   useEffect(() => {
     shaderRef.current.uniforms.uTexture = { value: props.image }
+    shaderRef.current.uniforms.uOpacity = { value: 1 }
     shaderRef.current.needsUpdate = true
   }, [])
+
+  useEffect(() => {
+    if (props.closeProject) {
+      idealOpacity.current = 1
+    }
+  }, [props.closeProject])
+
+  useFrame(() => {
+    currentOpacity.current = shaderRef.current.uniforms.uOpacity.value
+    shaderRef.current.uniforms.uOpacity = {
+      value: lerp(currentOpacity.current, idealOpacity.current, 0.15),
+    }
+  })
 
   // handlers
   const handleProjectClick = () => {
     props.handleProjectClick()
+
+    idealOpacity.current = 0
   }
 
   return (
