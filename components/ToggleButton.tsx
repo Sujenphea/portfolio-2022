@@ -41,8 +41,8 @@ const ToggleButton = (props: {
       margin: 0 auto;
 
       background-color: ${isToggled
-        ? props.untoggledColor
-        : props.toggledColor};
+        ? props.toggledColor
+        : props.untoggledColor};
       border-radius: 999px;
 
       transition: 0.3s ease background-color;
@@ -72,8 +72,8 @@ const ToggleButton = (props: {
       width: 40%;
 
       background-color: ${isToggled
-        ? props.toggledColor
-        : props.untoggledColor};
+        ? props.untoggledColor
+        : props.toggledColor};
       margin-left: ${circleOffset.current}%;
       border-radius: 50%;
 
@@ -98,7 +98,7 @@ const ToggleButton = (props: {
       top: 50%;
       transform: translateY(-50%);
 
-      color: ${isToggled ? props.untoggledColor : props.toggledColor};
+      color: ${isToggled ? props.toggledColor : props.untoggledColor};
       font-size: 14px;
       font-size: calc(60% + 0.2vw + 0.6vh);
     `,
@@ -108,7 +108,7 @@ const ToggleButton = (props: {
       top: 50%;
       transform: translateY(-50%);
 
-      color: ${isToggled ? props.untoggledColor : props.toggledColor};
+      color: ${isToggled ? props.toggledColor : props.untoggledColor};
       font-size: 14px;
       font-size: calc(60% + 0.2vw + 0.6vh);
     `,
