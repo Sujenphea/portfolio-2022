@@ -1,11 +1,12 @@
 import { CSSProperties } from 'react'
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 
 import ProjectViewType from '../types/projectViewType'
 
 import ToggleButton from './ToggleButton'
 
 const Menu = (props: {
+  styles: SerializedStyles
   visible: boolean
   toggleView: (toGlanceView: boolean) => void
   projectView: ProjectViewType
@@ -40,9 +41,6 @@ const Menu = (props: {
       align-items: center;
 
       z-index: 2;
-      background-color: ${props.projectView === 0
-        ? `rgba(114, 108, 220, 0.6)`
-        : `rgba(30, 30, 60, 0.6)`};
       color: white;
 
       ${animations.normalAnimation}
@@ -73,7 +71,7 @@ const Menu = (props: {
   }
 
   return (
-    <div css={styles.containerStyle}>
+    <div css={[styles.containerStyle, props.styles]}>
       <ToggleButton
         style={styles.toggleButtonStyle}
         leftText="immersive"

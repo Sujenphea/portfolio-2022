@@ -168,6 +168,19 @@ export default function Home() {
     } as CSSProperties,
   }
 
+  const overlayStyles = {
+    menu: css`
+      background-color: ${projectView === 0
+        ? `rgba(114, 108, 220, 0.6)`
+        : `rgba(30, 30, 60, 0.6)`};
+    `,
+    project: css`
+      background-color: ${projectView === 0
+        ? `rgba(120, 120, 200, 0.7)`
+        : `rgba(30, 30, 50, 0.5)`};
+    `,
+  }
+
   return (
     <div css={styles.containerStyle}>
       {/* <LoadingPage /> */}
@@ -200,6 +213,7 @@ export default function Home() {
       </div>
       <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
       <Menu
+        styles={overlayStyles.menu}
         visible={menuVisible}
         toggleView={handleToggleView}
         projectView={projectView}
@@ -209,6 +223,7 @@ export default function Home() {
         handleProjectClicked={handleOpenGlanceViewProjectOverlay}
       />
       <ProjectImmersiveOverlay
+        styles={overlayStyles.project}
         project={currentProjectOverlay}
         visible={currentProjectOverlay !== null}
         closeProjectOverlay={handleCloseProjectOverlay}

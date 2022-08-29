@@ -1,9 +1,10 @@
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 import { useEffect, useRef, useState } from 'react'
 
 import ProjectType from '../types/projectType'
 
 type Props = {
+  styles: SerializedStyles
   project: ProjectType
   closeProjectOverlay: () => void
   visible: boolean
@@ -120,8 +121,6 @@ const ProjectImmersiveOverlay = (props: Props) => {
       position: sticky;
       top: 0;
       width: 100vw;
-
-      background-color: rgba(40, 40, 40, 0.5);
 
       display: flex;
       flex-direction: column;
@@ -246,7 +245,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
   return (
     <section css={styles.sectionStyle}>
       <div css={styles.containerStyle} ref={containerRef}>
-        <div css={styles.modalStyle}>
+        <div css={[styles.modalStyle, props.styles]}>
           {/* title + button when width < 768px */}
           {/* otherwise title, button positioned absolutely */}
           <div css={styles.rowStyle}>
