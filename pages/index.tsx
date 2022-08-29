@@ -171,8 +171,8 @@ export default function Home() {
         : `linear-gradient(45deg, rgb(54, 61, 65) 0%, rgb(8, 3, 55) 100%)`};
     `,
     menu: css`
-      color: ${projectView === 0 ? `rgb(0, 0, 100)` : `white`};
-      backdrop-filter: blur(5px);
+      color: ${projectView === 0 ? `rgb(203, 182, 255)` : `white`};
+      backdrop-filter: blur(5px) brightness(65%);
     `,
     project: css`
       backdrop-filter: blur(3px) brightness(80%);
