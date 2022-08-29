@@ -126,12 +126,9 @@ export default function Home() {
   // styles
   const styles = {
     containerStyle: css`
-      background: rgb(211, 239, 255);
-      background: linear-gradient(
-        45deg,
-        rgba(211, 239, 255, 1) 0%,
-        rgba(107, 93, 255, 1) 100%
-      );
+      background: ${projectView === 0
+        ? `linear-gradient(45deg, rgb(211, 239, 255) 0%, rgb(107, 93, 255) 100%)`
+        : `linear-gradient(45deg, rgb(54, 61, 65) 0%, rgb(8, 3, 55) 100%)`};
 
       width: 100vw;
       height: 100vh;
@@ -173,8 +170,7 @@ export default function Home() {
 
   return (
     <div css={styles.containerStyle}>
-      <LoadingPage />
-
+      {/* <LoadingPage /> */}
       {/* mobile */}
       <div css={styles.mobileContainerStyle}>
         <h1>For optimal experiences, please rotate your device</h1>
