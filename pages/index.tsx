@@ -26,6 +26,7 @@ export default function Home() {
   // - overlays
   const [menuVisible, setMenuVisible] = useState(false)
   const [glanceViewVisible, setGlanceViewVisible] = useState(false) // enable hiding when project overlay is showing
+  const [loadingPageVisible, setLoadingPageVisible] = useState(true)
   const [mobileOverlayEnabled, setMobileOverlayEnabled] = useState(true) // enable overlay initially + change to immersive view
   const [currentProjectOverlay, setCurrentProjectOverlay] =
     useState<ProjectType>(null!)
@@ -46,6 +47,11 @@ export default function Home() {
 
     window.addEventListener('resize', updateScreenOrientation)
     updateScreenOrientation()
+
+    // timeout for loading page to disappear
+    setTimeout(() => {
+      setLoadingPageVisible(false)
+    }, 4500)
 
     return () => {
       window.removeEventListener('resize', updateScreenOrientation)
@@ -125,14 +131,19 @@ export default function Home() {
 
   // styles
   const styles = {
-    containerStyle: css`
-      background: rgb(211, 239, 255);
-      background: linear-gradient(
-        45deg,
-        rgba(211, 239, 255, 1) 0%,
-        rgba(107, 93, 255, 1) 100%
-      );
+    nonLoadingContainerStyle: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
 
+      display: block;
+      opacity: ${loadingPageVisible ? 0 : 1};
+
+      transition: opacity 2s;
+    `,
+    containerStyle: css`
       width: 100vw;
       height: 100vh;
     `,
@@ -164,61 +175,82 @@ export default function Home() {
         display: block;
       }
     `,
-    contactBarStyle: {
-      position: 'absolute',
-      bottom: '15px',
-      left: '15px',
-    } as CSSProperties,
+    contactBarStyle: css`
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+    `,
+  }
+
+  const theme = {
+    backgroundColor: css`
+      background: ${projectView === 0
+        ? `linear-gradient(45deg, rgb(211, 239, 255) 0%, rgb(107, 93, 255) 100%)`
+        : `linear-gradient(45deg, rgb(54, 61, 65) 0%, rgb(8, 3, 55) 100%)`};
+    `,
+    menu: css`
+      color: ${projectView === 0 ? `rgb(203, 182, 255)` : `white`};
+      backdrop-filter: blur(5px) brightness(65%);
+    `,
+    project: css`
+      backdrop-filter: blur(3px) brightness(80%);
+    `,
+    contactBar: css`
+      color: ${projectView === 0 ? `rgb(60, 60, 60)` : `rgb(255, 255, 255)`};
+    `,
   }
 
   return (
-    <div css={styles.containerStyle}>
-      <LoadingPage />
-
-      {/* mobile */}
-      <div css={styles.mobileContainerStyle}>
-        <h1>For optimal experiences, please rotate your device</h1>
-        <button
-          type="button"
-          onClick={() => {
-            handleMobileOverlaySwitchToGlanceView()
-          }}
-        >
-          continue with sub-optimal experiences
-        </button>
-        <Image
-          src="/temp-rotate-phone.gif"
-          alt="my gif"
-          height={500}
-          width={500}
+    <div css={[styles.containerStyle, theme.backgroundColor]}>
+      <LoadingPage visible={loadingPageVisible} />
+      <div css={styles.nonLoadingContainerStyle}>
+        {/* mobile */}
+        <div css={styles.mobileContainerStyle}>
+          <h1>For optimal experiences, please rotate your device</h1>
+          <button
+            type="button"
+            onClick={() => {
+              handleMobileOverlaySwitchToGlanceView()
+            }}
+          >
+            continue with sub-optimal experiences
+          </button>
+          <Image
+            src="/temp-rotate-phone.gif"
+            alt="my gif"
+            height={500}
+            width={500}
+          />
+        </div>
+        {/* non mobile */}
+        <div css={styles.nonMobileContainerStyle}>
+          <ExperienceCanvas
+            cameraView={cameraView}
+            handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
+            isPortrait={isPortrait}
+            currentProject={currentProjectOverlay}
+          />
+        </div>
+        <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+        <Menu
+          styles={theme.menu}
+          visible={menuVisible}
+          toggleView={handleToggleView}
+          projectView={projectView}
         />
-      </div>
-      {/* non mobile */}
-      <div css={styles.nonMobileContainerStyle}>
-        <ExperienceCanvas
-          cameraView={cameraView}
-          handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
+        <GlanceView
+          visible={glanceViewVisible}
+          handleProjectClicked={handleOpenGlanceViewProjectOverlay}
+        />
+        <ProjectImmersiveOverlay
+          styles={theme.project}
+          project={currentProjectOverlay}
+          visible={currentProjectOverlay !== null}
+          closeProjectOverlay={handleCloseProjectOverlay}
           isPortrait={isPortrait}
-          currentProject={currentProjectOverlay}
         />
+        <ContactBar style={[styles.contactBarStyle, theme.contactBar]} />
       </div>
-      <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
-      <Menu
-        visible={menuVisible}
-        toggleView={handleToggleView}
-        projectView={projectView}
-      />
-      <GlanceView
-        visible={glanceViewVisible}
-        handleProjectClicked={handleOpenGlanceViewProjectOverlay}
-      />
-      <ProjectImmersiveOverlay
-        project={currentProjectOverlay}
-        visible={currentProjectOverlay !== null}
-        closeProjectOverlay={handleCloseProjectOverlay}
-        isPortrait={isPortrait}
-      />
-      <ContactBar style={styles.contactBarStyle} />
     </div>
   )
 }

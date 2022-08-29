@@ -21,7 +21,7 @@ const Particles = (props: {
   return (
     <Line
       points={props.curve.current.getPoints(2000)}
-      color="red"
+      color="rgb(100, 100, 255)"
       lineWidth={3}
     />
   )

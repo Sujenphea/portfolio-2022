@@ -92,25 +92,23 @@ const ToggleButton = (props: {
   }
 
   const textCss = {
-    leftText: css`
+    text: css`
       position: absolute;
-      right: 100%;
       top: 50%;
-      transform: translateY(-50%);
 
       color: ${isToggled ? props.toggledColor : props.untoggledColor};
+
       font-size: 14px;
-      font-size: calc(60% + 0.2vw + 0.6vh);
+      font-size: calc(80% + 0.2vw + 0.6vh);
+      font-weight: 500;
+    `,
+    leftText: css`
+      right: 100%;
+      transform: translateY(-50%);
     `,
     rightText: css`
-      position: absolute;
       left: 100%;
-      top: 50%;
       transform: translateY(-50%);
-
-      color: ${isToggled ? props.toggledColor : props.untoggledColor};
-      font-size: 14px;
-      font-size: calc(60% + 0.2vw + 0.6vh);
     `,
   }
 
@@ -124,7 +122,7 @@ const ToggleButton = (props: {
         alignItems: 'center',
       }}
     >
-      <div css={textCss.leftText}>{props.leftText}</div>
+      <div css={[textCss.text, textCss.leftText]}>{props.leftText}</div>
 
       <input
         type="checkbox"
@@ -143,7 +141,7 @@ const ToggleButton = (props: {
         </div>
       </label>
 
-      <div css={textCss.rightText}>{props.rightText}</div>
+      <div css={[textCss.text, textCss.rightText]}>{props.rightText}</div>
     </div>
   )
 }

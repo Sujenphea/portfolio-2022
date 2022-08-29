@@ -1,6 +1,26 @@
+import { useEffect, useState } from 'react'
+
 import { css, keyframes } from '@emotion/react'
 
-const LoadingPage = () => {
+type Props = {
+  visible: boolean
+}
+
+const LoadingPage = (props: Props) => {
+  // states
+  // - purpose: remove from view after header appears (name doesn't fade out)
+  const [visible, setVisible] = useState(true)
+
+  // hooks
+  useEffect(() => {
+    if (props.visible === false) {
+      setTimeout(() => {
+        setVisible(false)
+      }, 1000)
+    }
+  }, [props.visible])
+
+  // styles + animations
   const animations = {
     nameShrink: keyframes`
       to {
@@ -13,6 +33,7 @@ const LoadingPage = () => {
       }
 
       to {
+        color: white;
         top: clamp(0px, 50px, calc(2.5vh + 2.5vw));
         font-size: calc(70% + 0.9vw + 0.9vh);
       }
@@ -41,15 +62,17 @@ const LoadingPage = () => {
 
   const styles = {
     containerStyle: css`
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
 
-      display: flex;
+      display: ${visible ? `flex` : `none`};
       flex-direction: column;
       justify-content: center;
       align-items: center;
 
-      z-index: 5;
       color: rgb(70, 70, 70);
     `,
     nameStyle: css`
@@ -70,8 +93,7 @@ const LoadingPage = () => {
       // animation
       animation: ${animations.fadeIn} 0.5s ease-in forwards,
         ${animations.nameShrink} 0.8s ease-out 1.5s forwards,
-        ${animations.nameMoveUpFadeOut} 1s 4s forwards,
-        ${animations.fadeOut} 0.1s 5s forwards;
+        ${animations.nameMoveUpFadeOut} 1s 4s forwards;
     `,
     descriptionContainerStyle: css`
       position: absolute;
