@@ -35,7 +35,7 @@ const AboutMe = (props: {
   return (
     <group>
       <Text
-        color="pink"
+        color="rgb(30, 30, 50)"
         fontSize={2}
         anchorX="center"
         anchorY="middle"
