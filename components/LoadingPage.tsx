@@ -50,6 +50,7 @@ const LoadingPage = () => {
       align-items: center;
 
       z-index: 5;
+      color: rgb(70, 70, 70);
     `,
     nameStyle: css`
       position: absolute;
@@ -67,8 +68,8 @@ const LoadingPage = () => {
       letter-spacing: calc(5vw);
 
       // animation
-      animation: ${animations.fadeIn} 1s ease-in forwards,
-        ${animations.nameShrink} 0.8s ease-out 1s forwards,
+      animation: ${animations.fadeIn} 0.5s ease-in forwards,
+        ${animations.nameShrink} 0.8s ease-out 1.5s forwards,
         ${animations.nameMoveUpFadeOut} 1s 4s forwards,
         ${animations.fadeOut} 0.1s 5s forwards;
     `,
@@ -81,6 +82,7 @@ const LoadingPage = () => {
     `,
     descriptionStyle: css`
       font-weight: 400;
+      font-size: calc(50% + 0.7vw + 0.7vh);
 
       transform: translateY(100%);
 
