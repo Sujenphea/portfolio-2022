@@ -1,11 +1,14 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { css } from '@emotion/react'
 
 import CameraViewType from '../types/cameraViewType'
 import ProjectViewType from '../types/projectViewType'
-import AnimateHandle from '../types/animateHandlerType'
+
+import Header from '../components/Header'
+
+import LoadingPage from '../components/LoadingPage'
 
 import Menu from '../components/Menu'
 
@@ -17,7 +20,6 @@ import ContactBar from '../components/ContactBar'
 
 import ProjectImmersiveOverlay from '../components/ProjectImmersiveOverlay'
 import ProjectType from '../types/projectType'
-import Header from '../components/Header'
 
 export default function Home() {
   // states
@@ -124,7 +126,13 @@ export default function Home() {
   // styles
   const styles = {
     containerStyle: css`
-      background-color: rgb(6, 10, 17);
+      background: rgb(211, 239, 255);
+      background: linear-gradient(
+        45deg,
+        rgba(211, 239, 255, 1) 0%,
+        rgba(107, 93, 255, 1) 100%
+      );
+
       width: 100vw;
       height: 100vh;
     `,
@@ -165,6 +173,8 @@ export default function Home() {
 
   return (
     <div css={styles.containerStyle}>
+      <LoadingPage />
+
       {/* mobile */}
       <div css={styles.mobileContainerStyle}>
         <h1>For optimal experiences, please rotate your device</h1>
