@@ -126,10 +126,6 @@ export default function Home() {
   // styles
   const styles = {
     containerStyle: css`
-      background: ${projectView === 0
-        ? `linear-gradient(45deg, rgb(211, 239, 255) 0%, rgb(107, 93, 255) 100%)`
-        : `linear-gradient(45deg, rgb(54, 61, 65) 0%, rgb(8, 3, 55) 100%)`};
-
       width: 100vw;
       height: 100vh;
     `,
@@ -168,21 +164,23 @@ export default function Home() {
     } as CSSProperties,
   }
 
-  const overlayStyles = {
+  const theme = {
+    backgroundColor: css`
+      background: ${projectView === 0
+        ? `linear-gradient(45deg, rgb(211, 239, 255) 0%, rgb(107, 93, 255) 100%)`
+        : `linear-gradient(45deg, rgb(54, 61, 65) 0%, rgb(8, 3, 55) 100%)`};
+    `,
     menu: css`
-      background-color: ${projectView === 0
-        ? `rgba(114, 108, 220, 0.6)`
-        : `rgba(30, 30, 60, 0.6)`};
+      color: ${projectView === 0 ? `rgb(0, 0, 100)` : `white`};
+      backdrop-filter: blur(5px);
     `,
     project: css`
-      background-color: ${projectView === 0
-        ? `rgba(120, 120, 200, 0.7)`
-        : `rgba(30, 30, 50, 0.5)`};
+      backdrop-filter: blur(3px) brightness(80%);
     `,
   }
 
   return (
-    <div css={styles.containerStyle}>
+    <div css={[styles.containerStyle, theme.backgroundColor]}>
       {/* <LoadingPage /> */}
       {/* mobile */}
       <div css={styles.mobileContainerStyle}>
@@ -213,7 +211,7 @@ export default function Home() {
       </div>
       <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
       <Menu
-        styles={overlayStyles.menu}
+        styles={theme.menu}
         visible={menuVisible}
         toggleView={handleToggleView}
         projectView={projectView}
@@ -223,7 +221,7 @@ export default function Home() {
         handleProjectClicked={handleOpenGlanceViewProjectOverlay}
       />
       <ProjectImmersiveOverlay
-        styles={overlayStyles.project}
+        styles={theme.project}
         project={currentProjectOverlay}
         visible={currentProjectOverlay !== null}
         closeProjectOverlay={handleCloseProjectOverlay}

@@ -111,7 +111,6 @@ const GlanceView = (props: {
       overflow-x: hidden;
 
       text-align: center;
-      background-color: rgba(10, 10, 10, 0.5);
       color: white;
 
       ${animations.normalAnimation}
