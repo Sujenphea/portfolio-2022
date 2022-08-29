@@ -26,6 +26,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
     link: '',
     images: [],
   })
+  const [scrollTransformX, setScrollTransformX] = useState(0)
 
   // refs
   const containerRef = useRef<HTMLDivElement>(null!) // to get scroll position
@@ -45,11 +46,8 @@ const ProjectImmersiveOverlay = (props: Props) => {
     const translateX = -currX.current.toFixed(4)
 
     // update translation
-    imageContainerRef.current.style.transform = `
-      translateX(
-        calc(${translateX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`})
-      )
-    `
+    // - caveat: props.isPortrait does not get updated here
+    setScrollTransformX(translateX)
 
     // call next frame
     requestRef.current = requestAnimationFrame(animate)
@@ -153,6 +151,12 @@ const ProjectImmersiveOverlay = (props: Props) => {
         height: calc(${props.isPortrait ? `24vh` : `38vh`});
 
         flex-direction: row;
+
+        transform: translateX(
+          calc(
+            ${scrollTransformX}px + ${props.isPortrait ? `-21vh` : `-33.7vh`}
+          )
+        );
       }
     `,
     imageStyle: css`
@@ -160,7 +164,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
       padding-bottom: 20px;
       max-width: 80%;
 
-      filter: brightness(70%);
+      filter: brightness(80%);
 
       @media (min-width: 768px) {
         max-width: 100%;
