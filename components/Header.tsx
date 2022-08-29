@@ -17,7 +17,7 @@ const Header = (props: { menuVisible: boolean; toggleMenu: () => void }) => {
       justify-content: right;
       align-items: center;
 
-      color: rgb(200, 200, 200);
+      color: white;
     `,
     // centered absolutely
     nameStyle: css`
