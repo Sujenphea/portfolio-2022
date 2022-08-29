@@ -26,6 +26,7 @@ export default function Home() {
   // - overlays
   const [menuVisible, setMenuVisible] = useState(false)
   const [glanceViewVisible, setGlanceViewVisible] = useState(false) // enable hiding when project overlay is showing
+  const [loadingPageVisible, setLoadingPageVisible] = useState(true)
   const [mobileOverlayEnabled, setMobileOverlayEnabled] = useState(true) // enable overlay initially + change to immersive view
   const [currentProjectOverlay, setCurrentProjectOverlay] =
     useState<ProjectType>(null!)
@@ -46,6 +47,11 @@ export default function Home() {
 
     window.addEventListener('resize', updateScreenOrientation)
     updateScreenOrientation()
+
+    // timeout for loading page to disappear
+    setTimeout(() => {
+      setLoadingPageVisible(false)
+    }, 4500)
 
     return () => {
       window.removeEventListener('resize', updateScreenOrientation)
@@ -125,6 +131,18 @@ export default function Home() {
 
   // styles
   const styles = {
+    nonLoadingContainerStyle: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+
+      display: block;
+      opacity: ${loadingPageVisible ? 0 : 1};
+
+      transition: opacity 2s;
+    `,
     containerStyle: css`
       width: 100vw;
       height: 100vh;
@@ -184,53 +202,55 @@ export default function Home() {
 
   return (
     <div css={[styles.containerStyle, theme.backgroundColor]}>
-      {/* <LoadingPage /> */}
-      {/* mobile */}
-      <div css={styles.mobileContainerStyle}>
-        <h1>For optimal experiences, please rotate your device</h1>
-        <button
-          type="button"
-          onClick={() => {
-            handleMobileOverlaySwitchToGlanceView()
-          }}
-        >
-          continue with sub-optimal experiences
-        </button>
-        <Image
-          src="/temp-rotate-phone.gif"
-          alt="my gif"
-          height={500}
-          width={500}
+      <LoadingPage visible={loadingPageVisible} />
+      <div css={styles.nonLoadingContainerStyle}>
+        {/* mobile */}
+        <div css={styles.mobileContainerStyle}>
+          <h1>For optimal experiences, please rotate your device</h1>
+          <button
+            type="button"
+            onClick={() => {
+              handleMobileOverlaySwitchToGlanceView()
+            }}
+          >
+            continue with sub-optimal experiences
+          </button>
+          <Image
+            src="/temp-rotate-phone.gif"
+            alt="my gif"
+            height={500}
+            width={500}
+          />
+        </div>
+        {/* non mobile */}
+        <div css={styles.nonMobileContainerStyle}>
+          <ExperienceCanvas
+            cameraView={cameraView}
+            handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
+            isPortrait={isPortrait}
+            currentProject={currentProjectOverlay}
+          />
+        </div>
+        <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
+        <Menu
+          styles={theme.menu}
+          visible={menuVisible}
+          toggleView={handleToggleView}
+          projectView={projectView}
         />
-      </div>
-      {/* non mobile */}
-      <div css={styles.nonMobileContainerStyle}>
-        <ExperienceCanvas
-          cameraView={cameraView}
-          handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
+        <GlanceView
+          visible={glanceViewVisible}
+          handleProjectClicked={handleOpenGlanceViewProjectOverlay}
+        />
+        <ProjectImmersiveOverlay
+          styles={theme.project}
+          project={currentProjectOverlay}
+          visible={currentProjectOverlay !== null}
+          closeProjectOverlay={handleCloseProjectOverlay}
           isPortrait={isPortrait}
-          currentProject={currentProjectOverlay}
         />
+        <ContactBar style={[styles.contactBarStyle, theme.contactBar]} />
       </div>
-      <Header menuVisible={menuVisible} toggleMenu={handleToggleMenu} />
-      <Menu
-        styles={theme.menu}
-        visible={menuVisible}
-        toggleView={handleToggleView}
-        projectView={projectView}
-      />
-      <GlanceView
-        visible={glanceViewVisible}
-        handleProjectClicked={handleOpenGlanceViewProjectOverlay}
-      />
-      <ProjectImmersiveOverlay
-        styles={theme.project}
-        project={currentProjectOverlay}
-        visible={currentProjectOverlay !== null}
-        closeProjectOverlay={handleCloseProjectOverlay}
-        isPortrait={isPortrait}
-      />
-      <ContactBar style={[styles.contactBarStyle, theme.contactBar]} />
     </div>
   )
 }
