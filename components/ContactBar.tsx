@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 
 import {
   faGithub,
@@ -13,7 +13,7 @@ const SocialIcon = (props: { icon: IconDefinition; link: string }) => {
   // styles
   const styles = {
     linkStyle: css`
-      color: white;
+      color: inherit;
       padding: 0 10px;
     `,
     iconStyle: css`
@@ -28,9 +28,16 @@ const SocialIcon = (props: { icon: IconDefinition; link: string }) => {
   )
 }
 
-const ContactBar = (props: { style: CSSProperties }) => {
+const ContactBar = (props: { style: SerializedStyles[] }) => {
   return (
-    <div style={{ ...props.style, zIndex: 4 }}>
+    <div
+      css={[
+        props.style,
+        css`
+          z-index: 4;
+        `,
+      ]}
+    >
       <SocialIcon
         icon={faLinkedin}
         link={'https://www.linkedin.com/in/sujenphea/'}

@@ -157,11 +157,11 @@ export default function Home() {
         display: block;
       }
     `,
-    contactBarStyle: {
-      position: 'absolute',
-      bottom: '15px',
-      left: '15px',
-    } as CSSProperties,
+    contactBarStyle: css`
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+    `,
   }
 
   const theme = {
@@ -176,6 +176,9 @@ export default function Home() {
     `,
     project: css`
       backdrop-filter: blur(3px) brightness(80%);
+    `,
+    contactBar: css`
+      color: ${projectView === 0 ? `rgb(60, 60, 60)` : `rgb(255, 255, 255)`};
     `,
   }
 
@@ -227,7 +230,7 @@ export default function Home() {
         closeProjectOverlay={handleCloseProjectOverlay}
         isPortrait={isPortrait}
       />
-      <ContactBar style={styles.contactBarStyle} />
+      <ContactBar style={[styles.contactBarStyle, theme.contactBar]} />
     </div>
   )
 }
