@@ -40,7 +40,9 @@ const Menu = (props: {
       align-items: center;
 
       z-index: 2;
-      background-color: transparent;
+      background-color: ${props.projectView === 0
+        ? `rgba(114, 108, 220, 0.6)`
+        : `rgba(30, 30, 60, 0.6)`};
       color: white;
 
       ${animations.normalAnimation}
