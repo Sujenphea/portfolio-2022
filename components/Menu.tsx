@@ -78,7 +78,7 @@ const Menu = (props: {
         rightText="glance"
         handleToggle={handleToggle}
         value={props.projectView === ProjectViewType.Glance}
-        untoggledColor="rgb(203, 182, 255)"
+        untoggledColor="rgb(201, 201, 254)"
         toggledColor="rgb(255, 255, 255)"
       />
       <div css={styles.categoriesStyle}>
