@@ -140,6 +140,7 @@ export default function Home() {
 
       display: block;
       opacity: ${loadingPageVisible ? 0 : 1};
+      pointer-events: ${loadingPageVisible ? `none` : `auto`};
 
       transition: opacity 2s;
     `,
