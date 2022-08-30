@@ -18,6 +18,8 @@ import ProjectType from '../types/projectType'
 
 import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
+import Headings from './models/Heading'
+import Heading from './models/Heading'
 
 type Props = {
   cameraView: CameraViewType
@@ -86,10 +88,11 @@ const ExperienceCanvas = (props: Props) => {
             cameraView={props.cameraView}
           />
           <AboutMe curve={curve} positionOnCurve={0.01} />
+          <Heading curve={curve} positionOnCurve={0.05} text="projects" />
           <Projects
             curve={curve}
-            projects={worksJSON}
-            rangeOnCurve={[0.01, 0.5]}
+            projects={projectsJSON}
+            rangeOnCurve={[0.05, 0.5]}
             currentCameraLocation={scrollProgress}
             projectClicked={handleProjectClick}
             handleNewLocation={(data: CameraData) => {
@@ -98,9 +101,10 @@ const ExperienceCanvas = (props: Props) => {
             isPortrait={props.isPortrait}
             currentProject={props.currentProject}
           />
+          <Heading curve={curve} positionOnCurve={0.5} text="works" />
           <Projects
             curve={curve}
-            projects={projectsJSON}
+            projects={worksJSON}
             rangeOnCurve={[0.5, 1]}
             currentCameraLocation={scrollProgress}
             projectClicked={handleProjectClick}
