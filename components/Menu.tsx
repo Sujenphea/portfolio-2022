@@ -31,13 +31,12 @@ const Menu = (props: {
       left: 0;
       width: 100vw;
       height: 100vh;
-      padding-top: 10vh;
+      padding-top: clamp(0px, 80px, calc(5vh + 5vw));
       padding-bottom: 10vh;
 
       display: flex;
       visibility: ${props.visible ? `visible` : `hidden`};
       flex-direction: column;
-      justify-content: center;
       align-items: center;
 
       z-index: 2;
@@ -81,11 +80,6 @@ const Menu = (props: {
         untoggledColor="rgb(201, 201, 254)"
         toggledColor="rgb(255, 255, 255)"
       />
-      <div css={styles.categoriesStyle}>
-        <h2 css={styles.categoryStyle}>Work</h2>
-        <h2 css={styles.categoryStyle}>Project</h2>
-        <h2 css={styles.categoryStyle}>About Me</h2>
-      </div>
     </div>
   )
 }
