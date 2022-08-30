@@ -1,8 +1,8 @@
-import { Dispatch, MutableRefObject, SetStateAction } from 'react'
+import { MutableRefObject } from 'react'
 
-import { CatmullRomCurve3 } from 'three'
 import { Line, ScrollControls, useScroll } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
+import { CatmullRomCurve3 } from 'three'
 
 import CameraViewType from '../../types/cameraViewType'
 
