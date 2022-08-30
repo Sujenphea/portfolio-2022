@@ -66,7 +66,7 @@ const Project = (props: Props) => {
   useFrame(() => {
     currentOpacity.current = shaderRef.current.uniforms.uOpacity.value
     shaderRef.current.uniforms.uOpacity = {
-      value: lerp(currentOpacity.current, idealOpacity.current, 0.15),
+      value: lerp(currentOpacity.current, idealOpacity.current, 0.1),
     }
 
     // multiplied by 30 to magnify distance

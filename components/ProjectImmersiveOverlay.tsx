@@ -76,7 +76,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
       // set timeout to reset scroll
       currentTimeout.current = setTimeout(() => {
         setCurrentProject({ ...currentProject, images: [] })
-      }, 300)
+      }, 400)
     }
   }, [props.project])
 
@@ -88,7 +88,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
     `,
     delayedImageContainerAnimation: css`
       opacity: ${props.visible ? 1 : 0};
-      transition: visibility 0.3s, opacity 0.3s;
+      transition: visibility 0.3s ease-in, opacity 0.3s ease-in;
     `,
   }
 
