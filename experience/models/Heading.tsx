@@ -36,7 +36,7 @@ const Heading = (props: {
   return (
     <group>
       <Text
-        color="rgb(255, 100, 180)"
+        color="rgb(30, 30, 80)"
         strokeWidth={0}
         fontSize={5}
         anchorX="center"

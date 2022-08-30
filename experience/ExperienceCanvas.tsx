@@ -87,12 +87,12 @@ const ExperienceCanvas = (props: Props) => {
             handleScrollProgress={handleScrollProgress}
             cameraView={props.cameraView}
           />
-          <AboutMe curve={curve} positionOnCurve={0.01} />
-          <Heading curve={curve} positionOnCurve={0.05} text="projects" />
+          <AboutMe curve={curve} positionOnCurve={0.03} />
+          <Heading curve={curve} positionOnCurve={0.07} text="projects" />
           <Projects
             curve={curve}
             projects={projectsJSON}
-            rangeOnCurve={[0.05, 0.5]}
+            rangeOnCurve={[0.07, 0.5]}
             currentCameraLocation={scrollProgress}
             projectClicked={handleProjectClick}
             handleNewLocation={(data: CameraData) => {
