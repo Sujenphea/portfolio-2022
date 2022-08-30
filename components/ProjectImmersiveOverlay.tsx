@@ -87,7 +87,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
     `,
     delayedImageContainerAnimation: css`
       opacity: ${props.visible ? 1 : 0};
-      transition: visibility 0.2s, opacity 0.2s;
+      transition: visibility 0.3s, opacity 0.3s;
     `,
   }
   const styles = {
@@ -207,7 +207,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
       ${animations.normalAnimation}
 
       // smaller device
-        @media (max-width: 768px) {
+      @media (max-width: 768px) {
         left: 50%;
         transform: translateX(-50%);
       }

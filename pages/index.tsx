@@ -194,7 +194,9 @@ export default function Home() {
       backdrop-filter: blur(5px) brightness(65%);
     `,
     project: css`
-      backdrop-filter: blur(3px) brightness(80%);
+      background-color: ${projectView === 0
+        ? `rgba(120, 120, 200, 0.7)`
+        : `rgba(30, 30, 50, 0.5)`};
     `,
     contactBar: css`
       color: ${projectView === 0 ? `rgb(60, 60, 60)` : `rgb(255, 255, 255)`};
