@@ -79,6 +79,7 @@ const ExperienceCanvas = (props: Props) => {
           cameraView={props.cameraView}
           cameraData={projectCameraData}
         />
+        <fog attach="fog" args={['rgb(200, 200, 255)', 30, 100]} />
         <Suspense fallback={null}>
           <SJLineScroll
             curve={curve}

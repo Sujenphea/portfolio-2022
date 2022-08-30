@@ -23,6 +23,7 @@ const Particles = (props: {
       points={props.curve.current.getPoints(2000)}
       color="rgb(100, 100, 255)"
       lineWidth={3}
+      fog
     />
   )
 }
