@@ -138,29 +138,6 @@ const Projects = (props: Props) => {
     })
   }, [props.projects])
 
-  // - dynamic size
-  useEffect(() => {
-    // BUG: curve.getPointAt(...) undefined if resizing is too fast
-    // calculate new position if a project is focused
-    if (currentProject.current !== null) {
-      const [cameraPosition, cameraLookAt] = calculateFocusProjectCameraData(
-        currentProjectLocation.current
-      )
-
-      // calculate mesh new lookAt position
-      updateMeshLookAtLocation(
-        currentProjectLocation.current,
-        currentProjectIndex.current
-      )
-
-      // handler
-      props.handleNewLocation({
-        position: cameraPosition,
-        lookAt: cameraLookAt,
-      })
-    }
-  }, [props.isPortrait])
-
   // update focused project
   useEffect(() => {
     if (props.currentProject === null) {
