@@ -1,46 +1,51 @@
 [
   {
+    "isWork": true,
     "name": "testWork1",
     "company": "testCompany1",
     "description": "testWork1 Description",
     "technologies": ["go"],
-    "year": 2021,
+    "year": ["August 2021", "August 2021"],
     "link": "https://www.google.com",
     "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
+    "isWork": true,
     "name": "testWork2",
     "company": "testCompany2",
     "description": "testWork2 Description",
     "technologies": ["go"],
-    "year": 2021,
+    "year": ["August 2021", "August 2021"],
     "link": "https://www.google.com",
     "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
+    "isWork": true,
     "name": "testWork3",
     "company": "testCompany3",
     "description": "testWork3 Description",
     "technologies": ["go"],
-    "year": 2021,
+    "year": ["August 2021", "August 2021"],
     "link": "https://www.google.com",
     "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
+    "isWork": true,
     "name": "testWork4",
     "company": "testCompany4",
     "description": "testWork4 Description",
     "technologies": ["go"],
-    "year": 2021,
+    "year": ["August 2021", "August 2021"],
     "link": "https://www.google.com",
     "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   },
   {
+    "isWork": true,
     "name": "testWork5",
     "company": "testCompany5",
     "description": "testWork5 Description",
     "technologies": ["go"],
-    "year": 2021,
+    "year": ["August 2021", "August 2021"],
     "link": "https://www.google.com",
     "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
   }

@@ -18,11 +18,12 @@ const ProjectImmersiveOverlay = (props: Props) => {
   // states
   // - makes sure project is not null
   const [currentProject, setCurrentProject] = useState<ProjectType>({
+    isWork: false,
     name: '',
     company: '',
     description: '',
     technologies: [],
-    year: 2000,
+    year: [],
     link: '',
     images: [],
   })

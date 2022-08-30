@@ -6,7 +6,6 @@ import { CatmullRomCurve3, Vector3 } from 'three'
 import Cameras from './Cameras'
 
 import AboutMe from './models/AboutMe'
-import Works from './models/Works'
 import Projects from './models/Projects/Projects'
 import SJLineScroll from './models/SJLineScroll'
 
@@ -87,10 +86,17 @@ const ExperienceCanvas = (props: Props) => {
             cameraView={props.cameraView}
           />
           <AboutMe curve={curve} positionOnCurve={0.01} />
-          <Works
+          <Projects
             curve={curve}
             projects={worksJSON}
             rangeOnCurve={[0.01, 0.5]}
+            currentCameraLocation={scrollProgress}
+            projectClicked={handleProjectClick}
+            handleNewLocation={(data: CameraData) => {
+              projectCameraData.current = data
+            }}
+            isPortrait={props.isPortrait}
+            currentProject={props.currentProject}
           />
           <Projects
             curve={curve}
