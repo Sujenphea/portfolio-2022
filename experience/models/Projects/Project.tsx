@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 
 import { extend, Object3DNode, useFrame } from '@react-three/fiber'
 import {
@@ -18,7 +18,7 @@ import vertexShader from './shaders/vertex.glsl'
 
 // material
 const ProjectShaderMaterial = shaderMaterial(
-  { uTexture: null, uOpacity: 1 },
+  { uTexture: null, uOpacity: 1, uDistance: 0 },
   vertexShader,
   fragmentShader
 )
@@ -41,6 +41,8 @@ type Props = {
   closeProject: boolean
   handleRef: (ref: Mesh<BufferGeometry, Material | Material[]> | null) => void
   handleProjectClick: () => void
+  cameraLocation: MutableRefObject<number>
+  projectLocation: number
 }
 
 const Project = (props: Props) => {
@@ -51,6 +53,7 @@ const Project = (props: Props) => {
   useEffect(() => {
     shaderRef.current.uniforms.uTexture = { value: props.image }
     shaderRef.current.uniforms.uOpacity = { value: 1 }
+    shaderRef.current.uniforms.uDistance = { value: 0 }
     shaderRef.current.needsUpdate = true
   }, [])
 
@@ -64,6 +67,11 @@ const Project = (props: Props) => {
     currentOpacity.current = shaderRef.current.uniforms.uOpacity.value
     shaderRef.current.uniforms.uOpacity = {
       value: lerp(currentOpacity.current, idealOpacity.current, 0.15),
+    }
+
+    // multiplied by 30 to magnify distance
+    shaderRef.current.uniforms.uDistance = {
+      value: (props.cameraLocation.current - props.projectLocation) * 30,
     }
   })
 

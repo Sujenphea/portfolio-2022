@@ -20,6 +20,7 @@ type Props = {
   curve: MutableRefObject<CatmullRomCurve3>
   projects: ProjectType[]
   rangeOnCurve: number[] // place projects on a certain section of curve
+  currentCameraLocation: MutableRefObject<number> // to blur projects
   projectClicked: (
     project: ProjectType,
     cameraPosition: Vector3,
@@ -219,6 +220,8 @@ const Projects = (props: Props) => {
             handleRef={(ref) => {
               meshRefs.current[i] = ref
             }}
+            cameraLocation={props.currentCameraLocation}
+            projectLocation={normalisedLocation}
           />
         )
       })}

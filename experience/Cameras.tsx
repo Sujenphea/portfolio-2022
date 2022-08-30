@@ -135,7 +135,7 @@ const Cameras = (props: {
         aspect={window.innerWidth / window.innerHeight}
         fov={84}
         near={0.01}
-        far={1000}
+        far={100}
         position={[0, 0, 0]}
         onUpdate={(self) => self.updateProjectionMatrix()}
       />
