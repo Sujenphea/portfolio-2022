@@ -14,6 +14,7 @@ import Menu from '../components/Menu'
 
 import GlanceView from '../components/GlanceView'
 
+import ScrollPrompt from '../components/ScrollPrompt'
 import ExperienceCanvas from '../experience/ExperienceCanvas'
 
 import ContactBar from '../components/ContactBar'
@@ -227,6 +228,7 @@ export default function Home() {
         </div>
         {/* non mobile */}
         <div css={styles.nonMobileContainerStyle}>
+          <ScrollPrompt />
           <ExperienceCanvas
             cameraView={cameraView}
             handleProjectClicked={handleOpenImmersiveViewProjectOverlay}
