@@ -91,6 +91,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
       transition: visibility 0.3s, opacity 0.3s;
     `,
   }
+
   const styles = {
     sectionStyle: css`
       display: block;
@@ -233,6 +234,14 @@ const ProjectImmersiveOverlay = (props: Props) => {
         transform: translate(2vw, 0);
       }
     `,
+    splitTextStyle: css`
+      display: flex;
+      justify-content: space-between;
+
+      & :first-of-type {
+        font-weight: 500;
+      }
+    `,
     closeButtonStyle: css`
       color: white;
       background-color: transparent;
@@ -244,6 +253,12 @@ const ProjectImmersiveOverlay = (props: Props) => {
         left: 50%;
         transform: translateX(-50%);
       }
+    `,
+  }
+
+  const workStyles = {
+    nonWork: css`
+      display: ${currentProject.isWork ? 'none' : ''};
     `,
   }
 
@@ -271,8 +286,14 @@ const ProjectImmersiveOverlay = (props: Props) => {
 
           {/* description */}
           <div css={styles.descriptionStyle}>
-            <div>year: {currentProject.year}</div>
-            <div>technologies: {currentProject.technologies}</div>
+            <div css={styles.splitTextStyle}>
+              <div>year</div>
+              <div>{currentProject.year[0]}</div>
+            </div>
+            <div css={[styles.splitTextStyle, workStyles.nonWork]}>
+              <div>tech</div>
+              <div>{currentProject.technologies}</div>
+            </div>
             <div>{currentProject.description}</div>
           </div>
 

@@ -66,6 +66,9 @@ const ProjectView = (props: {
       padding-top: 5px;
       padding-bottom: 5px;
     `,
+    nonWorkCss: css`
+      display: ${props.project.isWork ? `none` : ``};
+    `,
   }
 
   return (
@@ -74,8 +77,10 @@ const ProjectView = (props: {
       {/* column */}
       <div css={styles.columnCss}>
         <div css={styles.detailCss}>{props.project.company}</div>
-        <div css={styles.detailCss}>{props.project.technologies}</div>
-        <div css={styles.detailCss}>{props.project.year}</div>
+        <div css={[styles.detailCss, styles.nonWorkCss]}>
+          {props.project.technologies}
+        </div>
+        <div css={styles.detailCss}>{props.project.year[0]}</div>
       </div>
     </div>
   )
