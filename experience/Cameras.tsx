@@ -38,19 +38,45 @@ const Cameras = (props: {
   )
   const tempVector = useRef(new Vector3())
 
-  // states
-  // - change animation type in first person camera
+  // hooks
+  // - check if animate from fov to overview
+  // - check for change in camera's far position
   useEffect(() => {
-    // if change from any to first person (animate for 0.6s)
-    if (props.cameraView !== CameraViewType.FirstPerson) {
-      animateOverview.current = true
-    } else if (prevCameraView.current !== CameraViewType.FirstPerson) {
-      setTimeout(() => {
-        animateOverview.current = false
-      }, 600)
-    }
+    // if first person to non first person: animate
+    // if non first person to first person: stop animating in 0.6s
 
-    prevCameraView.current = props.cameraView
+    // if overview: change camera far to 1000
+    // if first person: change camera far to 100
+    // don't change camera far if project
+    // - always first person to project
+
+    switch (props.cameraView) {
+      case CameraViewType.FirstPerson:
+        cameraRef.current.far = 100
+        cameraRef.current.updateProjectionMatrix()
+
+        if (prevCameraView.current !== CameraViewType.FirstPerson) {
+          setTimeout(() => {
+            animateOverview.current = false
+          }, 600)
+        }
+        prevCameraView.current = props.cameraView
+
+        return
+      case CameraViewType.Overview:
+        cameraRef.current.far = 1000
+        cameraRef.current.updateProjectionMatrix()
+
+        animateOverview.current = true
+        prevCameraView.current = props.cameraView
+
+        return
+      case CameraViewType.Project:
+        animateOverview.current = true
+        prevCameraView.current = props.cameraView
+
+        return
+    }
   }, [props.cameraView])
 
   // tick
