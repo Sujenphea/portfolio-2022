@@ -297,7 +297,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
             </div>
             <div css={[styles.splitTextStyle, workStyles.nonWork]}>
               <div>tech</div>
-              <div>{currentProject.technologies}</div>
+              <div>{currentProject.technologies.join(', ')}</div>
             </div>
             <div css={styles.descriptionStyle}>
               {currentProject.description}

@@ -78,7 +78,7 @@ const ProjectView = (props: {
       <div css={styles.columnCss}>
         <div css={styles.detailCss}>{props.project.company}</div>
         <div css={[styles.detailCss, styles.nonWorkCss]}>
-          {props.project.technologies}
+          {props.project.technologies.join(', ')}
         </div>
         <div css={styles.detailCss}>{props.project.year[0]}</div>
       </div>
