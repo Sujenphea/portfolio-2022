@@ -3,12 +3,13 @@ import { memo, MutableRefObject, useEffect, useRef } from 'react'
 import { Text } from '@react-three/drei'
 import { CatmullRomCurve3, Vector3 } from 'three'
 
-const AboutMe = (props: {
+const CenteredText = (props: {
+  text: string
   curve: MutableRefObject<CatmullRomCurve3>
   positionOnCurve: number
 }) => {
   // params
-  const objectVerticalOffset = useRef(new Vector3(0, 5, 0))
+  const objectVerticalOffset = useRef(new Vector3(0, 4, 0))
 
   // refs
   const textRef = useRef<THREE.Mesh>(null!)
@@ -28,7 +29,7 @@ const AboutMe = (props: {
     textRef.current.position.copy(position)
 
     // lookAtPosition
-    const lookAtPosition = calculatePosition(props.positionOnCurve - 0.001)
+    const lookAtPosition = calculatePosition(props.positionOnCurve - 0.01)
     textRef.current.lookAt(lookAtPosition)
   }, [textRef])
 
@@ -41,10 +42,10 @@ const AboutMe = (props: {
         anchorY="middle"
         ref={textRef}
       >
-        {`Hi! I'm Sujen. I am a frontend web and mobile developer based in New Zealand.\nI am currently finishing my studies majoring in Computer Science.\nFeel free to reach out about a project, collaboration or say a friendly hello!`}
+        {props.text}
       </Text>
     </group>
   )
 }
 
-export default memo(AboutMe)
+export default CenteredText

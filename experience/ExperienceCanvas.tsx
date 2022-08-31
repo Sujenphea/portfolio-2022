@@ -5,11 +5,13 @@ import { CatmullRomCurve3, Vector3 } from 'three'
 
 import Cameras from './Cameras'
 
-import AboutMe from './models/AboutMe'
 import Projects from './models/Projects/Projects'
 import SJLineScroll from './models/SJLineScroll'
 
 import pointsSj from './points/points-sj'
+
+import Heading from './models/Heading'
+import CenteredText from './models/CenteredText'
 
 import projectsJSON from '../data/projects.json'
 import worksJSON from '../data/works.json'
@@ -18,8 +20,6 @@ import ProjectType from '../types/projectType'
 
 import CameraViewType from '../types/cameraViewType'
 import CameraData from '../types/cameraData'
-import Headings from './models/Heading'
-import Heading from './models/Heading'
 
 type Props = {
   cameraView: CameraViewType
@@ -87,12 +87,16 @@ const ExperienceCanvas = (props: Props) => {
             handleScrollProgress={handleScrollProgress}
             cameraView={props.cameraView}
           />
-          <AboutMe curve={curve} positionOnCurve={0.03} />
+          <CenteredText
+            text={`Hi! I'm Sujen. I am a frontend web and mobile developer based in New Zealand.\nI am currently finishing my studies majoring in Computer Science.\nFeel free to reach out about a project, collaboration or say a friendly hello!`}
+            curve={curve}
+            positionOnCurve={0.03}
+          />
           <Heading curve={curve} positionOnCurve={0.07} text="projects" />
           <Projects
             curve={curve}
             projects={projectsJSON}
-            rangeOnCurve={[0.07, 0.5]}
+            rangeOnCurve={[0.07, 0.2]}
             currentCameraLocation={scrollProgress}
             projectClicked={handleProjectClick}
             handleNewLocation={(data: CameraData) => {
@@ -101,11 +105,11 @@ const ExperienceCanvas = (props: Props) => {
             isPortrait={props.isPortrait}
             currentProject={props.currentProject}
           />
-          <Heading curve={curve} positionOnCurve={0.5} text="works" />
+          <Heading curve={curve} positionOnCurve={0.21} text="works" />
           <Projects
             curve={curve}
             projects={worksJSON}
-            rangeOnCurve={[0.5, 1]}
+            rangeOnCurve={[0.22, 0.3]}
             currentCameraLocation={scrollProgress}
             projectClicked={handleProjectClick}
             handleNewLocation={(data: CameraData) => {
@@ -113,6 +117,11 @@ const ExperienceCanvas = (props: Props) => {
             }}
             isPortrait={props.isPortrait}
             currentProject={props.currentProject}
+          />
+          <CenteredText
+            text={`Stay tuned for more\nexciting projects!\n(or scroll if you're bored)`}
+            curve={curve}
+            positionOnCurve={0.34}
           />
         </Suspense>
       </Canvas>
