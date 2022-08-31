@@ -250,6 +250,8 @@ const ProjectImmersiveOverlay = (props: Props) => {
       background-color: transparent;
       border: none;
 
+      cursor: pointer;
+
       @media (min-width: 768px) {
         position: absolute;
         top: calc(5vh + 5vw);

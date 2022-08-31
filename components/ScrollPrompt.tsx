@@ -28,7 +28,7 @@ const ScrollPrompt = () => {
       font-size: calc(1vw + 2.5vh);
       text-transform: uppercase;
 
-      animation: ${animations.fadeIn} 1s linear 5s forwards,
+      animation: ${animations.fadeIn} 1s linear 5.5s forwards,
         ${animations.fadeOut} 0.5s linear 7s forwards;
     `,
   }

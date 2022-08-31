@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 import { extend, Object3DNode, useFrame } from '@react-three/fiber'
 import {
@@ -50,6 +50,9 @@ const Project = (props: Props) => {
   const currentOpacity = useRef(1)
   const idealOpacity = useRef(1)
 
+  // states
+  const [hovered, setHovered] = useState(false)
+
   useEffect(() => {
     shaderRef.current.uniforms.uTexture = { value: props.image }
     shaderRef.current.uniforms.uOpacity = { value: 1 }
@@ -62,6 +65,10 @@ const Project = (props: Props) => {
       idealOpacity.current = 1
     }
   }, [props.closeProject])
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+  }, [hovered])
 
   useFrame(() => {
     currentOpacity.current = shaderRef.current.uniforms.uOpacity.value
@@ -89,6 +96,8 @@ const Project = (props: Props) => {
         props.handleRef(ref)
       }}
       onClick={handleProjectClick}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
       geometry={props.geometry}
     >
       <projectShaderMaterial ref={shaderRef} transparent />
