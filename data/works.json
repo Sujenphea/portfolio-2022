@@ -1,52 +1,12 @@
 [
   {
     "isWork": true,
-    "name": "testWork1",
-    "company": "testCompany1",
-    "description": "testWork1 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
+    "name": "software developer",
+    "company": "Umajin",
+    "description": "An intern for a duration of 3 months. Worked on the development of a software platfork with the in-house language. Improved the keyboard accessibility of the in-house app creator application",
+    "technologies": [],
+    "year": ["2021", "2022"],
     "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": true,
-    "name": "testWork2",
-    "company": "testCompany2",
-    "description": "testWork2 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": true,
-    "name": "testWork3",
-    "company": "testCompany3",
-    "description": "testWork3 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": true,
-    "name": "testWork4",
-    "company": "testCompany4",
-    "description": "testWork4 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": true,
-    "name": "testWork5",
-    "company": "testCompany5",
-    "description": "testWork5 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
+    "images": ["./umajin-1.png"]
   }
 ]

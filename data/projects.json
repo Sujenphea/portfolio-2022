@@ -1,52 +1,22 @@
 [
   {
     "isWork": false,
-    "name": "testProject1",
-    "company": "testCompany1",
-    "description": "testProject1 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
+    "name": "launch site",
+    "company": "blackmatter",
+    "description": "An initial launch beta website for a groundbreaking note taking iOS and web application.",
+    "technologies": ["React", "Threejs", "Blender"],
+    "year": ["2021"],
+    "link": "https://black-matter-threejs.vercel.app",
+    "images": ["./blackmatter-1.png", "./blackmatter-2.png"]
   },
   {
     "isWork": false,
-    "name": "testProject2",
-    "company": "testCompany2",
-    "description": "testProject2 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": false,
-    "name": "testProject3",
-    "company": "testCompany3",
-    "description": "testProject3 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": false,
-    "name": "testProject4",
-    "company": "testCompany4",
-    "description": "testProject4 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
-  },
-  {
-    "isWork": false,
-    "name": "testProject5",
-    "company": "testCompany5",
-    "description": "testProject5 Description",
-    "technologies": ["go"],
-    "year": ["August 2021", "August 2021"],
-    "link": "https://www.google.com",
-    "images": ["./testImage.png", "./testImage.png", "./testImage.png"]
+    "name": "portfolio",
+    "company": "sujen phea",
+    "description": "The current portfolio presenting threejs experiments + upcoming experiments yet to publish",
+    "technologies": ["React", "Threejs", "Blender"],
+    "year": ["2021"],
+    "link": "https://black-matter-threejs.vercel.app",
+    "images": ["./blackmatter-1.png", "./blackmatter-2.png"]
   }
 ]
