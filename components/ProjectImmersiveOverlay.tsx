@@ -214,7 +214,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
         transform: translateX(-50%);
       }
     `,
-    descriptionStyle: css`
+    textStyle: css`
       display: flex;
       flex-direction: column;
       max-width: 80vw;
@@ -241,6 +241,9 @@ const ProjectImmersiveOverlay = (props: Props) => {
       & :first-of-type {
         font-weight: 500;
       }
+    `,
+    descriptionStyle: css`
+      padding-top: calc(1vh);
     `,
     closeButtonStyle: css`
       color: white;
@@ -285,7 +288,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
           </div>
 
           {/* description */}
-          <div css={styles.descriptionStyle}>
+          <div css={styles.textStyle}>
             <div css={styles.splitTextStyle}>
               <div>year</div>
               <div>{currentProject.year[0]}</div>
@@ -294,7 +297,9 @@ const ProjectImmersiveOverlay = (props: Props) => {
               <div>tech</div>
               <div>{currentProject.technologies}</div>
             </div>
-            <div>{currentProject.description}</div>
+            <div css={styles.descriptionStyle}>
+              {currentProject.description}
+            </div>
           </div>
 
           <div css={styles.imageContainerStyle} ref={imageContainerRef}>
