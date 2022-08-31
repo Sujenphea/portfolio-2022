@@ -218,6 +218,8 @@ const ProjectImmersiveOverlay = (props: Props) => {
       display: flex;
       flex-direction: column;
       max-width: 80vw;
+      min-width: 350px;
+      width: 40vw;
 
       font-family: SourceSansPro;
       font-weight: 300;
