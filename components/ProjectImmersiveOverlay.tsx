@@ -259,6 +259,11 @@ const ProjectImmersiveOverlay = (props: Props) => {
         transform: translateX(-50%);
       }
     `,
+    linkStyle: css`
+      &:hover {
+        color: rgb(180, 180, 250);
+      }
+    `,
   }
 
   const workStyles = {
@@ -298,6 +303,16 @@ const ProjectImmersiveOverlay = (props: Props) => {
             <div css={[styles.splitTextStyle, workStyles.nonWork]}>
               <div>tech</div>
               <div>{currentProject.technologies.join(', ')}</div>
+            </div>
+            <div css={[styles.splitTextStyle, workStyles.nonWork]}>
+              <div>link</div>
+              <a
+                css={styles.linkStyle}
+                href={currentProject.link}
+                target="_blank"
+              >
+                {currentProject.link}
+              </a>
             </div>
             <div css={styles.descriptionStyle}>
               {currentProject.description}
