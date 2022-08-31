@@ -111,6 +111,8 @@ const GlanceView = (props: {
       width: 100%;
       padding-top: 40px;
 
+      backdrop-filter: blur(3px);
+
       z-index: 1;
       overflow-y: scroll;
       overflow-x: hidden;
