@@ -41,7 +41,7 @@ const AboutMe = (props: {
         anchorY="middle"
         ref={textRef}
       >
-        {`first line. \nsecond line. \nthird line.`}
+        {`Hi! I'm Sujen. I am a frontend web and mobile developer based in New Zealand.\nI am currently finishing my studies majoring in Computer Science.\nFeel free to reach out about a project, collaboration or say a friendly hello!`}
       </Text>
     </group>
   )

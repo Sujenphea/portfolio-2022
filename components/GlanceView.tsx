@@ -134,10 +134,37 @@ const GlanceView = (props: {
         padding-left: 3vw;
       }
     `,
+    introContainerCss: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      height: 200px;
+      border-top: 1px solid white;
+    `,
+    introCss: css`
+      width: 80vw;
+
+      font-family: SourceSansPro;
+      font-size: 24px;
+      font-size: calc(50% + 0.8vw + 0.8vh);
+    `,
   }
 
   return (
     <div css={styles.containerCss}>
+      {/* intro */}
+      <h1 css={styles.titleCss}>Me</h1>
+      <div css={styles.introContainerCss}>
+        <div css={styles.introCss}>
+          Hi! I'm Sujen. I am a frontend web and mobile developer based in New
+          Zealand. I am currently finishing my studies majoring in Computer
+          Science. Feel free to reach out about a project, collaboration or say
+          a friendly hello!
+        </div>
+      </div>
+
+      {/* projects */}
       <h1 css={styles.titleCss}>Projects</h1>
       {projectsJSON.map((project, i) => (
         <ProjectView
@@ -149,6 +176,7 @@ const GlanceView = (props: {
         />
       ))}
 
+      {/* works */}
       <h1 css={styles.titleCss}>Works</h1>
       {worksJSON.map((project, i) => (
         <ProjectView
