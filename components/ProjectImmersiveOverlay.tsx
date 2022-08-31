@@ -322,7 +322,7 @@ const ProjectImmersiveOverlay = (props: Props) => {
           </div>
 
           <div css={styles.imageContainerStyle} ref={imageContainerRef}>
-            {currentProject.images.map((link, i) => {
+            {[...currentProject.images].reverse().map((link, i) => {
               return (
                 <img
                   key={link + i}
