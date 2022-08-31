@@ -1,5 +1,4 @@
-import { CSSProperties, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 import { css } from '@emotion/react'
 
@@ -9,6 +8,7 @@ import ProjectViewType from '../types/projectViewType'
 import Header from '../components/Header'
 
 import LoadingPage from '../components/LoadingPage'
+import MobilePromptOverlay from '../components/MobilePromptOverlay'
 
 import Menu from '../components/Menu'
 
@@ -149,27 +149,7 @@ export default function Home() {
       width: 100vw;
       height: 100vh;
     `,
-    mobileContainerStyle: css`
-      display: ${mobileOverlayEnabled ? `flex` : `none`};
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
 
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 100vw;
-      background-color: black;
-      z-index: 4;
-
-      color: white;
-      text-align: center;
-
-      @media (min-width: 768px) {
-        display: none;
-      }
-    `,
     nonMobileContainerStyle: css`
       display: none;
 
@@ -209,23 +189,14 @@ export default function Home() {
       <LoadingPage visible={loadingPageVisible} />
       <div css={styles.nonLoadingContainerStyle}>
         {/* mobile */}
-        <div css={styles.mobileContainerStyle}>
-          <h1>For optimal experiences, please rotate your device</h1>
-          <button
-            type="button"
-            onClick={() => {
-              handleMobileOverlaySwitchToGlanceView()
-            }}
-          >
-            continue with sub-optimal experiences
-          </button>
-          <Image
-            src="/temp-rotate-phone.gif"
-            alt="my gif"
-            height={500}
-            width={500}
-          />
-        </div>
+        <MobilePromptOverlay
+          styles={theme.backgroundColor}
+          mobileOverlayEnabled={mobileOverlayEnabled}
+          handleMobileOverlaySwitchToGlanceView={
+            handleMobileOverlaySwitchToGlanceView
+          }
+        />
+
         {/* non mobile */}
         <div css={styles.nonMobileContainerStyle}>
           <ScrollPrompt />
