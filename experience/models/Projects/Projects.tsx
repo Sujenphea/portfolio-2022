@@ -35,7 +35,7 @@ const Projects = (props: Props) => {
   // params
   const objectVerticalOffset = useRef(5)
   const objectNormalMultiplier = useRef(8) // horizontal displacement of object
-  const lookAtPositionOffset = useRef(-0.005)
+  const lookAtPositionOffset = useRef(-0.01)
 
   // states
   const currentProject = useRef<ProjectType | null>(null)
@@ -85,19 +85,6 @@ const Projects = (props: Props) => {
     const cameraLookAt = calculatePosition(location, 0)
 
     return [cameraPosition, cameraLookAt]
-  }
-
-  const updateMeshLookAtLocation = (
-    projectLocation: number,
-    projectIndex: number
-  ) => {
-    const newMeshLookAtPosition = props.isPortrait ? -0.008 : -0.005
-    const lookAtPosition = calculatePosition(
-      projectLocation + newMeshLookAtPosition,
-      1
-    )
-
-    meshRefs.current[projectIndex]?.lookAt(lookAtPosition)
   }
 
   const numberLinearConverstion = (
@@ -157,7 +144,7 @@ const Projects = (props: Props) => {
       calculateFocusProjectCameraData(location)
 
     // calculate mesh new lookAt position
-    updateMeshLookAtLocation(location, index)
+    // - unnecessary since mesh will be invisible
 
     // handler
     props.projectClicked(project, cameraPosition, cameraLookAt)

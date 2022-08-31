@@ -29,7 +29,7 @@ const Heading = (props: {
     textRef.current.position.copy(position)
 
     // lookAtPosition
-    const lookAtPosition = calculatePosition(props.positionOnCurve - 0.001)
+    const lookAtPosition = calculatePosition(props.positionOnCurve - 0.01)
     textRef.current.lookAt(lookAtPosition)
   }, [textRef])
 
